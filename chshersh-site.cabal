@@ -1,0 +1,58 @@
+cabal-version:         2.4
+name:                  chshersh-site
+version:               0.0.0
+synopsis:              ChShersh website
+description:           ChShersh website
+homepage:              https://github.com/kowainik/chshersh.github.io
+bug-reports:           https://github.com/kowainik/chshersh.github.io/issues
+license:               MPL-2.0
+license-file:          LICENSE
+author:                Dmitrii Kovanikov
+maintainer:            kovanikov@gmail.com
+copyright:             2019 Dmitrii Kovanikov
+category:              Web
+build-type:            Simple
+extra-doc-files:       README.md
+tested-with:           GHC == 8.6.3
+
+
+library
+  exposed-modules:
+    Chshersh.Main
+    Chshersh.Posts
+    Chshersh.Social
+  other-modules:
+    Prelude
+
+  build-depends:
+    , base-noprelude ^>= 4.12
+    , hakyll ^>= 4.12.5.1
+    , hakyll-sass
+    , pandoc
+    , relude ^>= 0.4.0
+    , text
+
+  ghc-options:         -Wall
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+
+  default-extensions:
+    LambdaCase
+    OverloadedStrings
+    RecordWildCards
+    ScopedTypeVariables
+    TypeApplications
+
+
+executable site
+  main-is:
+    site.hs
+
+  build-depends:
+    , base
+    , chshersh-site
+
+  ghc-options:        -Wall -threaded
+
+  default-language:   Haskell2010
+  default-extensions: OverloadedStrings

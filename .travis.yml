@@ -1,0 +1,27 @@
+sudo: true
+language: haskell
+
+git:
+  depth: 5
+
+cabal: "head"
+
+cache:
+  directories:
+  - "$HOME/.cabal/store"
+
+matrix:
+  include:
+  - ghc: 8.6.3
+
+install:
+  - cabal new-update
+  - cabal new-build
+
+script:
+
+  - curl https://raw.githubusercontent.com/kowainik/relude/988bbdd3a09df1159917012933780523644880e5/.hlint.yaml -o .hlint-relude.yaml
+  - curl -sSL https://raw.github.com/ndmitchell/neil/master/misc/travis.sh | sh -s -- hlint -h .hlint-relude.yaml src/ site.hs
+
+notifications:
+  email: false

@@ -1,0 +1,169 @@
+@font-face {
+    font-family: 'Noteworthy Light';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Noteworthy Light'), url('/fonts/Noteworthy-Lt.woff') format('woff');
+}
+
+body {font-family: 'Lato';}
+.body-posts {font-family: 'Ubuntu';}
+code, pre {font-family: 'Ubuntu Mono'; font-size:1.2rem;}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    font-family: 'Montserrat';
+}
+
+a {
+    color: #2C3E50;
+    text-decoration: none;
+}
+a:focus, a:hover, a:active {
+    text-decoration: none;
+    color: #26e4bb;
+}
+
+/* yellow circles pattern */
+.bg-primary {
+    background-color: white !important;
+    background-image: url("/images/circles.png");
+    background-repeat: repeat;
+}
+
+/* Dark bg */
+.bg-secondary {background-color: #2C3E50 !important;}
+/* beautiful text */
+.text-primary {color: #26e4bb !important;}
+
+/* Dark text */
+.text-secondary {color: #2C3E50 !important;}
+
+.main-font {
+    font-family: 'Montserrat';
+    font-weight: 700;
+    font-size: 0.5em;
+}
+
+/*******************************
+ ******** HR
+ *******************************/
+hr.star-light,
+hr.star-dark,
+hr.star-dark-pr {
+    max-width: 15rem;
+    padding: 0;
+    text-align: center;
+    border: none;
+    border-top: solid 0.25rem;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+hr.star-light:after,
+hr.star-dark:after,
+hr.star-dark-pr:after {
+    position: relative;
+    top: -.8em;
+    display: inline-block;
+    padding: 0 0.25em;
+    content: '\f1fd';
+    font-family: FontAwesome;
+    font-size: 2em;
+}
+
+hr.star-light {border-color: #fff;}
+
+hr.star-light:after {color: #fff;}
+
+hr.star-dark,
+hr.star-dark-pr{
+    border-color: #2C3E50;
+}
+
+hr.star-dark:after {
+    color: #2C3E50;
+    background-color: white;
+}
+
+hr.star-dark-pr:after {
+    color: #2C3E50;
+    background-color: #26e4bb !important;
+    background-image: url("/images/circles.png");
+    background-repeat: repeat;
+}
+
+/*******************************
+ ******** Buttons
+ *******************************/
+
+.btn {border-width: 2px;}
+.btn-xl {
+    padding: 1rem 1.75rem;
+    font-size: 1.25rem;
+}
+
+.btn-social {
+    width: 3.25rem;
+    height: 3.25rem;
+    font-size: 1.25rem;
+    line-height: 2rem;
+}
+
+.btn-social:hover, .btn-social:focus, .btn-social:active {
+    color: #fff;
+    background: #26e4bb;
+    border-color: #26e4bb;
+}
+
+.btn-primary {
+    background-color: #26e4bb;
+    border-color: #26e4bb;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: #128f76;
+    border-color: #128f76;
+}
+
+.btn-secondary {
+    background-color: #2C3E50;
+    border-color: #2C3E50;
+}
+
+.btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
+    background-color: #1a252f;
+    border-color: #1a252f;
+}
+
+.btn-github:hover, .btn-github:focus, .btn-github:active, .btn-tag:hover, .btn-tag:focus, .btn-tag:active {
+    color: #fff;
+    background: #26e4bb;
+    border-color: #26e4bb;
+}
+
+.btn-tag {
+    background-color: #2C3E50;
+    border-color: #2C3E50;
+    color: #fff;
+    font-size: 0.75rem;
+}
+
+.p404 {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: center;
+}
+.p404-img {
+    max-height: 15vh;
+}
+
+/* Code */
+code {
+    padding: 0% 0.5%;
+    color:#2C3E50 !important;
+    background-color:#FAFFC3 !important;
+}
+
+pre > code {background-color: #2C3E50 !important; color: #fff !important; }
