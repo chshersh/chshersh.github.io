@@ -8,7 +8,7 @@
   <meta name="description" content="Personal website and some blog posts">
   <meta name="author" content="Dmitrii Kovanikov">
 
-  <title>ko-dimension by Dmitrii Kovanikov</title>
+  <title>kodimensional by Dmitrii Kovanikov</title>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -18,7 +18,6 @@
   <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
 
   <link href="/css/font-awesome.css" rel="stylesheet" type="text/css">
-  <!-- <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet"> -->
 
   <!-- Custom styles for this template -->
   <link href="/css/resume.css" rel="stylesheet">
@@ -59,18 +58,18 @@
 
     <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="about">
       <div class="w-100">
-        <h1 class="mb-0">ko
-          <span class="text-primary">dimension</span>
-        </h1>
-        <div class="subheading mb-5"><span class="text-primary">Dmitrii</span> Kovanikov
+        <h1 class="mb-0"><span class="text-primary">ko</span> dimensional </h1>
+        <div class="subheading mb-5">
+            <span class="text-black">Dmitrii</span> <span class="text-primary">Ko</span><span class="text-black">vanikov</span>
         </div>
-        <p class="lead mb-5">I am Haskell Adept: developer, teacher, enthusiast.
-        Here you can find information about me including my working experience.
-        Oh, and don't forget to check out my <a class="js-scroll-trigger" href="#blog">blog</a>!
+        <p class="lead mb-5">I am a Haskell Adept: developer, teacher, enthusiast.
+        Here you can find information about me, my working experience and my
+        most notable work in the open-source community. Oh, and don't forget to
+        check out my <a class="js-scroll-trigger" href="#blog">blog</a>!
         </p>
         <div class="social-icons">
           $for(socials)$
-            <a href="$socialLink$">
+            <a href="$socialLink$" target="_blank">
                 <i class="fab fa fa-$socialName$"></i>
             </a>
           $endfor$
@@ -84,12 +83,14 @@
       <div class="w-100">
         <h2 class="mb-5">Experience</h2>
 
-        <p>Here you can download my CV</p>
+        <a class="btn btn-outline-warning" href="/files/CV_Kovanikov_15_02_2019.pdf" download>
+            <i class="fab fa fa-file"></i> Download CV
+        </a>
 
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
             <h3 class="mb-0">Co-founder & Mentor & Maintainer</h3>
-            <div class="subheading mb-3"><a href="https://kowainik.github.io/">Kowainik</a></div>
+            <div class="subheading mb-3"><a href="https://kowainik.github.io/" target="_blank">Kowainik</a></div>
             <p>Using Haskell to build better software. Improving Haskell ecosystem and making community friendlier. Mentoring people and help them to learn the programming language.</p>
           </div>
           <div class="resume-date text-md-right">
@@ -100,7 +101,7 @@
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
             <h3 class="mb-0">Middle Haskell Developer</h3>
-            <div class="subheading mb-3"><a href="https://www.holmusk.com/">Holmusk</a></div>
+            <div class="subheading mb-3"><a href="https://www.holmusk.com/" target="_blank">Holmusk</a></div>
             <p>Backend development of web applications in Haskell. Working on healthcare projects that sync information from multiple sources and display them to users. Integration with machine learning models in other languages. Technologies included: Haskell, Elm, PostgreSQL, Amazon services (S3, SQS), Protocol buffers.</p>
           </div>
           <div class="resume-date text-md-right">
@@ -111,7 +112,7 @@
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
             <h3 class="mb-0">Haskell Software Engineer</h3>
-            <div class="subheading mb-3"><a href="https://serokell.io/">Serokell</a></div>
+            <div class="subheading mb-3"><a href="https://serokell.io/" target="_blank">Serokell</a></div>
             <p>Developing distributed cryptocurrency systems using Haskell. Implementing cryptocurrency protocols, creating logging framework, writing jekyll documentation in English, Haskell development and refactoring tooling support, performance optimizations, benchmarking, making world better.</p>
           </div>
           <div class="resume-date text-md-right">
@@ -122,7 +123,7 @@
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
             <h3 class="mb-0">Haskell PL Tutor</h3>
-            <div class="subheading mb-3"><a href="http://en.ifmo.ru/en/">ITMO University</a></div>
+            <div class="subheading mb-3"><a href="http://en.ifmo.ru/en/" target="_blank">ITMO University</a></div>
             <p>Teaching the course about functional programming in Haskell: desinging the course, creating lecture slides and validating completed lab assignments.</p>
           </div>
           <div class="resume-date text-md-right">
@@ -144,40 +145,40 @@
 
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
-            <h3 class="mb-0"><a href="https://kowainik.github.io/posts/2018-09-25-co-log">co-log</a></h3>
+            <h3 class="mb-0"><a href="https://kowainik.github.io/posts/2018-09-25-co-log" target="_blank">co-log</a></h3>
             <div class="subheading mb-3">Composable contravariant comonadic logging library</div>
           </div>
         </div>
 
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
-            <h3 class="mb-0"><a href="https://kowainik.github.io/posts/2019-01-14-tomland">tomland</a></h3>
+            <h3 class="mb-0"><a href="https://kowainik.github.io/posts/2019-01-14-tomland" target="_blank">tomland</a></h3>
             <div class="subheading mb-3">Bidirectional TOML serialization library with monadic profunctors, theorem proving and prefix trees</div>
           </div>
         </div>
 
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
-            <h3 class="mb-0"><a href="https://kowainik.github.io/posts/2018-08-19-picnic-put-containers-into-a-backpack">containers-backpack</a></h3>
+            <h3 class="mb-0"><a href="https://kowainik.github.io/posts/2018-08-19-picnic-put-containers-into-a-backpack" target="_blank">containers-backpack</a></h3>
             <div class="subheading mb-3">Backpack implementation of the uniform interface for containers in Haskell</div>
           </div>
         </div>
 
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
-              <h3 class="mb-0"><a href="https://github.com/kowainik/relude">relude</a></h3>
+              <h3 class="mb-0"><a href="https://github.com/kowainik/relude" target="_blank">relude</a></h3>
             <div class="subheading mb-3">Alternative standard library for Haskell with modern idioms</div>
           </div>
         </div>
 
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
-            <h3 class="mb-0"><a href="https://github.com/kowainik/idris-patricia">idris-patricia</a></h3>
+            <h3 class="mb-0"><a href="https://github.com/kowainik/idris-patricia" target="_blank">idris-patricia</a></h3>
             <div class="subheading mb-3">Idris implementation of the patricia trees</div>
           </div>
         </div>
 
-        <a class="btn btn-outline-warning" href="https://github.com/kowainik">See more of my projects</a>
+        <a class="btn btn-outline-warning" href="https://github.com/kowainik" target="_blank">See more of my projects</a>
       </div>
     </section>
 
@@ -193,7 +194,7 @@
                 <h3 class="mb-0"><a href="$stripExtension(url)$">$title$</a></h3>
             </div>
             <div class="resume-date text-md-right">
-                <p>$date$</p>
+                <p class="text-black">$date$</p>
             </div>
         </div>
         $endfor$

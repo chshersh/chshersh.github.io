@@ -8,7 +8,7 @@ cabal new-exec site rebuild
 mkdir .deploy
 cd .deploy
 git init
-git remote add origin git@github.com:kowainik/kowainik.github.io.git
+git remote add origin git@github.com:chshersh/chshersh.github.io.git
 git pull -r origin master
 
 # Add built site files

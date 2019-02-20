@@ -16,7 +16,7 @@ import Chshersh.Social (socialContext)
 
 main :: IO ()
 main =  hakyll $ do
-    match ("images/*" .||. "fonts/**" .||. "js/*") $ do
+    match ("images/*" .||. "fonts/**" .||. "js/*" .||. "files/*") $ do
         route   idRoute
         compile copyFileCompiler
 
