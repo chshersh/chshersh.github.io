@@ -6,6 +6,8 @@ module Chshersh.Posts
 import Hakyll (compile, dateField, defaultContext, functionField, listField, loadAll, match,
                pandocCompiler, recentFirst, route, setExtension)
 
+import Chshersh.Social (socialContext)
+
 import qualified Data.Text as T
 
 
@@ -13,7 +15,7 @@ postsRules :: Rules ()
 postsRules = match "posts/*" $ do
     route $ setExtension "html"
     compile $ do
-        let ctx = postContext
+        let ctx = postContext <> socialContext
         pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html" ctx
             >>= relativizeUrls

@@ -8,7 +8,7 @@
   <meta name="description" content="Personal website and some blog posts">
   <meta name="author" content="Dmitrii Kovanikov">
 
-  <title>ko-dimension by Dmitrii Kovanikov</title>
+  <title>kodimensional: $title$</title>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -18,16 +18,20 @@
   <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
 
   <link href="/css/font-awesome.css" rel="stylesheet" type="text/css">
-  <!-- <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet"> -->
 
   <!-- Custom styles for this template -->
   <link href="/css/resume.css" rel="stylesheet">
+  <link href="/css/dracula.css" rel="stylesheet">
+  <link href="/css/post.css" rel="stylesheet">
 
 </head>
 
 <body id="page-top">
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+    <h2 class="mb-0 blog-name">kodimensional</h2>
+    <p class="text-black">by Dmitrii Kovanikov</p>
+
     <a class="navbar-brand js-scroll-trigger" href="#page-top">
       <span class="d-block d-lg-none">Dmitrii Kovanikov</span>
       <span class="d-none d-lg-block">
@@ -40,35 +44,37 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#about">About</a>
+          <a class="nav-link js-scroll-trigger" href="/#about">About</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#experience">Experience</a>
+          <a class="nav-link js-scroll-trigger" href="/#experience">Experience</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#projects">Projects</a>
+          <a class="nav-link js-scroll-trigger" href="/#projects">Projects</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#blog">Blog</a>
+          <a class="nav-link js-scroll-trigger" href="/#blog">Blog</a>
         </li>
       </ul>
+
     </div>
+
+    <div class="social-icons">
+        $for(socials)$
+        <a href="$socialLink$" target="_blank">
+            <i class="fab fa fa-$socialName$"></i>
+        </a>
+        $endfor$
+    </div>
+
   </nav>
 
   <div class="container-fluid p-0">
 
-    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="about">
-      <div class="w-100">
-        <h1 class="mb-0">ko
-          <span class="text-primary">dimension</span>
-        </h1>
-        <div class="subheading mb-5"><span class="text-primary">Dmitrii</span> Kovanikov
-        </div>
-        <p class="lead mb-5">I am Haskell Adept: developer, teacher, enthusiast.
-        Here you can find information about me including my working experience.
-        Oh, and don't forget to check out my <a class="js-scroll-trigger" href="#blog">blog</a>!
-        </p>
-      </div>
+      <section class="resume-section p-3 p-lg-5" >
+        <h2>$title$</h2>
+        <p class="text-center">$date$</p>
+        <div class="post">$body$</div>
     </section>
 
   </div>
@@ -79,6 +85,10 @@
   <!-- Plugin JavaScript -->
 
   <script src="/js/jquery.easing.min.js"></script>
+  <!-- Code highlighting  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
+  <script>hljs.initHighlightingOnLoad()</script>
 
   <!-- Custom scripts for this template -->
   <script src="/js/resume.min.js"></script>
