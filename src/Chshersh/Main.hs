@@ -1,6 +1,3 @@
-{-# LANGUAGE TupleSections    #-}
-{-# LANGUAGE TypeApplications #-}
-
 module Chshersh.Main
        ( main
        ) where
