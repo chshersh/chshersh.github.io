@@ -5,4 +5,5 @@ module Prelude
 
 import Relude
 
-import Hakyll (Compiler, Context, Item, Rules, loadAndApplyTemplate, relativizeUrls)
+import Hakyll (Compiler, Context, Item (..), Rules, field, listField, loadAndApplyTemplate,
+               makeItem, relativizeUrls)

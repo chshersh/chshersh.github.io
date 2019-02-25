@@ -3,11 +3,11 @@ module Chshersh.Main
        ) where
 
 import Hakyll (applyAsTemplate, compile, compressCss, compressCssCompiler, constRoute,
-               copyFileCompiler, create, defaultContext, hakyll, idRoute, makeItem, match, route,
+               copyFileCompiler, create, defaultContext, hakyll, idRoute, match, route,
                templateBodyCompiler, (.||.))
 import Hakyll.Web.Sass (sassCompiler)
 
-import Chshersh.Posts (postsContextCompiler, postsRules)
+import Chshersh.Posts (externalPostsContext, postsContextCompiler, postsRules)
 import Chshersh.Social (socialContext)
 
 
@@ -36,6 +36,7 @@ main =  hakyll $ do
             let ctx = defaultContext
                    <> socialContext
                    <> postsCtx
+                   <> externalPostsContext
 
             makeItem ""
                 >>= applyAsTemplate ctx

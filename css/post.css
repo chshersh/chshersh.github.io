@@ -1,7 +1,7 @@
 .blog-name {
     font-size: 2rem;
 }
-.post p {
+.post p, .post ul, .post li {
     color: black;
 }
 pre, code {text-align: left;}

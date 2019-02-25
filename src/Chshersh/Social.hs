@@ -3,7 +3,6 @@ module Chshersh.Social
        , socialContext
        ) where
 
-import Hakyll (field, itemBody, listField, makeItem)
 
 data Social = Social
     { sName :: String
