@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135017265-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-135017265-1');
+    </script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Personal website and some blog posts">
+  <meta name="author" content="Dmitrii Kovanikov">
+
+  <title>Dead simple Haskell Travis settings for cabal and stack</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <!-- Custom fonts for this template -->
+  <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
+
+  <link href="../css/font-awesome.css" rel="stylesheet" type="text/css">
+
+  <!-- Custom styles for this template -->
+  <link href="../css/resume.css" rel="stylesheet">
+  <link href="../css/dracula.css" rel="stylesheet">
+  <link href="../css/post.css" rel="stylesheet">
+
+  <!-- Metatags -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="kodimensional by Dmitrii Kovanikov" />
+  <meta property="og:title" content="kodimensional :: Dead simple Haskell Travis settings for cabal and stack" />
+  <meta property="og:description" content="Travis CI settings for Haskell projects with cabal and stack" />
+  <meta property="og:url" content="https://chshersh.github.io" />
+  <meta property="og:image" content="/images/logo-yellow.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="kodimensional :: Dead simple Haskell Travis settings for cabal and stack" />
+  <meta name="twitter:description" content="Travis CI settings for Haskell projects with cabal and stack" />
+  <meta name="twitter:image:src" content="https://chshersh.github.io/images/logo-yellow.png" />
+  <meta name="twitter:url" content="https://chshersh.github.io" />
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="../images/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="../images/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="../images/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../images/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="../images/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../images/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="../images/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="../images/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../images/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="../images/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon-16x16.png">
+  <link rel="manifest" href="../images/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/images/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+</head>
+
+<body id="page-top">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+    <h2 class="mb-0 blog-name">kodimensional</h2>
+    <p class="text-black">by Dmitrii Kovanikov</p>
+
+    <a class="navbar-brand js-scroll-trigger" href="#page-top">
+      <span class="d-block d-lg-none">Dmitrii Kovanikov</span>
+      <span class="d-none d-lg-block">
+        <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="../images/profile.png" alt>
+      </span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="../#about">λ &rarr; ABOUT</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="../#experience">λ &rarr; EXPERIENCE</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="../#projects">λ &rarr; PROJECTS</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="../#blog">λ &rarr; BLOG</a>
+        </li>
+      </ul>
+
+    </div>
+
+    <div class="social-icons">
+        
+        <a href="https://twitter.com/chshersh" target="_blank">
+            <i class="fab fa fa-twitter"></i>
+        </a>
+        
+        <a href="https://github.com/chshersh" target="_blank">
+            <i class="fab fa fa-github"></i>
+        </a>
+        
+        <a href="https://www.reddit.com/user/chshersh" target="_blank">
+            <i class="fab fa fa-reddit"></i>
+        </a>
+        
+        <a href="https://www.linkedin.com/in/chshersh/" target="_blank">
+            <i class="fab fa fa-linkedin"></i>
+        </a>
+        
+        <a href="https://t.me/chshersh" target="_blank">
+            <i class="fab fa fa-telegram"></i>
+        </a>
+        
+    </div>
+
+  </nav>
+
+  <div class="container-fluid p-0">
+
+      <section class="resume-section p-3 p-lg-5">
+        <h2>Dead simple Haskell Travis settings for cabal and stack</h2>
+        <p class="text-center text-black">February 25, 2019</p>
+        <div class="post"><p>Today I am going to share a simple <a href="https://travis-ci.com/">Travis CI</a> configuration for Haskell projects with you. The <code>.travis.yml</code> file presented in this blog post allows you to painlessly test your repository on the continuous integration service under multiple GHC versions and with both build tools — <a href="https://www.haskell.org/cabal/users-guide/">cabal-install</a> and <a href="https://docs.haskellstack.org/en/stable/README/">stack</a>. Note that the suggested settings do not include complex configuration steps that could possibly be required for some projects. However, they work amazingly well for most Haskell libraries and applications where a basic setup is enough!</p>
+<h2 id="the-config">The Config</h2>
+<p>I’ll cut to the chase, here is the <code>.travis.yml</code> file that you can copy-paste to each Haskell project and enjoy (hopefully) the green CI status:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb1-1" title="1"><span class="fu">sudo:</span><span class="at"> </span><span class="ch">true</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="fu">language:</span><span class="at"> haskell</span></a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="fu">git:</span></a>
+<a class="sourceLine" id="cb1-5" title="5">  <span class="fu">depth:</span><span class="at"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb1-6" title="6"></a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="fu">cabal:</span><span class="at"> </span><span class="st">&quot;2.4&quot;</span></a>
+<a class="sourceLine" id="cb1-8" title="8"></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="fu">cache:</span></a>
+<a class="sourceLine" id="cb1-10" title="10">  <span class="fu">directories:</span></a>
+<a class="sourceLine" id="cb1-11" title="11">  <span class="kw">-</span> <span class="st">&quot;$HOME/.cabal/store&quot;</span></a>
+<a class="sourceLine" id="cb1-12" title="12">  <span class="kw">-</span> <span class="st">&quot;$HOME/.stack&quot;</span></a>
+<a class="sourceLine" id="cb1-13" title="13">  <span class="kw">-</span> <span class="st">&quot;$TRAVIS_BUILD_DIR/.stack-work&quot;</span></a>
+<a class="sourceLine" id="cb1-14" title="14"></a>
+<a class="sourceLine" id="cb1-15" title="15"><span class="fu">matrix:</span></a>
+<a class="sourceLine" id="cb1-16" title="16">  <span class="fu">include:</span></a>
+<a class="sourceLine" id="cb1-17" title="17"></a>
+<a class="sourceLine" id="cb1-18" title="18">  <span class="co"># Cabal</span></a>
+<a class="sourceLine" id="cb1-19" title="19">  <span class="kw">-</span> <span class="fu">ghc:</span><span class="at"> </span><span class="fl">8.2.2</span></a>
+<a class="sourceLine" id="cb1-20" title="20">  <span class="kw">-</span> <span class="fu">ghc:</span><span class="at"> </span><span class="fl">8.4.4</span></a>
+<a class="sourceLine" id="cb1-21" title="21">  <span class="kw">-</span> <span class="fu">ghc:</span><span class="at"> </span><span class="fl">8.6.3</span></a>
+<a class="sourceLine" id="cb1-22" title="22"></a>
+<a class="sourceLine" id="cb1-23" title="23">  <span class="co"># Stack</span></a>
+<a class="sourceLine" id="cb1-24" title="24">  <span class="kw">-</span> <span class="fu">ghc:</span><span class="at"> </span><span class="fl">8.6.3</span></a>
+<a class="sourceLine" id="cb1-25" title="25">    <span class="fu">env:</span><span class="at"> STACK_YAML=&quot;$TRAVIS_BUILD_DIR/stack.yaml&quot;</span></a>
+<a class="sourceLine" id="cb1-26" title="26"></a>
+<a class="sourceLine" id="cb1-27" title="27"><span class="fu">install:</span></a>
+<a class="sourceLine" id="cb1-28" title="28"><span class="kw">  - </span><span class="st">|</span></a>
+<a class="sourceLine" id="cb1-29" title="29">    if [ -z &quot;$STACK_YAML&quot; ]; then</a>
+<a class="sourceLine" id="cb1-30" title="30">      ghc --version</a>
+<a class="sourceLine" id="cb1-31" title="31">      cabal --version</a>
+<a class="sourceLine" id="cb1-32" title="32">      cabal new-update</a>
+<a class="sourceLine" id="cb1-33" title="33">      cabal new-build --enable-tests --enable-benchmarks</a>
+<a class="sourceLine" id="cb1-34" title="34">    else</a>
+<a class="sourceLine" id="cb1-35" title="35">      # install stack</a>
+<a class="sourceLine" id="cb1-36" title="36">      curl -sSL https://get.haskellstack.org/ | sh</a>
+<a class="sourceLine" id="cb1-37" title="37"></a>
+<a class="sourceLine" id="cb1-38" title="38">      # build project with stack</a>
+<a class="sourceLine" id="cb1-39" title="39">      stack --version</a>
+<a class="sourceLine" id="cb1-40" title="40">      stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks</a>
+<a class="sourceLine" id="cb1-41" title="41">    fi</a>
+<a class="sourceLine" id="cb1-42" title="42"></a>
+<a class="sourceLine" id="cb1-43" title="43"><span class="fu">script:</span></a>
+<a class="sourceLine" id="cb1-44" title="44"><span class="kw">  - </span><span class="st">|</span></a>
+<a class="sourceLine" id="cb1-45" title="45">    if [ -z &quot;$STACK_YAML&quot; ]; then</a>
+<a class="sourceLine" id="cb1-46" title="46">      cabal new-test --enable-tests</a>
+<a class="sourceLine" id="cb1-47" title="47">    else</a>
+<a class="sourceLine" id="cb1-48" title="48">      stack test --system-ghc</a>
+<a class="sourceLine" id="cb1-49" title="49">    fi</a>
+<a class="sourceLine" id="cb1-50" title="50"></a>
+<a class="sourceLine" id="cb1-51" title="51"><span class="fu">notifications:</span></a>
+<a class="sourceLine" id="cb1-52" title="52">  <span class="fu">email:</span><span class="at"> </span><span class="ch">false</span></a></code></pre></div>
+<blockquote>
+<p><strong>NOTE:</strong> Instead of copy-pasting this <code>.travis.yml</code> file to every project you can use <a href="https://github.com/kowainik/summoner">Summoner</a> to scaffold completely configured production-level Haskell libraries and applications which would include Travis configurations corresponding to the user-configured/custom project settings.</p>
+</blockquote>
+<p>I want to point out some nice things about this config — it doesn’t mention the project name anywhere and it doesn’t rely on any additional shell scripts. Which means that you have the ability to paste it in any Haskell project and it <strong>should just work</strong> out of the box. Though, it’s not the only reason why I recommend it. This config requires almost no maintenance, but at the same time, it is easily extensible. For example, if you want to check your code with <a href="http://hackage.haskell.org/package/hlint">HLint</a> on every CI run, you just need to add the following line at the end of the <code>script</code> section:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb2-1" title="1">  <span class="kw">-</span> curl -sSL https://raw.github.com/ndmitchell/neil/master/misc/travis.sh | sh -s -- hlint .</a></code></pre></div>
+<p>This command downloads the latest HLint version and runs the <code>hlint</code> executable on your project.</p>
+<h2 id="how-to-set-up-travis-ci">How to set up Travis CI</h2>
+<p>A quick recap on how to make Travis CI work for your project:</p>
+<ol type="1">
+<li><a href="https://docs.travis-ci.com/user/tutorial/">Enable Travis CI for your GitHub account</a> if you haven’t done it before.</li>
+<li>Enable Travis CI for your specific repository.</li>
+<li>Copy-paste the given <code>.travis.yml</code> to your project.</li>
+</ol>
+<p>That’s all! Feel free to contact me if you have any problem setting up Travis CI for your Haskell projects with this config. I have done tons of <code>“Fix CI”</code> commits and learned about a lot of weird errors before figuring out the proper settings.</p>
+<blockquote>
+<p><strong>NOTE:</strong> If you build your project with <code>stack</code>, it is a good idea to put a fully configured <code>stack.yaml</code> file to the repository. There you can specify all the settings required for <code>stack</code> to build your project, but for basic cases, it should be enough to have only the resolver in there:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" title="1">resolver<span class="op">:</span> lts<span class="op">-</span><span class="fl">13.9</span></a></code></pre></div>
+</blockquote>
+<h2 id="explanation-of-the-configuration-commands">Explanation of the configuration commands</h2>
+<p>Here is a short description of the commands used in the script:</p>
+<ol type="1">
+<li><code>sudo: true</code> allows us to use more powerful CI environment and increases the speed of building.</li>
+<li>When you use <code>language: haskell</code>, the GHC and cabal versions for Ubuntu are taken from <a href="https://launchpad.net/~hvr/+archive/ubuntu/ghc">Herbert V. Riedel’s ppa</a>.</li>
+<li>Setting <code>git depth</code> to 5 decreases the time for cloning the GitHub repo, by pruning the amount of history (commits) of the repo that is fetched.</li>
+<li><code>STACK_YAML</code> environment variable is used to distinguish between Cabal and Stack builds. If you want to test multiple GHC versions with <code>stack</code> you only need to create <code>stack-VERSION.yaml</code> file specific to GHC version and add the corresponding number of items to the <code>matrix</code>.</li>
+<li><code>new-</code> commands are used for Cabal since they provide a modern way to build Haskell projects with <code>cabal-install</code> in <a href="https://www.haskell.org/cabal/users-guide/">nix-style local builds</a>.</li>
+<li><code>--system-ghc</code> flag is important for <code>stack</code> builds. Since you get the GHC version from the CI, <code>stack</code> doesn’t need to download them separately. That’s why, do remember to add this flag to every <code>stack</code> command you’re using.</li>
+<li>Email notifications are disabled because they quickly become annoying. But the <code>notifications</code> section allows you to add a Slack integration, which can be handy.</li>
+</ol>
+<h2 id="reasoning-behind-such-a-ci-config">Reasoning behind such a CI config</h2>
+<p>As you can see from the config, it contains several opinionated decisions, which can appear redundant or suboptimal. Here I am going to reveal the reasoning behind them.</p>
+<h3 id="why-both-cabal-and-stack">Why both cabal and stack?</h3>
+<p>You may ask, why would I need to test my project with two build tools? The answer is to be friendlier to the rest of the Haskell community. Yes, there are several build tools for Haskell with <code>cabal</code> and <code>stack</code> being the most popular ones. But, unfortunately, if the project builds with one of the tools, it doesn’t guarantee that it would also build with the other (though it works in <em>most</em> cases).</p>
+<ol type="1">
+<li>If your project builds with <code>stack</code> it may still fail to build with <code>cabal</code>. For example, if you don’t specify library bounds in the <code>build-depends</code> section, cabal solver might not find a valid plan to build your package with.</li>
+<li>If your project builds with <code>cabal</code> it may still fail to build with <code>stack</code>. For example, some of your dependencies might not be in the Stackage snapshot, so you would need to add them into the <code>extra-deps</code> section in <code>stack.yaml</code>.</li>
+</ol>
+<p>If you test your Haskell package on CI with both Cabal and Stack you provide a better user experience for users of both the build tools. As a maintainer of multiple open-source libraries and applications, I try to make the life of the contributors and users of my packages easier by providing support for both <code>cabal</code> and <code>stack</code>. The fewer steps they need to do in order to make my project work in their current environment, the more chances they don’t give up halfway through fighting with the tooling. Also, if your Haskell package builds with <code>cabal</code> and <code>stack</code>, you can add it to both <a href="http://hackage.haskell.org/">Hackage</a> and <a href="https://www.stackage.org/">Stackage</a>.</p>
+<h3 id="why-latest-3-major-ghc-versions">Why latest 3 major GHC versions?</h3>
+<p>It is a huge temptation to use only the latest GHC version for your package with all brand new cool features. But even if migration to a newer GHC version is usually a painless process, it takes time for the whole Haskell ecosystem to catch up. And users of your Haskell package may still use a two year old GHC version. This usually happens in big applications where you cannot switch to a newer GHC version unless each of your dependencies supports it.</p>
+<p>At the same time, it is highly desired to be able to bump up the version bounds only for some specific libraries (because of applied bug-fixes and performance improvements in the newer versions). But if newer versions require you to also switch to a newer compiler, you might not be able to do that because the migration of your application to a newer GHC version can be blocked by other libraries.</p>
+<p>You can see why it is nice when libraries support older compiler versions as well. However, maintaining support for very old GHC versions might be a thankless and time-consuming thing to do. Also, the more GHC versions you test against on the CI, the more time you need to wait until CI passes. That’s why the latest 3 seem reasonable enough.</p>
+<blockquote>
+<p><strong>NOTE:</strong> you may notice from the configuration that the latest 3 GHC versions are tested only for <code>cabal-install</code> while <code>stack</code> builds only most recent version. This is done merely for convenience since in Stackage snapshots GHC versions are tightly coupled with dependency versions.</p>
+</blockquote>
+<h2 id="conclusion">Conclusion</h2>
+<p>You can see now that it’s actually not that hard to run Travis CI for Haskell repositories! And the given configuration is easily extensible with more commands, like adding HLint, checking on a newer compiler version, building <a href="https://www.haskell.org/haddock/">Haddock</a> documentation, running benchmarks, etc. Dealing with CI errors requires time and patience. But at least with this config you don’t need to have multiple build tools and multiple GHC versions installed on your machine, you can delegate all this dirty work to the CI.</p>
+<h2 id="appendix">Appendix</h2>
+<p>In some situations it’s not possible to run CI for your Haskell project with both build tools easily. So below I’m providing separate configurations for each build tool.</p>
+<h3 id="cabal-only-configuration">Cabal-only configuration</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb4-1" title="1"><span class="fu">sudo:</span><span class="at"> </span><span class="ch">true</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="fu">language:</span><span class="at"> haskell</span></a>
+<a class="sourceLine" id="cb4-3" title="3"></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="fu">git:</span></a>
+<a class="sourceLine" id="cb4-5" title="5">  <span class="fu">depth:</span><span class="at"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb4-6" title="6"></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="fu">cabal:</span><span class="at"> </span><span class="st">&quot;2.4&quot;</span></a>
+<a class="sourceLine" id="cb4-8" title="8"></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="fu">cache:</span></a>
+<a class="sourceLine" id="cb4-10" title="10">  <span class="fu">directories:</span></a>
+<a class="sourceLine" id="cb4-11" title="11">  <span class="kw">-</span> <span class="st">&quot;$HOME/.cabal/store&quot;</span></a>
+<a class="sourceLine" id="cb4-12" title="12"></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="fu">matrix:</span></a>
+<a class="sourceLine" id="cb4-14" title="14">  <span class="fu">include:</span></a>
+<a class="sourceLine" id="cb4-15" title="15">  <span class="kw">-</span> <span class="fu">ghc:</span><span class="at"> </span><span class="fl">8.2.2</span></a>
+<a class="sourceLine" id="cb4-16" title="16">  <span class="kw">-</span> <span class="fu">ghc:</span><span class="at"> </span><span class="fl">8.4.4</span></a>
+<a class="sourceLine" id="cb4-17" title="17">  <span class="kw">-</span> <span class="fu">ghc:</span><span class="at"> </span><span class="fl">8.6.3</span></a>
+<a class="sourceLine" id="cb4-18" title="18"></a>
+<a class="sourceLine" id="cb4-19" title="19"><span class="fu">install:</span></a>
+<a class="sourceLine" id="cb4-20" title="20">  <span class="kw">-</span> ghc --version</a>
+<a class="sourceLine" id="cb4-21" title="21">  <span class="kw">-</span> cabal --version</a>
+<a class="sourceLine" id="cb4-22" title="22">  <span class="kw">-</span> cabal new-update</a>
+<a class="sourceLine" id="cb4-23" title="23">  <span class="kw">-</span> cabal new-build --enable-tests --enable-benchmarks</a>
+<a class="sourceLine" id="cb4-24" title="24"></a>
+<a class="sourceLine" id="cb4-25" title="25"><span class="fu">script:</span></a>
+<a class="sourceLine" id="cb4-26" title="26">  <span class="kw">-</span> cabal new-test --enable-tests</a>
+<a class="sourceLine" id="cb4-27" title="27"></a>
+<a class="sourceLine" id="cb4-28" title="28"><span class="fu">notifications:</span></a>
+<a class="sourceLine" id="cb4-29" title="29">  <span class="fu">email:</span><span class="at"> </span><span class="ch">false</span></a></code></pre></div>
+<h3 id="stack-only-configuration">Stack-only configuration</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb5-1" title="1"><span class="fu">sudo:</span><span class="at"> </span><span class="ch">true</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="fu">language:</span><span class="at"> haskell</span></a>
+<a class="sourceLine" id="cb5-3" title="3"></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="fu">git:</span></a>
+<a class="sourceLine" id="cb5-5" title="5">  <span class="fu">depth:</span><span class="at"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb5-6" title="6"></a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="fu">cache:</span></a>
+<a class="sourceLine" id="cb5-8" title="8">  <span class="fu">directories:</span></a>
+<a class="sourceLine" id="cb5-9" title="9">  <span class="kw">-</span> <span class="st">&quot;$HOME/.stack&quot;</span></a>
+<a class="sourceLine" id="cb5-10" title="10">  <span class="kw">-</span> <span class="st">&quot;$TRAVIS_BUILD_DIR/.stack-work&quot;</span></a>
+<a class="sourceLine" id="cb5-11" title="11"></a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="fu">matrix:</span></a>
+<a class="sourceLine" id="cb5-13" title="13">  <span class="fu">Include:</span></a>
+<a class="sourceLine" id="cb5-14" title="14">  <span class="kw">-</span> <span class="fu">ghc:</span><span class="at"> </span><span class="fl">8.2.2</span></a>
+<a class="sourceLine" id="cb5-15" title="15">    <span class="fu">env:</span><span class="at"> STACK_YAML=&quot;$TRAVIS_BUILD_DIR/stack-8.2.2.yaml&quot;</span></a>
+<a class="sourceLine" id="cb5-16" title="16">  <span class="kw">-</span> <span class="fu">ghc:</span><span class="at"> </span><span class="fl">8.4.4</span></a>
+<a class="sourceLine" id="cb5-17" title="17">    <span class="fu">env:</span><span class="at"> STACK_YAML=&quot;$TRAVIS_BUILD_DIR/stack-8.4.4.yaml&quot;</span></a>
+<a class="sourceLine" id="cb5-18" title="18">  <span class="kw">-</span> <span class="fu">ghc:</span><span class="at"> </span><span class="fl">8.6.3</span></a>
+<a class="sourceLine" id="cb5-19" title="19">    <span class="fu">env:</span><span class="at"> STACK_YAML=&quot;$TRAVIS_BUILD_DIR/stack.yaml&quot;</span></a>
+<a class="sourceLine" id="cb5-20" title="20"></a>
+<a class="sourceLine" id="cb5-21" title="21"><span class="fu">install:</span></a>
+<a class="sourceLine" id="cb5-22" title="22">  <span class="kw">-</span> curl -sSL https://get.haskellstack.org/ | sh</a>
+<a class="sourceLine" id="cb5-23" title="23">  <span class="kw">-</span> stack --version</a>
+<a class="sourceLine" id="cb5-24" title="24">  <span class="kw">-</span> stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks</a>
+<a class="sourceLine" id="cb5-25" title="25"></a>
+<a class="sourceLine" id="cb5-26" title="26"><span class="fu">script:</span></a>
+<a class="sourceLine" id="cb5-27" title="27">  <span class="kw">-</span> stack test --system-ghc</a>
+<a class="sourceLine" id="cb5-28" title="28"></a>
+<a class="sourceLine" id="cb5-29" title="29"><span class="fu">notifications:</span></a>
+<a class="sourceLine" id="cb5-30" title="30">  <span class="fu">email:</span><span class="at"> </span><span class="ch">false</span></a></code></pre></div></div>
+    </section>
+
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"> </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.bundle.min.js" integrity="sha384-VoPFvGr9GxhDT3n8vqqZ46twP5lgex+raTCfICQy73NLhN7ZqSfCtfSn4mLA2EFA" crossorigin="anonymous"></script>
+  <!-- Plugin JavaScript -->
+
+  <script src="../js/jquery.easing.min.js"></script>
+  <!-- Code highlighting  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
+  <script>hljs.initHighlightingOnLoad()</script>
+
+  <!-- Custom scripts for this template -->
+  <script src="../js/resume.min.js"></script>
+
+</body>
+
+</html>
