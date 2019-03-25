@@ -1,3 +1,6 @@
+#page-top {
+    padding-top: 0 !important;
+}
 .blog-name {
     font-size: 2rem;
 }
