@@ -12,7 +12,7 @@ cache:
 
 matrix:
   include:
-  - ghc: 8.6.3
+  - ghc: 8.6.4
 
 install:
   - cabal new-update

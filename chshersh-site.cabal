@@ -1,8 +1,8 @@
 cabal-version:         2.4
 name:                  chshersh-site
-version:               0.0.0
-synopsis:              ChShersh website
-description:           ChShersh website
+version:               0.0.1.0
+synopsis:              chshersh website
+description:           chshersh website
 homepage:              https://github.com/kowainik/chshersh.github.io
 bug-reports:           https://github.com/kowainik/chshersh.github.io/issues
 license:               MPL-2.0
@@ -13,13 +13,15 @@ copyright:             2019 Dmitrii Kovanikov
 category:              Web
 build-type:            Simple
 extra-doc-files:       README.md
-tested-with:           GHC == 8.6.3
+tested-with:           GHC == 8.6.4
 
 
 library
   exposed-modules:
+    Chshersh.Experience
     Chshersh.Main
     Chshersh.Posts
+    Chshersh.Project
     Chshersh.Social
   other-modules:
     Prelude

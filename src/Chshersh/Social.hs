@@ -5,8 +5,8 @@ module Chshersh.Social
 
 
 data Social = Social
-    { sName :: String
-    , sLink :: String
+    { sName :: !String
+    , sLink :: !String
     }
 
 socialName, socialLink :: Context Social
@@ -15,11 +15,12 @@ socialLink = field "socialLink" $ pure . sLink . itemBody
 
 allSocials :: Compiler [Item Social]
 allSocials = traverse makeItem
-    [ Social "twitter"  "https://twitter.com/chshersh"
-    , Social "github"   "https://github.com/chshersh"
-    , Social "reddit"   "https://www.reddit.com/user/chshersh"
-    , Social "linkedin" "https://www.linkedin.com/in/chshersh/"
-    , Social "telegram" "https://t.me/chshersh"
+    [ Social "twitter"        "https://twitter.com/chshersh"
+    , Social "github"         "https://github.com/chshersh"
+    , Social "reddit"         "https://www.reddit.com/user/chshersh"
+    , Social "stack-overflow" "https://stackoverflow.com/users/2900502/shersh"
+    , Social "linkedin"       "https://www.linkedin.com/in/chshersh/"
+    , Social "telegram"       "https://t.me/chshersh"
     ]
 
 socialContext :: Context a

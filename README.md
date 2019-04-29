@@ -2,7 +2,7 @@
 
 My personal web page:
 
-+ [ko-dimension](http://chshersh.github.io/)
++ [ko-dimensional](http://chshersh.github.io/)
 
 ## How to update this web page
 
