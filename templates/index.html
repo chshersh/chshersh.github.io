@@ -26,7 +26,7 @@
   <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
 
-  <link href="/css/font-awesome.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
   <!-- Custom styles for this template -->
   <link href="/css/resume.css" rel="stylesheet">
@@ -101,7 +101,7 @@
     <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="about">
       <div class="w-100">
         <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/images/logo-yellow.png" alt="">
-        <h1 class="mb-0"><span class="text-primary">ko</span> dimensional </h1>
+        <h1 class="mb-0 text-uppercase"><span class="text-primary">ko</span> dimensional </h1>
         <div class="subheading mb-5">
             <span class="text-black">Dmitrii</span> <span class="text-primary">Ko</span><span class="text-black">vanikov</span>
         </div>
@@ -117,7 +117,7 @@
         <div class="social-icons">
           $for(socials)$
             <a href="$socialLink$" target="_blank">
-                <i class="fab fa fa-$socialName$"></i>
+                <i class="fab fa-$socialName$"></i>
             </a>
           $endfor$
         </div>
@@ -131,53 +131,22 @@
         <h2 class="mb-5">Experience</h2>
         <div class="mb-5">
         <a class="btn btn-outline-warning" href="/files/CV_Kovanikov_15_02_2019.pdf" download>
-            <i class="fab fa fa-file"></i> Download CV
+            <i class="fas fa-file-pdf"></i> Download CV
         </a>
         </div>
 
+        $for(experience)$
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
-            <h3 class="mb-0">Co-founder & Mentor & Maintainer</h3>
-            <div class="subheading mb-3"><a href="https://kowainik.github.io/" target="_blank">Kowainik</a></div>
-            <p class="text-black">Using Haskell to build better software. Improving Haskell ecosystem and making community friendlier. Mentoring people and help them to learn the programming language.</p>
+            <h3 class="mb-0">$eTitle$</h3>
+            <div class="subheading mb-3"><a href="$eSite$" target="_blank">$eCompany$</a></div>
+            <p class="text-black">$eDesc$</p>
           </div>
-          <div class="resume-date text-md-right">
-              <span class="text-primary">March 2018 - Present</span>
-          </div>
+            <div class="resume-date text-md-right">
+                <span class="text-primary">$eDate$</span>
+            </div>
         </div>
-
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-          <div class="resume-content">
-            <h3 class="mb-0">Middle Haskell Developer</h3>
-            <div class="subheading mb-3"><a href="https://www.holmusk.com/" target="_blank">Holmusk</a></div>
-            <p class="text-black">Backend development of web applications in Haskell. Working on healthcare projects that sync information from multiple sources and display them to users. Integration with machine learning models in other languages. Technologies included: Haskell, Elm, PostgreSQL, Amazon services (S3, SQS), Protocol buffers.</p>
-          </div>
-          <div class="resume-date text-md-right">
-            <span class="text-primary">May 2018 - Present</span>
-          </div>
-        </div>
-
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-          <div class="resume-content">
-            <h3 class="mb-0">Haskell Software Engineer</h3>
-            <div class="subheading mb-3"><a href="https://serokell.io/" target="_blank">Serokell</a></div>
-            <p class="text-black">Developing distributed cryptocurrency systems using Haskell. Implementing cryptocurrency protocols, creating logging framework, writing jekyll documentation in English, Haskell development and refactoring tooling support, performance optimizations, benchmarking, making world better.</p>
-          </div>
-          <div class="resume-date text-md-right">
-            <span class="text-primary">May 2016 - April 2018</span>
-          </div>
-        </div>
-
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
-          <div class="resume-content">
-            <h3 class="mb-0">Haskell PL Tutor</h3>
-            <div class="subheading mb-3"><a href="http://en.ifmo.ru/en/" target="_blank">ITMO University</a></div>
-            <p class="text-black">Teaching the course about functional programming in Haskell: desinging the course, creating lecture slides and validating completed lab assignments.</p>
-          </div>
-          <div class="resume-date text-md-right">
-            <span class="text-primary">September 2015 - April 2018</span>
-          </div>
-        </div>
+        $endfor$
 
       </div>
 
@@ -191,40 +160,14 @@
 
         <p class="lead mb-4 text-black">My open-source work and most notable projects.</p>
 
+        $for(projects)$
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
           <div class="resume-content">
-            <h3 class="mb-0"><a href="https://kowainik.github.io/posts/2018-09-25-co-log" target="_blank">co-log</a></h3>
-            <div class="subheading mb-3">Composable contravariant comonadic logging library</div>
+            <h3 class="mb-0"><a href="$pLink$" target="_blank">$pName$</a></h3>
+            <div class="subheading-description mb-3">$pDesc$</div>
           </div>
         </div>
-
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
-          <div class="resume-content">
-            <h3 class="mb-0"><a href="https://kowainik.github.io/posts/2019-01-14-tomland" target="_blank">tomland</a></h3>
-            <div class="subheading mb-3">Bidirectional TOML serialization library with monadic profunctors, theorem proving and prefix trees</div>
-          </div>
-        </div>
-
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
-          <div class="resume-content">
-            <h3 class="mb-0"><a href="https://kowainik.github.io/posts/2018-08-19-picnic-put-containers-into-a-backpack" target="_blank">containers-backpack</a></h3>
-            <div class="subheading mb-3">Backpack implementation of the uniform interface for containers in Haskell</div>
-          </div>
-        </div>
-
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
-          <div class="resume-content">
-              <h3 class="mb-0"><a href="https://github.com/kowainik/relude" target="_blank">relude</a></h3>
-            <div class="subheading mb-3">Alternative standard library for Haskell with modern idioms</div>
-          </div>
-        </div>
-
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
-          <div class="resume-content">
-            <h3 class="mb-0"><a href="https://github.com/kowainik/idris-patricia" target="_blank">idris-patricia</a></h3>
-            <div class="subheading mb-3">Idris implementation of the patricia trees</div>
-          </div>
-        </div>
+        $endfor$
 
         <a class="btn btn-outline-warning" href="https://github.com/kowainik" target="_blank">See more of my projects</a>
       </div>
@@ -234,14 +177,15 @@
 
     <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="blog">
       <div class="w-100">
-        <h2 class="mb-5"><span class="text-primary">kodimensional</span> blog</h2>
+        <h2 class="mb-5 text-uppercase"><span class="text-primary">kodimensional</span> blog</h2>
 
         $for(posts)$
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-1">
+        <div class="resume-item d-flex flex-column mb-1">
             <div class="resume-content">
-                <h3 class="mb-0"><a href="$stripExtension(url)$">$title$</a></h3>
+                <h3 class="mb-0"><i class="fas fa-pen-nib fa-xs"></i> <a href="$stripExtension(url)$">$title$</a></h3>
+
             </div>
-            <div class="resume-date text-md-right">
+            <div class="resume-date">
                 <p class="text-black">$date$</p>
             </div>
         </div>
@@ -250,14 +194,16 @@
         <h2 class="mb-5 mt-5">External blog posts</h2>
 
         $for(externalPosts)$
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-1">
-        <div class="resume-content">
-            <h3 class="mb-0"><a href="$postUrl$" target="_blank">$postName$</a></h3>
+        <div class="resume-item d-flex flex-column mb-1">
+
+          <div class="resume-content">
+              <h3 class="mb-0"><i class="fas fa-link fa-xs"></i> <a href="$postUrl$" target="_blank">$postName$</a></h3>
+            <div class="resume-date">
+              <span class="text-black">$postDate$</span>
+            </div>
             <div class="subheading mb-3">$postSource$</div>
-            </div>
-            <div class="resume-date text-md-right">
-                <span class="text-black">$postDate$</span>
-            </div>
+          </div>
+
         </div>
         $endfor$
       </div>

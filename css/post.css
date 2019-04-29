@@ -50,7 +50,7 @@ pre.comment {
     padding-left: 2%;
     border-left: 4px solid #ffc107;
 }
-
+.social-icons {width:100%;}
 .social-icons a {
     color: #ffc107 !important;
     background-color: white !important;

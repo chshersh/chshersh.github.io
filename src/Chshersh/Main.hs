@@ -7,7 +7,9 @@ import Hakyll (applyAsTemplate, compile, compressCss, compressCssCompiler, const
                templateBodyCompiler, (.||.))
 import Hakyll.Web.Sass (sassCompiler)
 
+import Chshersh.Experience (experienceContext)
 import Chshersh.Posts (externalPostsContext, postsContextCompiler, postsRules)
+import Chshersh.Project (projectsContext)
 import Chshersh.Social (socialContext)
 
 
@@ -34,6 +36,8 @@ main =  hakyll $ do
         compile $ do
             postsCtx <- postsContextCompiler
             let ctx = defaultContext
+                   <> experienceContext
+                   <> projectsContext
                    <> socialContext
                    <> postsCtx
                    <> externalPostsContext
