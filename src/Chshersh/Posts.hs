@@ -2,10 +2,11 @@ module Chshersh.Posts
        ( postsRules
        , postsContextCompiler
        , externalPostsContext
+       , postContext
        ) where
 
 import Hakyll (compile, dateField, defaultContext, functionField, loadAll, match, pandocCompiler,
-               recentFirst, route, setExtension)
+               recentFirst, route, saveSnapshot, setExtension)
 
 import Chshersh.Social (socialContext)
 
@@ -19,6 +20,7 @@ postsRules = match "posts/*" $ do
         let ctx = postContext <> socialContext
         pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html" ctx
+            >>= saveSnapshot "content"
             >>= relativizeUrls
 
 postsContextCompiler :: Compiler (Context String)
