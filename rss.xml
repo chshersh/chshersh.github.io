@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>kodimensional :: Haskell blog posts</title>
+        <link>https://chshersh.github.io</link>
+        <description><![CDATA[This feed provides blog posts about using modern Haskell]]></description>
+        <atom:link href="https://chshersh.github.io/rss.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>Mon, 25 Mar 2019 00:00:00 UT</lastBuildDate>
+        <item>
+    <title>Comonadic builders</title>
+    <link>https://chshersh.github.io/posts/2019-03-25-comonadic-builders.html</link>
+    <description><![CDATA[Builder pattern in Haskell using Comonads]]></description>
+    <pubDate>Mon, 25 Mar 2019 00:00:00 UT</pubDate>
+    <guid>https://chshersh.github.io/posts/2019-03-25-comonadic-builders.html</guid>
+    <dc:creator>Dmitrii Kovanikov</dc:creator>
+</item>
+<item>
+    <title>Dead simple Haskell Travis settings for cabal and stack</title>
+    <link>https://chshersh.github.io/posts/2019-02-25-haskell-travis.html</link>
+    <description><![CDATA[Travis CI settings for Haskell projects with cabal and stack]]></description>
+    <pubDate>Mon, 25 Feb 2019 00:00:00 UT</pubDate>
+    <guid>https://chshersh.github.io/posts/2019-02-25-haskell-travis.html</guid>
+    <dc:creator>Dmitrii Kovanikov</dc:creator>
+</item>
+
+    </channel>
+</rss>

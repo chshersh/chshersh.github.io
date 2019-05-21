@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>kodimensional :: Haskell blog posts</title>
+    <link href="https://chshersh.github.io/atom.xml" rel="self" />
+    <link href="https://chshersh.github.io" />
+    <id>https://chshersh.github.io/atom.xml</id>
+    <author>
+        <name>Dmitrii Kovanikov</name>
+        <email>kovanikov@gmail.com</email>
+    </author>
+    <updated>2019-03-25T00:00:00Z</updated>
+    <entry>
+    <title>Comonadic builders</title>
+    <link href="https://chshersh.github.io/posts/2019-03-25-comonadic-builders.html" />
+    <id>https://chshersh.github.io/posts/2019-03-25-comonadic-builders.html</id>
+    <published>2019-03-25T00:00:00Z</published>
+    <updated>2019-03-25T00:00:00Z</updated>
+    <summary type="html"><![CDATA[Builder pattern in Haskell using Comonads]]></summary>
+</entry>
+<entry>
+    <title>Dead simple Haskell Travis settings for cabal and stack</title>
+    <link href="https://chshersh.github.io/posts/2019-02-25-haskell-travis.html" />
+    <id>https://chshersh.github.io/posts/2019-02-25-haskell-travis.html</id>
+    <published>2019-02-25T00:00:00Z</published>
+    <updated>2019-02-25T00:00:00Z</updated>
+    <summary type="html"><![CDATA[Travis CI settings for Haskell projects with cabal and stack]]></summary>
+</entry>
+
+</feed>
