@@ -5,9 +5,11 @@ module Chshersh.Main
 import Hakyll (applyAsTemplate, compile, compressCss, compressCssCompiler, constRoute,
                copyFileCompiler, create, defaultContext, hakyll, idRoute, match, route,
                templateBodyCompiler, (.||.))
+import Hakyll.Web.Feed (renderAtom, renderRss)
 import Hakyll.Web.Sass (sassCompiler)
 
 import Chshersh.Experience (experienceContext)
+import Chshersh.Feed (feedCompiler)
 import Chshersh.Posts (externalPostsContext, postsContextCompiler, postsRules)
 import Chshersh.Project (projectsContext)
 import Chshersh.Social (socialContext)
@@ -48,6 +50,16 @@ main =  hakyll $ do
                 >>= relativizeUrls
 
     match "templates/*" $ compile templateBodyCompiler
+
+    -- RSS feeds
+    create ["atom.xml"] $ do
+        route idRoute
+        compile (feedCompiler renderAtom)
+
+
+    create ["rss.xml"] $ do
+        route idRoute
+        compile (feedCompiler renderRss)
 
 --     -- Posts pages
 --     match "posts/*" $ do
