@@ -1,4 +1,4 @@
-module Chshersh.Social
+module Website.Social
        ( Social (..)
        , socialContext
        ) where

@@ -1,4 +1,4 @@
-module Chshersh.Experience
+module Website.Experience
        ( Experience (..)
        , experienceContext
        ) where

@@ -76,6 +76,16 @@ pre.comment {
     background-color: #2C3E50;
     color: white;
 }
+
+.toc-header ul {
+    list-style-type: none;
+}
+
+.toc-header ul li:before {
+    content: '\1F4DA';
+    margin: 0 0.5em;
+}
+
 /* Table of Contents (TOC) */
 @media (max-width:767px) {
     .toc-zone {display:none;}

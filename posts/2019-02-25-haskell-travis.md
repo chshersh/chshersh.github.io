@@ -31,10 +31,10 @@ matrix:
   # Cabal
   - ghc: 8.2.2
   - ghc: 8.4.4
-  - ghc: 8.6.3
+  - ghc: 8.6.5
 
   # Stack
-  - ghc: 8.6.3
+  - ghc: 8.6.5
     env: STACK_YAML="$TRAVIS_BUILD_DIR/stack.yaml"
 
 install:
@@ -91,7 +91,7 @@ That's all! Feel free to contact me if you have any problem setting up Travis CI
 > cases, it should be enough to have only the resolver in there:
 >
 > ```haskell
-> resolver: lts-13.9
+> resolver: lts-13.26
 > ```
 
 ## Explanation of the configuration commands
@@ -156,7 +156,7 @@ matrix:
   include:
   - ghc: 8.2.2
   - ghc: 8.4.4
-  - ghc: 8.6.3
+  - ghc: 8.6.5
 
 install:
   - ghc --version
@@ -191,7 +191,7 @@ matrix:
     env: STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.2.2.yaml"
   - ghc: 8.4.4
     env: STACK_YAML="$TRAVIS_BUILD_DIR/stack-8.4.4.yaml"
-  - ghc: 8.6.3
+  - ghc: 8.6.5
     env: STACK_YAML="$TRAVIS_BUILD_DIR/stack.yaml"
 
 install:

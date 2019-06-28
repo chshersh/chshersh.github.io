@@ -12,14 +12,15 @@ cache:
 
 matrix:
   include:
-  - ghc: 8.6.4
+  - ghc: 8.6.5
 
 install:
-  - cabal new-update
-  - cabal new-build --enable-tests --enable-benchmarks
+  - ghc --version
+  - cabal --version
 
 script:
-  - curl -sSL https://raw.github.com/ndmitchell/neil/master/misc/travis.sh | sh -s -- hlint .
+  - cabal new-update
+  - cabal new-build --enable-tests --enable-benchmarks
 
 notifications:
   email: false

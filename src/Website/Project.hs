@@ -1,4 +1,4 @@
-module Chshersh.Project
+module Website.Project
        ( Project (..)
        , projectsContext
        ) where
