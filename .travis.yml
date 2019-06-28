@@ -15,6 +15,10 @@ matrix:
   - ghc: 8.6.5
 
 install:
+  - ghc --version
+  - cabal --version
+
+script:
   - cabal new-update
   - cabal new-build --enable-tests --enable-benchmarks
 
