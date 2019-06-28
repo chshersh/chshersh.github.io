@@ -1,14 +1,17 @@
-module Chshersh.Posts
+module Website.Posts
        ( postsRules
        , postsContextCompiler
        , externalPostsContext
        , postContext
        ) where
 
-import Hakyll (compile, dateField, defaultContext, functionField, loadAll, match, pandocCompiler,
-               recentFirst, route, saveSnapshot, setExtension)
+import Hakyll (compile, constField, dateField, defaultContext, defaultHakyllReaderOptions,
+               defaultHakyllWriterOptions, functionField, getResourceString, loadAll, match,
+               recentFirst, renderPandocWith, route, saveSnapshot, setExtension)
+import Hakyll.ShortcutLinks (allShortcutLinksCompiler)
+import Text.Pandoc.Options (WriterOptions (..))
 
-import Chshersh.Social (socialContext)
+import Website.Social (socialContext)
 
 import qualified Data.Text as T
 
@@ -17,11 +20,21 @@ postsRules :: Rules ()
 postsRules = match "posts/*" $ do
     route $ setExtension "html"
     compile $ do
-        let ctx = postContext <> socialContext
-        pandocCompiler
+        rawPost <- getResourceString
+        tocItem <- renderPandocWith defaultHakyllReaderOptions withToc rawPost
+        let toc = itemBody tocItem
+        let ctx = postContext <> socialContext <> constField "toc" toc
+        allShortcutLinksCompiler
             >>= loadAndApplyTemplate "templates/post.html" ctx
             >>= saveSnapshot "content"
             >>= relativizeUrls
+
+withToc :: WriterOptions
+withToc = defaultHakyllWriterOptions
+    { writerTableOfContents = True
+    , writerTOCDepth = 4
+    , writerTemplate = Just "$toc$"
+    }
 
 postsContextCompiler :: Compiler (Context String)
 postsContextCompiler = do

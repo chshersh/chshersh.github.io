@@ -1,4 +1,5 @@
-import qualified Chshersh.Main
+import qualified Website.Main
+
 
 main :: IO ()
-main = Chshersh.Main.main
+main = Website.Main.main

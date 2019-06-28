@@ -1,11 +1,11 @@
-module Chshersh.Feed
+module Website.Feed
        ( feedCompiler
        ) where
 
 import Hakyll (bodyField, loadAllSnapshots, recentFirst)
 import Hakyll.Web.Feed (FeedConfiguration (..))
 
-import Chshersh.Posts (postContext)
+import Website.Posts (postContext)
 
 
 feedConfiguration :: FeedConfiguration

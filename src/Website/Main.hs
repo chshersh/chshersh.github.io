@@ -1,4 +1,4 @@
-module Chshersh.Main
+module Website.Main
        ( main
        ) where
 
@@ -8,11 +8,11 @@ import Hakyll (applyAsTemplate, compile, compressCss, compressCssCompiler, const
 import Hakyll.Web.Feed (renderAtom, renderRss)
 import Hakyll.Web.Sass (sassCompiler)
 
-import Chshersh.Experience (experienceContext)
-import Chshersh.Feed (feedCompiler)
-import Chshersh.Posts (externalPostsContext, postsContextCompiler, postsRules)
-import Chshersh.Project (projectsContext)
-import Chshersh.Social (socialContext)
+import Website.Experience (experienceContext)
+import Website.Feed (feedCompiler)
+import Website.Posts (externalPostsContext, postsContextCompiler, postsRules)
+import Website.Project (projectsContext)
+import Website.Social (socialContext)
 
 
 main :: IO ()
