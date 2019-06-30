@@ -5,9 +5,11 @@ module Website.Posts
        , postContext
        ) where
 
-import Hakyll (compile, constField, dateField, defaultContext, defaultHakyllReaderOptions,
-               defaultHakyllWriterOptions, functionField, getResourceString, loadAll, match,
-               recentFirst, renderPandocWith, route, saveSnapshot, setExtension)
+import Hakyll (compile, composeRoutes, constField, constRoute, dateField, defaultContext,
+               defaultHakyllReaderOptions, defaultHakyllWriterOptions, functionField,
+               getResourceString, idRoute, loadAll, match, metadataRoute, recentFirst,
+               renderPandocWith, route, saveSnapshot, setExtension)
+import Hakyll.Core.Metadata (lookupString)
 import Hakyll.ShortcutLinks (allShortcutLinksCompiler)
 import Text.Pandoc.Options (WriterOptions (..))
 
@@ -18,7 +20,12 @@ import qualified Data.Text as T
 
 postsRules :: Rules ()
 postsRules = match "posts/*" $ do
-    route $ setExtension "html"
+    route $ metadataRoute $ \metadata ->
+        let shortNameRoute = case lookupString "shortName" metadata of
+                Nothing   -> idRoute
+                Just name -> constRoute name
+        in composeRoutes shortNameRoute (setExtension "html")
+
     compile $ do
         rawPost <- getResourceString
         tocItem <- renderPandocWith defaultHakyllReaderOptions withToc rawPost
