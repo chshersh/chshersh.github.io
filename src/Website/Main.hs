@@ -3,8 +3,8 @@ module Website.Main
        ) where
 
 import Hakyll (applyAsTemplate, compile, compressCss, compressCssCompiler, constRoute,
-               copyFileCompiler, create, defaultContext, hakyll, idRoute, match, route,
-               templateBodyCompiler, (.||.))
+               copyFileCompiler, create, createRedirects, defaultContext, hakyll, idRoute, match,
+               route, templateBodyCompiler, (.||.))
 import Hakyll.Web.Feed (renderAtom, renderRss)
 import Hakyll.Web.Sass (sassCompiler)
 
@@ -31,6 +31,10 @@ main =  hakyll $ do
         compile (compressCssItem <$> sassCompiler)
 
     postsRules
+    createRedirects  -- short-names for the old posts
+        [ ("comonadic-builders.html", "posts/2019-03-25-comonadic-builders")
+        , ("travis.html", "posts/2019-02-25-haskell-travis")
+        ]
 
     -- Main page
     create ["index.html"] $ do
