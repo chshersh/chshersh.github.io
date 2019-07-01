@@ -8,8 +8,16 @@
         <name>Dmitrii Kovanikov</name>
         <email>kovanikov@gmail.com</email>
     </author>
-    <updated>2019-03-25T00:00:00Z</updated>
+    <updated>2019-07-01T00:00:00Z</updated>
     <entry>
+    <title>A story told by Type Errors</title>
+    <link href="https://chshersh.github.io/type-errors.html" />
+    <id>https://chshersh.github.io/type-errors.html</id>
+    <published>2019-07-01T00:00:00Z</published>
+    <updated>2019-07-01T00:00:00Z</updated>
+    <summary type="html"><![CDATA[Tutorial on custom type errors in Haskell with a lot of examples]]></summary>
+</entry>
+<entry>
     <title>Comonadic builders</title>
     <link href="https://chshersh.github.io/posts/2019-03-25-comonadic-builders.html" />
     <id>https://chshersh.github.io/posts/2019-03-25-comonadic-builders.html</id>

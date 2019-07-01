@@ -7,8 +7,16 @@
         <description><![CDATA[This feed provides blog posts about using modern Haskell]]></description>
         <atom:link href="https://chshersh.github.io/rss.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Mon, 25 Mar 2019 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 01 Jul 2019 00:00:00 UT</lastBuildDate>
         <item>
+    <title>A story told by Type Errors</title>
+    <link>https://chshersh.github.io/type-errors.html</link>
+    <description><![CDATA[Tutorial on custom type errors in Haskell with a lot of examples]]></description>
+    <pubDate>Mon, 01 Jul 2019 00:00:00 UT</pubDate>
+    <guid>https://chshersh.github.io/type-errors.html</guid>
+    <dc:creator>Dmitrii Kovanikov</dc:creator>
+</item>
+<item>
     <title>Comonadic builders</title>
     <link>https://chshersh.github.io/posts/2019-03-25-comonadic-builders.html</link>
     <description><![CDATA[Builder pattern in Haskell using Comonads]]></description>
