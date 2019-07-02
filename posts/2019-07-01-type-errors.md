@@ -358,7 +358,7 @@ were added not only for lists but also for `Bool`, `Char`, `String`, tuples,
 you only need to do this once and from now on till the end of times all
 developers would benefit from these instances.
 
-A similar approach is heavily used by the [silica](@hackage) library which implements
+A similar approach is heavily used by the [silica](https://github.com/mrkgnao/silica) library which implements
 lenses but has a lot of nice custom error messages that help developers to
 understand the concept of lenses better.
 
