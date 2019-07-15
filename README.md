@@ -1,8 +1,8 @@
-# chshersh.github.io
+# kodimensional.dev
 
 My personal web page:
 
-+ [ko-dimensional](http://chshersh.github.io/)
++ [kodimensional](http://kodimensional.dev/)
 
 ## How to update this web page
 
