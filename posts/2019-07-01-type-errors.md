@@ -252,8 +252,9 @@ This use case is not particularly useful but it should demonstrate how to
 construct and use custom type errors. In the following sections I'm going to
 explain how to implement a lot of cool and useful stuff with type errors.
 
-> You can construct error messages using combinators from the
-> [type-errors](@hackage) library.
+> You can construct text of error messages much easier by using
+> the [type-errors-pretty](@github(chshersh)) library.
+
 
 ## Motivating example: adding two lists
 
@@ -420,6 +421,9 @@ type family CheckFunArg (arg :: Type) (res :: Type) :: Constraint where
 instance (CheckFunArg a b, Bounded a, Enum a, Eq b) => Eq (a -> b) where
    ... implementation stays the same ...
 ```
+
+> We've implemented `CheckFunArg` type family manually. The
+> [type-errors](@hackage) library can help with more complicated functions.
 
 And now we can safely use it!
 
