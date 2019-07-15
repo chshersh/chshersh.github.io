@@ -32,6 +32,11 @@ allProjects = traverse makeItem
         , projectDesc = "Efficient implementation of the implicit treap data structure"
         }
     , Project
+        { projectName = "🐞 type-errors-pretty"
+        , projectLink = "https://github.com/chshersh/type-errors-pretty"
+        , projectDesc = "Combinators for writing pretty type errors easily"
+        }
+    , Project
         { projectName = "🎒 containers-backpack"
         , projectLink = "https://kowainik.github.io/posts/2018-08-19-picnic-put-containers-into-a-backpack"
         , projectDesc = "Backpack implementation of the uniform interface for containers in Haskell"
