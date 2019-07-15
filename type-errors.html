@@ -268,7 +268,7 @@
    |        ^^^^^^^^^^^^^^^^^^^^</code></pre>
 <p>This use case is not particularly useful but it should demonstrate how to construct and use custom type errors. In the following sections I’m going to explain how to implement a lot of cool and useful stuff with type errors.</p>
 <blockquote>
-<p>You can construct error messages using combinators from the <a href="https://hackage.haskell.org/package/type-errors">type-errors</a> library.</p>
+<p>You can construct text of error messages much easier by using the <a href="https://github.com/chshersh/type-errors-pretty">type-errors-pretty</a> library.</p>
 </blockquote>
 <h2 id="motivating-example-adding-two-lists">Motivating example: adding two lists</h2>
 <p>One of the most common Haskell typeclasses is the <code>Num</code> typeclass. It contains a lot of arithmetic operations, including number addition:</p>
@@ -357,6 +357,9 @@
 <span id="cb19-8"><a href="#cb19-8"></a></span>
 <span id="cb19-9"><a href="#cb19-9"></a><span class="kw">instance</span> (<span class="dt">CheckFunArg</span> a b, <span class="dt">Bounded</span> a, <span class="dt">Enum</span> a, <span class="dt">Eq</span> b) <span class="ot">=&gt;</span> <span class="dt">Eq</span> (a <span class="ot">-&gt;</span> b) <span class="kw">where</span></span>
 <span id="cb19-10"><a href="#cb19-10"></a>   <span class="op">...</span> implementation stays the same <span class="op">...</span></span></code></pre></div>
+<blockquote>
+<p>We’ve implemented <code>CheckFunArg</code> type family manually. The <a href="https://hackage.haskell.org/package/type-errors">type-errors</a> library can help with more complicated functions.</p>
+</blockquote>
 <p>And now we can safely use it!</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1"></a>inc1,<span class="ot"> inc2 ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
 <span id="cb20-2"><a href="#cb20-2"></a>inc1 <span class="ot">=</span> (<span class="op">+</span><span class="dv">1</span>)</span>
