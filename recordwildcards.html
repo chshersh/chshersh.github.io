@@ -199,8 +199,8 @@
 <span id="cb3-2"><a href="#cb3-2"></a>canBuyVodka user <span class="ot">=</span> age user <span class="op">&gt;=</span> <span class="dv">18</span></span></code></pre></div>
 <h3 id="deconstruction">Deconstruction</h3>
 <p>The first feature that <code>RecordWildCards</code> allows you to do is to pattern-match on the constructor in a special way by bringing all its fields into scope not as functions but as values instead. So, using this extension we can rewrite code above in the following way:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="ot">canBuyBeer ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>canBuyBeer <span class="dt">User</span>{<span class="op">..</span>} <span class="ot">=</span> age <span class="op">&gt;=</span> <span class="dv">21</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="ot">canBuyVodka ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>canBuyVodka <span class="dt">User</span>{<span class="op">..</span>} <span class="ot">=</span> age <span class="op">&gt;=</span> <span class="dv">18</span></span></code></pre></div>
 <p>In the snippet above <code>age</code> would be the value taken taken from <code>User</code> and it has type <code>Int</code>. It’s hard to see benefits in this small example. However, when you have a lot of fields and use them multiple times inside a single function, this extension becomes really handy.</p>
 <h3 id="construction">Construction</h3>
 <p>The second feature of <code>RecordWildCards</code> is the ability to construct values of the record type from identifiers in scope. Like this:</p>
