@@ -24,7 +24,7 @@ type FeedRenderer =
     -> Compiler (Item String)
 
 feedContext :: Context String
-feedContext = postContext <> bodyField "description"
+feedContext = postContext [] <> bodyField "description"
 
 feedCompiler :: FeedRenderer -> Compiler (Item String)
 feedCompiler renderer =loadAllSnapshots "posts/*" "content"

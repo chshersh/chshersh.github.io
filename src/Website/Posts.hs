@@ -7,7 +7,7 @@ module Website.Posts
 
 import Hakyll (compile, composeRoutes, constField, constRoute, dateField, defaultContext,
                defaultHakyllReaderOptions, defaultHakyllWriterOptions, functionField,
-               getResourceString, idRoute, loadAll, match, metadataRoute, recentFirst,
+               getResourceString, getTags, idRoute, loadAll, match, metadataRoute, recentFirst,
                renderPandocWith, route, saveSnapshot, setExtension)
 import Hakyll.Core.Metadata (lookupString)
 import Hakyll.ShortcutLinks (allShortcutLinksCompiler)
@@ -29,8 +29,15 @@ postsRules = match "posts/*" $ do
     compile $ do
         rawPost <- getResourceString
         tocItem <- renderPandocWith defaultHakyllReaderOptions withToc rawPost
-        let toc = itemBody tocItem
-        let ctx = postContext <> socialContext <> constField "toc" toc
+        let toc  = itemBody tocItem
+        tags    <- getTags (itemIdentifier rawPost)
+
+        let ctx = mconcat
+                [ postContext tags
+                , socialContext
+                , constField "toc" toc
+                ]
+
         allShortcutLinksCompiler
             >>= loadAndApplyTemplate "templates/post.html" ctx
             >>= saveSnapshot "content"
@@ -46,7 +53,7 @@ withToc = defaultHakyllWriterOptions
 postsContextCompiler :: Compiler (Context String)
 postsContextCompiler = do
     posts <- recentFirst =<< loadAll "posts/*"
-    pure $ listField "posts" postContext (pure posts)
+    pure $ listField "posts" (postContext []) (pure posts)
 
 -- | Removes the @.html@ suffix in the post URLs.
 stripHtmlContext :: Context a
@@ -55,9 +62,10 @@ stripHtmlContext = functionField "stripExtension" $ \args _ -> case args of
     _   -> error "relativizeUrl only needs a single argument"
 
 -- Context to used for posts
-postContext :: Context String
-postContext = mconcat
-    [ stripHtmlContext
+postContext :: [String] -> Context String
+postContext tags = mconcat
+    [ listField "tagsList" (field "tag" $ pure . itemBody) (traverse makeItem tags)
+    , stripHtmlContext
     , dateField "date" "%B %e, %Y"
     , defaultContext
     ]
