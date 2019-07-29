@@ -61,6 +61,15 @@ pre.comment {
     color: white !important;
 }
 
+.post-tag a {
+    color: #ffc107 !important;
+    background-color: white !important;
+}
+.post-tag a:focus, .post-tag a:hover {
+    color: black !important;
+    background-color: #ffc107 !important;
+}
+
 .post table {
     width: 80%;
     align: center;

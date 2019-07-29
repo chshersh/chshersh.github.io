@@ -115,6 +115,13 @@
       <section class="resume-section p-3 p-lg-5" >
         <h2 class="text-center">$title$</h2>
         <p class="text-center text-black">$date$</p>
+
+        <div class="col-12 tag-block text-center">
+            $for(tagsList)$
+            <span class="post-tag"><a class="btn btn-outline-warning">$tag$</a></span>
+            $endfor$
+        </div>
+
         <div class="post toc-header">$toc$</div>
         <div class="post">$body$</div>
     </section>
