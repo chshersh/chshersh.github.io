@@ -191,6 +191,9 @@ will see compiler error instead of warning when you forget to initialise some
 fields. Adding bangs also considered one of the best-practices to avoid space
 leaks. It's very rare when you want lazy fields of records.
 
+> **NOTE:** you can add `{-# OPTIONS_GHC -Werror=missing-fields #-}` to get
+> compile time error on unitialised lazy fields.
+
 **Conclusion:** mark field as strict to have more compile time checks and to
 avoid potential performance problems.
 
