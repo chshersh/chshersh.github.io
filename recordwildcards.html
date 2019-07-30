@@ -248,6 +248,9 @@
 <p><strong>NOTE:</strong> you can make all your types strict by default by enabling the <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#strict-by-default-data-types">StrictData</a> language extension.</p>
 </blockquote>
 <p>If you add <code>!</code> in front of each type, then all fields will become strict and you will see compiler error instead of warning when you forget to initialise some fields. Adding bangs also considered one of the best-practices to avoid space leaks. It’s very rare when you want lazy fields of records.</p>
+<blockquote>
+<p><strong>NOTE:</strong> you can add <code>{-# OPTIONS_GHC -Werror=missing-fields #-}</code> to get compile time error on unitialised lazy fields.</p>
+</blockquote>
 <p><strong>Conclusion:</strong> mark field as strict to have more compile time checks and to avoid potential performance problems.</p>
 <h2 id="compileless">Compileless</h2>
 <p>Another popular concern about <code>RecordWildCards</code> is that you lose compile time checks during pattern-matching when you add more fields. For example, we want to implement <code>ToJSON</code> instance from the <a href="https://hackage.haskell.org/package/aeson">aeson</a> library for our <code>User</code> data type:</p>
