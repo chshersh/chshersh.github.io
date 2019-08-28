@@ -70,7 +70,7 @@ canBuyVodka :: User -> Bool
 canBuyVodka User{..} = age >= 18
 ```
 
-In the snippet above `age` would be the value taken taken from `User` and it has
+In the snippet above `age` would be the value taken from `User` and it has
 type `Int`. It's hard to see benefits in this small example. However, when you
 have a lot of fields and use them multiple times inside a single function, this
 extension becomes really handy.
@@ -295,7 +295,7 @@ optionsP = Options
     <*> toP
 ```
 
-One problem with writing code in this style is that very easy to use the wrong
+One problem with writing code in this style is that it's very easy to use the wrong
 order of `fromP` and `toP` parsers when defining a parser for `Options` and this
 can lead to bugs. In CLI you can write either `--from 3 --to 42` or `--to 42 --from 3`
 and both work correctly. But in code `Options <$> fromP <*> toP` is
@@ -319,7 +319,7 @@ optionsP = do
     pure Options{..}
 ```
 
-Now, even if you change the order of `optionsFrom` and `optionsT` variables, the
+Now, even if you change the order of `optionsFrom` and `optionsTo` variables, the
 code still works.
 
 **Conclustion:** `RecordWildCards` combined with `ApplicativeDo` allow you to
