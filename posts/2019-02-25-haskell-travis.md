@@ -1,7 +1,7 @@
 ---
 title: Dead simple Haskell Travis settings for cabal and stack
 description: Travis CI settings for Haskell projects with cabal and stack
-tags: haskell, cabal, stack, travis, ci
+tags: haskell, ci, travis, cabal, stack
 ---
 
 Today I am going to share a simple [Travis CI](https://travis-ci.com/) configuration for Haskell projects with you. The `.travis.yml` file presented in this blog post allows you to painlessly test your repository on the continuous integration service under multiple GHC versions and with both build tools — [cabal-install](https://www.haskell.org/cabal/users-guide/) and [stack](https://docs.haskellstack.org/en/stable/README/). Note that the suggested settings do not include complex configuration steps that could possibly be required for some projects. However, they work amazingly well for most Haskell libraries and applications where a basic setup is enough!

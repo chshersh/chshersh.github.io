@@ -86,6 +86,20 @@ pre.comment {
     color: white;
 }
 
+.post h2:hover, .post h3:hover, .post h4:hover, .post h5:hover, .post h6:hover {
+    color: #ffc107;
+}
+.post h2 a, .post h3 a, .post h4 a, .post h5 a, .post h6 a {
+    text-decoration: none;
+    color: #343a40;
+}
+
+.post h2 a:hover, .post h3 a:hover, .post h4 a:hover, .post h5 a:hover, .post h6 a:hover ,
+.post h2 a:focus, .post h3 a:focus, .post h4 a:focus, .post h5 a:focus, .post h6 a:focus {
+    color: #ffc107;
+    text-decoration: none;
+}
+
 .toc-header ul {
     list-style-type: none;
 }
