@@ -156,11 +156,13 @@
 
         <div class="post toc-header"><ul>
 <li><a href="#problem-statement">Problem statement</a></li>
-<li><a href="#short-intro-to-comonads">Short intro to comonads</a><ul>
+<li><a href="#short-intro-to-comonads">Short intro to comonads</a>
+<ul>
 <li><a href="#what-is-comonad">What is Comonad?</a></li>
 <li><a href="#arrow-comonad">Arrow comonad</a></li>
 </ul></li>
-<li><a href="#builder-pattern-using-comonad">Builder pattern using Comonad</a><ul>
+<li><a href="#builder-pattern-using-comonad">Builder pattern using Comonad</a>
+<ul>
 <li><a href="#monoidal-settings">Monoidal settings</a></li>
 <li><a href="#trivial-project-builder">Trivial project builder</a></li>
 <li><a href="#simple-project-builder">Simple project builder</a></li>
@@ -169,7 +171,7 @@
 <li><a href="#conclusion">Conclusion</a></li>
 </ul></div>
         <div class="post"><p>When I was teaching advanced Haskell course to students, I’ve created lab assignments on several compelling topics. One of the homework tasks on the comonad section is particularly interesting, and today I would like to share the problem itself with the solution and explanation. Turns out, you actually can use comonads to solve production problems from the real world.</p>
-<h2 id="problem-statement">Problem statement</h2>
+<h2 id="problem-statement"><a href="#problem-statement" class="anchor">Problem statement</a></h2>
 <p>The problem in its essence is simple — we want to implement the <a href="https://en.wikipedia.org/wiki/Builder_pattern">Builder programming pattern</a>. In simple words, the builder is used when you want to separate value creation from configuring the creation process. In our case, we can represent config as a separate data type, construct config first and only then create a value using the configuration.</p>
 <blockquote>
 <p><strong>NOTE:</strong> It is a known fact that comonads can help with representing some OOP patterns. Check out this blog post: <a href="http://www.haskellforall.com/2013/02/you-could-have-invented-comonads.html">OOP Comonads</a>.</p>
@@ -185,9 +187,9 @@
 <blockquote>
 <p><strong>NOTE:</strong> The proposed solution has restrictions. It works only in a special case when dependencies have depth 1. In other words, your configuration contains two sets of options — A and B — and only options from set B depend on options from set A. Sure, it is possible to implement general solution with arbitrary non-cyclic dependencies (and maybe not with comonads) where you can disable and enable options, and all dependencies are resolved automatically. But I want to demonstrate how comonads can be used here and, who knows, maybe later this solution can be generalised!</p>
 </blockquote>
-<h2 id="short-intro-to-comonads">Short intro to comonads</h2>
+<h2 id="short-intro-to-comonads"><a href="#short-intro-to-comonads" class="anchor">Short intro to comonads</a></h2>
 <p>Before showing how comonads can be applied to solve the problem, I want to talk about the comonad concept itself. This is not a tutorial on comonads but I will try to give better intuition behind this typeclass.</p>
-<h3 id="what-is-comonad">What is Comonad?</h3>
+<h3 id="what-is-comonad"><a href="#what-is-comonad" class="anchor">What is Comonad?</a></h3>
 <p><code>Comonad</code> is implemented as the following typeclass available in the <a href="https://hackage.haskell.org/package/comonad">comonad</a> package:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">class</span> <span class="dt">Functor</span> w <span class="ot">=&gt;</span> <span class="dt">Comonad</span> w <span class="kw">where</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="ot">    extract   ::</span> w a <span class="ot">-&gt;</span> a</span>
@@ -231,7 +233,7 @@
 <span id="cb3-10"><a href="#cb3-10"></a><span class="ot">    extend ::</span> (<span class="dt">Identity</span> a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Identity</span> a <span class="ot">-&gt;</span> <span class="dt">Identity</span> b</span>
 <span id="cb3-11"><a href="#cb3-11"></a>    extend f <span class="ot">=</span> <span class="dt">Identity</span> <span class="op">.</span> f</span></code></pre></div>
 <p>And who said that comonads are scary? :)</p>
-<h3 id="arrow-comonad">Arrow comonad</h3>
+<h3 id="arrow-comonad"><a href="#arrow-comonad" class="anchor">Arrow comonad</a></h3>
 <p>In order to implement the Builder pattern, we are going to use the <code>Comonad</code> instance for the function arrow <code>(-&gt;)</code>. The <code>comonad</code> package has the <a href="https://hackage.haskell.org/package/comonad-5.0.4/docs/Control-Comonad-Trans-Traced.html#t:TracedT">Traced</a> <code>newtype</code> wrapper around the function <code>(-&gt;)</code>. The <code>Comonad</code> instance for this <code>newtype</code> gives us the desired behaviour.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">newtype</span> <span class="dt">Traced</span> m a <span class="ot">=</span> <span class="dt">Traced</span> {<span class="ot"> runTraced ::</span> m <span class="ot">-&gt;</span> a }</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
@@ -254,7 +256,7 @@
 <p><strong>NOTE:</strong> This instance is also useful for logging! See <a href="https://kowainik.github.io/posts/2018-09-25-co-log#comonads">co-log</a> for an example.</p>
 </blockquote>
 <p>We are going to use the <code>(-&gt;)</code> instance above as a fundamental piece of our interface in the following section.</p>
-<h2 id="builder-pattern-using-comonad">Builder pattern using Comonad</h2>
+<h2 id="builder-pattern-using-comonad"><a href="#builder-pattern-using-comonad" class="anchor">Builder pattern using Comonad</a></h2>
 <p>Finally, let’s solve the original problem! In Builder pattern we have several pieces:</p>
 <ol type="1">
 <li>A data type for the configuration.</li>
@@ -265,7 +267,7 @@
 <p>In our approach the <code>Builder</code> itself is a function that takes configuration and produces a value:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">type</span> <span class="dt">Builder</span> <span class="ot">=</span> <span class="dt">Config</span> <span class="ot">-&gt;</span> <span class="dt">Value</span></span></code></pre></div>
 <p>And <code>Builder</code> is a comonad! However, it requires from <code>Config</code> to have the <code>Monoid</code> instance in order to make the whole thing work.</p>
-<h3 id="monoidal-settings">Monoidal settings</h3>
+<h3 id="monoidal-settings"><a href="#monoidal-settings" class="anchor">Monoidal settings</a></h3>
 <p>Let’s use a simpler version of the <code>Settings</code> data type from <a href="https://github.com/kowainik/summoner">Summoner</a> in our example as the configuration. This data type has the following fields:</p>
 <ol type="1">
 <li>Flag that tells whether the project has a library or not (disabled by default).</li>
@@ -285,7 +287,7 @@
 <span id="cb9-4"><a href="#cb9-4"></a></span>
 <span id="cb9-5"><a href="#cb9-5"></a><span class="kw">instance</span> <span class="dt">Monoid</span> <span class="dt">Settings</span> <span class="kw">where</span></span>
 <span id="cb9-6"><a href="#cb9-6"></a>    <span class="fu">mempty</span> <span class="ot">=</span> <span class="dt">Settings</span> <span class="fu">mempty</span> <span class="fu">mempty</span> <span class="fu">mempty</span></span></code></pre></div>
-<h3 id="trivial-project-builder">Trivial project builder</h3>
+<h3 id="trivial-project-builder"><a href="#trivial-project-builder" class="anchor">Trivial project builder</a></h3>
 <p>We are going to create <code>Project</code> from <code>Settings</code> and here is how our <code>Project</code> data type looks like:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">data</span> <span class="dt">Project</span> <span class="ot">=</span> <span class="dt">Project</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>    {<span class="ot"> projectName       ::</span> <span class="op">!</span><span class="dt">Text</span></span>
@@ -311,7 +313,7 @@
 <span id="cb13-5"><a href="#cb13-5"></a>    , projectGitHub <span class="ot">=</span> <span class="dt">False</span></span>
 <span id="cb13-6"><a href="#cb13-6"></a>    , projectTravis <span class="ot">=</span> <span class="dt">False</span></span>
 <span id="cb13-7"><a href="#cb13-7"></a>    }</span></code></pre></div>
-<h3 id="simple-project-builder">Simple project builder</h3>
+<h3 id="simple-project-builder"><a href="#simple-project-builder" class="anchor">Simple project builder</a></h3>
 <p>Now, what we would like to have, is a way to compose different builders. The idea here is to build the smallest and simplest project builders manually and create more complicated ones by composing the smaller ones. For this we are going to use the following operator from the <code>comonad</code> package:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1"></a><span class="ot">(=&gt;&gt;) ::</span> <span class="dt">Comonad</span> w <span class="ot">=&gt;</span> w a <span class="ot">-&gt;</span> (w a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> w b</span>
 <span id="cb14-2"><a href="#cb14-2"></a>(<span class="op">=&gt;&gt;</span>) <span class="ot">=</span> <span class="fu">flip</span> extend</span></code></pre></div>
@@ -373,7 +375,7 @@
 <span id="cb20-2"><a href="#cb20-2"></a>    <span class="ot">=</span> \settings <span class="ot">-&gt;</span> hasLibraryB <span class="op">$</span> \settings2 <span class="ot">-&gt;</span> buildProject <span class="st">&quot;foo&quot;</span> <span class="op">$</span> settings <span class="op">&lt;&gt;</span> settings2</span>
 <span id="cb20-3"><a href="#cb20-3"></a>    <span class="ot">=</span> \settings <span class="ot">-&gt;</span> (\settings2 <span class="ot">-&gt;</span> buildProject <span class="st">&quot;foo&quot;</span> <span class="op">$</span> settings <span class="op">&lt;&gt;</span> settings2) (<span class="fu">mempty</span> { settingsHasLibrary <span class="ot">=</span> <span class="dt">Any</span> <span class="dt">True</span> })</span>
 <span id="cb20-4"><a href="#cb20-4"></a>    <span class="ot">=</span> \settings <span class="ot">-&gt;</span> buildProject <span class="st">&quot;foo&quot;</span> <span class="op">$</span> settings <span class="op">&lt;&gt;</span> <span class="fu">mempty</span> { settingsHasLibrary <span class="ot">=</span> <span class="dt">Any</span> <span class="dt">True</span> }</span></code></pre></div>
-<h3 id="context-dependent-builders">Context-dependent builders</h3>
+<h3 id="context-dependent-builders"><a href="#context-dependent-builders" class="anchor">Context-dependent builders</a></h3>
 <p>Now comes the fun part. We need to implement a builder for the Travis flag. However, we can’t just do the same job that we did for the other flags. We don’t want to set <code>projectTravis</code> to <code>True</code> if GitHub flag is set to <code>False</code>. So we need to inspect the value of the GitHub flag before setting something to Travis flag. The way to achieve the desired behaviour is the following:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1"></a><span class="ot">travisB ::</span> <span class="dt">ProjectBuilder</span> <span class="ot">-&gt;</span> <span class="dt">Project</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a>travisB builder <span class="ot">=</span></span>
@@ -410,7 +412,7 @@
 <blockquote>
 <p>To make sure that the above works you can apply the <a href="http://www.haskellforall.com/2013/12/equational-reasoning.html">equational reasoning</a> technique here as well.</p>
 </blockquote>
-<h2 id="conclusion">Conclusion</h2>
+<h2 id="conclusion"><a href="#conclusion" class="anchor">Conclusion</a></h2>
 <p>Putting all together we have the following pieces of the Builder pattern implemented in Haskell:</p>
 <ol type="1">
 <li><code>Settings</code>: our configuration which is a Monoid as well.</li>

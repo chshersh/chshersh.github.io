@@ -158,7 +158,8 @@
 
         <div class="post toc-header"><ul>
 <li><a href="#motivation">Motivation</a></li>
-<li><a href="#what-is-typeerror">What is TypeError?</a><ul>
+<li><a href="#what-is-typeerror">What is TypeError?</a>
+<ul>
 <li><a href="#short-intro-to-type-families">Short intro to type families</a></li>
 <li><a href="#typeerror-type-family">TypeError type family</a></li>
 <li><a href="#short-intro-to-datakinds">Short intro to DataKinds</a></li>
@@ -177,9 +178,9 @@
 <ul>
 <li><a href="https://gist.github.com/chshersh/d9413b52aafd2057f1d8c87880aa3df7">Complete version of the code from this blog</a></li>
 </ul>
-<h2 id="motivation">Motivation</h2>
+<h2 id="motivation"><a href="#motivation" class="anchor">Motivation</a></h2>
 <p>I can not express how important it is to have lucid error messages. An ideal error message should not only point out an incorrect piece of code but also suggest how to fix it. Unfortunately, not all standard error messages are that helpful. Moreover, GHC cannot know in advance about all possible usages for various functions. That’s why error messages are not attached to particular use cases. Often they are vague due to the fact how the type system in GHC is implemented and this makes errors hard to understand sometimes. However, most of the common types and functions became standard idioms in day-to-day Haskell programming. So why not give Haskell users a helping hand and guide them how to use the language efficiently by exploiting the power of the type system itself?</p>
-<h2 id="what-is-typeerror">What is TypeError?</h2>
+<h2 id="what-is-typeerror"><a href="#what-is-typeerror" class="anchor">What is TypeError?</a></h2>
 <p>Custom type errors mechanism allows Haskell developers to introduce their own compile-time error messages about usages of their functions without a need to fork GHC and patch it for the particular use cases. It provides a user-level way for extending the capabilities of the compiler. Custom user error messages can use the information only about types. With such type errors, you can’t introduce new parse errors about Haskell syntax (for that you actually need to fork GHC and patch it). But using type errors you can guide users of your library in the right direction of using your functions and types.</p>
 <p>To use custom type errors you need to perform two steps:</p>
 <ol type="1">
@@ -190,7 +191,7 @@
 <blockquote>
 <p>For a deeper understanding of type-level computations in Haskell I recommend reading <a href="https://leanpub.com/thinking-with-types">Thinking with Types</a> by Sandy Maguire.</p>
 </blockquote>
-<h3 id="short-intro-to-type-families">Short intro to type families</h3>
+<h3 id="short-intro-to-type-families"><a href="#short-intro-to-type-families" class="anchor">Short intro to type families</a></h3>
 <p>In simple words, <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#type-families">type family</a> is a type-level function from types to types. Below you can see the example of some simple type family that for a given type of unsigned numeric values returns signed type that contains every unsigned value of the corresponding type:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">Signed</span> (<span class="ot">t ::</span> <span class="dt">Type</span>)<span class="ot"> ::</span> <span class="dt">Type</span> <span class="kw">where</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>    <span class="dt">Signed</span> <span class="dt">Word8</span>   <span class="ot">=</span> <span class="dt">Int16</span></span>
@@ -214,12 +215,12 @@
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">class</span> <span class="dt">ToSigned</span> a <span class="kw">where</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="ot">    toSigned ::</span> a <span class="ot">-&gt;</span> <span class="dt">Signed</span> a</span></code></pre></div>
 <p>In the <code>ToSigned</code> typeclass the result type depends on the argument type and it is possible to have instances of this typeclasses only for types handled by the <code>Signed</code> type family.</p>
-<h3 id="typeerror-type-family">TypeError type family</h3>
+<h3 id="typeerror-type-family"><a href="#typeerror-type-family" class="anchor">TypeError type family</a></h3>
 <p>Let’s look at the implementation details of the <a href="https://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-TypeLits.html#t:TypeError">TypeError</a> type family first. Below I provide its full definition from <code>base</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">TypeError</span> (<span class="ot">a ::</span> <span class="dt">ErrorMessage</span>)<span class="ot"> ::</span> b <span class="kw">where</span></span></code></pre></div>
 <p><code>TypeError</code> is a type family that takes a type of <code>ErrorMessage</code> kind and returns a type of a <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#kind-polymorphism">polymorphic kind</a> (not just <code>Type</code> as in the example from the previous section). The fact that <code>TypeError</code> has polymorphic kind of the result means that the result can be used in many places, like constraint context or return value of any function (though usually it’s used inside constraints).</p>
 <p>You can notice that the <code>TypeError</code> type family doesn’t have a body at the language-level. There is nothing after the <code>where</code> keyword. And it is also a <em>closed type family</em> which means that you can’t extend it externally. The implementation of <code>TypeError</code> is baked into GHC internals.</p>
-<h3 id="short-intro-to-datakinds">Short intro to DataKinds</h3>
+<h3 id="short-intro-to-datakinds"><a href="#short-intro-to-datakinds" class="anchor">Short intro to DataKinds</a></h3>
 <p>In Haskell, every type can be typed. The type of type is called <em>kind</em>. You can inspect the value type in GHCi using <code>:t</code> command. Similarly, you can inspect the kind of type using <code>:k</code> command.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>t <span class="dt">True</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="dt">True</span><span class="ot"> ::</span> <span class="dt">Bool</span></span>
@@ -239,7 +240,7 @@
 <span id="cb6-2"><a href="#cb6-2"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>k <span class="dt">'True</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="dt">'True</span><span class="ot"> ::</span> <span class="dt">Bool</span></span></code></pre></div>
 <p><code>True</code> is a value that has type <code>Bool</code> and <code>Bool</code> has kind <code>Type</code>. But <code>'True</code> is a type that has kind <code>Bool</code>. So we promoted constructors to types and types to kinds. You may ask if <code>'True</code> is a type then what values it has? The answer is that it doesn’t have any values, this type is uninhabited. Not every type has values. Though, such promoted types still can be useful for type-level computations.</p>
-<h3 id="errormessage-data-type">ErrorMessage data type</h3>
+<h3 id="errormessage-data-type"><a href="#errormessage-data-type" class="anchor">ErrorMessage data type</a></h3>
 <p>Now, let’s have a look at the <a href="https://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-TypeLits.html#t:ErrorMessage">ErrorMessage</a> data type which is used as an argument in the <code>TypeError</code> type family:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">data</span> <span class="dt">ErrorMessage</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>    <span class="ot">=</span> <span class="dt">Text</span> <span class="dt">Symbol</span></span>
@@ -281,7 +282,7 @@
 <blockquote>
 <p>You can construct text of error messages much easier by using the <a href="https://github.com/chshersh/type-errors-pretty">type-errors-pretty</a> library.</p>
 </blockquote>
-<h2 id="motivating-example-adding-two-lists">Motivating example: adding two lists</h2>
+<h2 id="motivating-example-adding-two-lists"><a href="#motivating-example-adding-two-lists" class="anchor">Motivating example: adding two lists</a></h2>
 <p>One of the most common Haskell typeclasses is the <code>Num</code> typeclass. It contains a lot of arithmetic operations, including number addition:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>t (<span class="op">+</span>)</span>
 <span id="cb13-2"><a href="#cb13-2"></a><span class="ot">(+) ::</span> <span class="dt">Num</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</span></code></pre></div>
@@ -340,7 +341,7 @@
 <p>We’ve implemented the <code>Num</code> instance for the list. So every time this instance is used, GHC will kindly tell why we can’t use it and how to fix the error. If, instead, there is no instance for some data type then all you see is the error message saying “There is no such instance”. However, if you know that there is no reasonable instance of this typeclass and it can be used in the wrong context and confuse users of your library then you can forbid this instance and provide helpful error message explaining your motivation and guiding users in the right direction when this instance is used.</p>
 <p>I think that UX of Haskell beginners can be improved a lot if such instances were added not only for lists but also for <code>Bool</code>, <code>Char</code>, <code>String</code>, tuples, <code>IO</code> and many more data types. It will take time to write all the messages. But you only need to do this once and from now on till the end of times all developers would benefit from these instances.</p>
 <p>A similar approach is heavily used by the <a href="https://github.com/mrkgnao/silica">silica</a> library which implements lenses but has a lot of nice custom error messages that help developers to understand the concept of lenses better.</p>
-<h2 id="create-the-restricted-instance-eq-instance-for-the-function">Create the restricted instance: Eq instance for the function</h2>
+<h2 id="create-the-restricted-instance-eq-instance-for-the-function"><a href="#create-the-restricted-instance-eq-instance-for-the-function" class="anchor">Create the restricted instance: Eq instance for the function</a></h2>
 <p>In the previous example, we’ve forbidden the instance completely. But sometimes we want to forbid it partially (wat?). I’ll explain what I mean.</p>
 <p>Let’s say that we want to check whether two functions are equal (this might be useful for property-based testing or during refactoring). It is a difficult question: what does the function equality mean in programming? In <a href="https://math.stackexchange.com/questions/1070895/equality-of-functions">math we have a formal definition</a>. This means that in Haskell we can apply this definition in the context of pure computations. We can say that two functions are equal if they produce the same output for all possible values of their arguments. This property can be encoded via the following instance:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">instance</span> (<span class="dt">Bounded</span> a, <span class="dt">Enum</span> a, <span class="dt">Eq</span> b) <span class="ot">=&gt;</span> <span class="dt">Eq</span> (a <span class="ot">-&gt;</span> b) <span class="kw">where</span></span>
@@ -396,7 +397,7 @@
 <div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1"></a><span class="dt">Int8</span> <span class="ot">-&gt;</span> <span class="dt">Int8</span> <span class="ot">-&gt;</span> <span class="dt">Int8</span> <span class="ot">-&gt;</span> <span class="dt">Int8</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span></code></pre></div>
 <p>But this is just an implementation detail how to patch this instance to take such cases into consideration.</p>
 </blockquote>
-<h2 id="restrict-instance-externally-foldable">Restrict instance externally: Foldable</h2>
+<h2 id="restrict-instance-externally-foldable"><a href="#restrict-instance-externally-foldable" class="anchor">Restrict instance externally: Foldable</a></h2>
 <p>This use case is similar to the previous one, but now we want to restrict some functions from the already implemented instance. Some instances are written in the external libraries. It is not possible in Haskell to not import some instances. But sometimes you really want to not have all of them. Or, alternatively, the instance itself is useful except a couple of dangerous functions.</p>
 <p><strong>Example:</strong> there exist well-known efficient container types <code>Set</code> and <code>HashSet</code> from the <a href="https://hackage.haskell.org/package/containers">containers</a> and <a href="https://hackage.haskell.org/package/unordered-containers">unordered-containers</a> packages correspondingly. These data structures provide fast modification and query operation. Like these two:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1"></a><span class="ot">member ::</span> <span class="dt">Ord</span> a              <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span>     <span class="dt">Set</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
@@ -429,7 +430,7 @@
 <blockquote>
 <p><strong>NOTE:</strong> In the first example with the list we provided fat text for the whole instance because we don’t know which function was used. But now you can see how we can be aware of the fact which function is used and provide more specific error messages.</p>
 </blockquote>
-<h2 id="deprecation-better-migration-guide">Deprecation: better migration guide</h2>
+<h2 id="deprecation-better-migration-guide"><a href="#deprecation-better-migration-guide" class="anchor">Deprecation: better migration guide</a></h2>
 <p>According to <a href="https://pvp.haskell.org/">PvP</a> it’s okay to remove a function from a library while you are increasing major version. However, from the users of the library point of view function removal may hurt when they try to upgrade to a newer version of your library. If the function you are using is removed from the library, the only error you get is that there is no such function. And now you need to find CHANGELOG for the library to see what to use instead and if the library author doesn’t provide migration guide, you need to read comments and reasoning under the corresponding issues (again, only if there was an issue at first place). This is a poor UX.</p>
 <p>GHC gives developers an ability to mark their functions with the <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#warning-and-deprecated-pragmas">DEPRECATED</a> pragma and provide a custom message. When a deprecated function is used you will see a warning with the specified text. Unfortunately, it’s very easy to miss a warning message. And, again, once the function is removed, you will see only the message that there is no such function. However, with custom type errors we can make deprecation cycles smoother. Instead of removing the function, you can add custom type error to the function saying that this function is deprecated. So every time the function is used, users will see compiler error telling what to do instead. It is still a compiler error like it would be if you removed the function, but now at least users know how to fix it with less hassle.</p>
 <p>It’s extremely easy to introduce such deprecation message. This can be done via the following code:</p>
@@ -459,7 +460,7 @@
     • In the expression: parse &quot;path/to/config&quot;
       In an equation for ‘it’: it = parse &quot;path/to/config&quot;</code></pre>
 <p>Why write migration guide in some separate document if you can force the compiler to show this guide to every user of your library? I’m just joking. Please, write migration guides anyways, a separate document is still super useful!</p>
-<h2 id="analyse-generic-representation-of-a-type-names-fields-constructors">Analyse Generic representation of a type: names, fields, constructors</h2>
+<h2 id="analyse-generic-representation-of-a-type-names-fields-constructors"><a href="#analyse-generic-representation-of-a-type-names-fields-constructors" class="anchor">Analyse Generic representation of a type: names, fields, constructors</a></h2>
 <p>Final usage of custom type errors is more advanced than the previous ones. The approach uses <a href="https://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-Generics.html">Generic</a> capabilities to analyse the structure of the data types during compilation. Generics allow haskellers to derive automatically instances of arbitrary data types. However, it’s not always possible to derive instances. Sometimes you want to check whether a structure of a data type satisfies specific requirements. For example, if you don’t support automatic deriving for sum types, it is better to tell about this fact during compilation, not from docs or runtime. But with <code>Generic</code> you can do much more advanced checks! See <a href="https://github.com/Holmusk/elm-street/blob/69a574055c281e781da65f31b6feba075a4f9728/src/Elm/Generic.hs#L79-L89">elm-street</a> for examples of different compile-time verification.</p>
 <p>A possible list of compile-time analytics includes:</p>
 <ol type="1">
@@ -472,9 +473,9 @@
 </ol>
 <p>And much more. The choices are limited only by your imagination!</p>
 <p>This approach is heavily used by the <a href="https://hackage.haskell.org/package/generic-lens">generic-lens</a> library to check the structure of data type before allowing to use lenses.</p>
-<h2 id="conclusion">Conclusion</h2>
+<h2 id="conclusion"><a href="#conclusion" class="anchor">Conclusion</a></h2>
 <p>You can see that custom type errors is a really powerful mechanism. It can increase the quality of type errors by a lot. But they require some effort from the developers. And sometimes they require some advanced Haskell knowledge and understanding of more challenging topics. But in the end, it pays off a lot.</p>
-<h2 id="acknowledgements">Acknowledgements</h2>
+<h2 id="acknowledgements"><a href="#acknowledgements" class="anchor">Acknowledgements</a></h2>
 <p>I want to thank <a href="https://vrom911.github.io/">Veronika Romashkina</a> for her support and help with the blog post. I spent a lot of time and effort compiling and explaining all the examples and I couldn’t do this without her help.</p></div>
     </section>
 

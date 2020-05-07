@@ -8,8 +8,16 @@
         <name>Dmitrii Kovanikov</name>
         <email>kovanikov@gmail.com</email>
     </author>
-    <updated>2019-07-29T00:00:00Z</updated>
+    <updated>2020-05-07T00:00:00Z</updated>
     <entry>
+    <title>Dead simple cross-platform GitHub Actions for Haskell</title>
+    <link href="https://chshersh.github.io/github-actions.html" />
+    <id>https://chshersh.github.io/github-actions.html</id>
+    <published>2020-05-07T00:00:00Z</published>
+    <updated>2020-05-07T00:00:00Z</updated>
+    <summary type="html"><![CDATA[GitHub Actions CI settings for Haskell projects with Cabal and Stack]]></summary>
+</entry>
+<entry>
     <title>The Power of RecordWildCards</title>
     <link href="https://chshersh.github.io/recordwildcards.html" />
     <id>https://chshersh.github.io/recordwildcards.html</id>

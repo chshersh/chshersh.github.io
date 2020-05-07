@@ -150,13 +150,13 @@
             
             <span class="post-tag"><a class="btn btn-outline-warning">haskell</a></span>
             
-            <span class="post-tag"><a class="btn btn-outline-warning">cabal</a></span>
-            
-            <span class="post-tag"><a class="btn btn-outline-warning">stack</a></span>
+            <span class="post-tag"><a class="btn btn-outline-warning">ci</a></span>
             
             <span class="post-tag"><a class="btn btn-outline-warning">travis</a></span>
             
-            <span class="post-tag"><a class="btn btn-outline-warning">ci</a></span>
+            <span class="post-tag"><a class="btn btn-outline-warning">cabal</a></span>
+            
+            <span class="post-tag"><a class="btn btn-outline-warning">stack</a></span>
             
         </div>
 
@@ -164,18 +164,20 @@
 <li><a href="#the-config">The Config</a></li>
 <li><a href="#how-to-set-up-travis-ci">How to set up Travis CI</a></li>
 <li><a href="#explanation-of-the-configuration-commands">Explanation of the configuration commands</a></li>
-<li><a href="#reasoning-behind-such-a-ci-config">Reasoning behind such a CI config</a><ul>
+<li><a href="#reasoning-behind-such-a-ci-config">Reasoning behind such a CI config</a>
+<ul>
 <li><a href="#why-both-cabal-and-stack">Why both cabal and stack?</a></li>
 <li><a href="#why-latest-3-major-ghc-versions">Why latest 3 major GHC versions?</a></li>
 </ul></li>
 <li><a href="#conclusion">Conclusion</a></li>
-<li><a href="#appendix">Appendix</a><ul>
+<li><a href="#appendix">Appendix</a>
+<ul>
 <li><a href="#cabal-only-configuration">Cabal-only configuration</a></li>
 <li><a href="#stack-only-configuration">Stack-only configuration</a></li>
 </ul></li>
 </ul></div>
         <div class="post"><p>Today I am going to share a simple <a href="https://travis-ci.com/">Travis CI</a> configuration for Haskell projects with you. The <code>.travis.yml</code> file presented in this blog post allows you to painlessly test your repository on the continuous integration service under multiple GHC versions and with both build tools — <a href="https://www.haskell.org/cabal/users-guide/">cabal-install</a> and <a href="https://docs.haskellstack.org/en/stable/README/">stack</a>. Note that the suggested settings do not include complex configuration steps that could possibly be required for some projects. However, they work amazingly well for most Haskell libraries and applications where a basic setup is enough!</p>
-<h2 id="the-config">The Config</h2>
+<h2 id="the-config"><a href="#the-config" class="anchor">The Config</a></h2>
 <p>I’ll cut to the chase, here is the <code>.travis.yml</code> file that you can copy-paste to each Haskell project and enjoy (hopefully) the green CI status:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">sudo</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="fu">language</span><span class="kw">:</span><span class="at"> haskell</span></span>
@@ -235,7 +237,7 @@
 <p>I want to point out some nice things about this config — it doesn’t mention the project name anywhere and it doesn’t rely on any additional shell scripts. Which means that you have the ability to paste it in any Haskell project and it <strong>should just work</strong> out of the box. Though, it’s not the only reason why I recommend it. This config requires almost no maintenance, but at the same time, it is easily extensible. For example, if you want to check your code with <a href="http://hackage.haskell.org/package/hlint">HLint</a> on every CI run, you just need to add the following line at the end of the <code>script</code> section:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> curl -sSL https://raw.github.com/ndmitchell/neil/master/misc/travis.sh | sh -s -- hlint .</span></span></code></pre></div>
 <p>This command downloads the latest HLint version and runs the <code>hlint</code> executable on your project.</p>
-<h2 id="how-to-set-up-travis-ci">How to set up Travis CI</h2>
+<h2 id="how-to-set-up-travis-ci"><a href="#how-to-set-up-travis-ci" class="anchor">How to set up Travis CI</a></h2>
 <p>A quick recap on how to make Travis CI work for your project:</p>
 <ol type="1">
 <li><a href="https://docs.travis-ci.com/user/tutorial/">Enable Travis CI for your GitHub account</a> if you haven’t done it before.</li>
@@ -247,7 +249,7 @@
 <p><strong>NOTE:</strong> If you build your project with <code>stack</code>, it is a good idea to put a fully configured <code>stack.yaml</code> file to the repository. There you can specify all the settings required for <code>stack</code> to build your project, but for basic cases, it should be enough to have only the resolver in there:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a>resolver<span class="op">:</span> lts<span class="op">-</span><span class="fl">13.26</span></span></code></pre></div>
 </blockquote>
-<h2 id="explanation-of-the-configuration-commands">Explanation of the configuration commands</h2>
+<h2 id="explanation-of-the-configuration-commands"><a href="#explanation-of-the-configuration-commands" class="anchor">Explanation of the configuration commands</a></h2>
 <p>Here is a short description of the commands used in the script:</p>
 <ol type="1">
 <li><code>sudo: true</code> allows us to use more powerful CI environment and increases the speed of building.</li>
@@ -258,27 +260,27 @@
 <li><code>--system-ghc</code> flag is important for <code>stack</code> builds. Since you get the GHC version from the CI, <code>stack</code> doesn’t need to download them separately. That’s why, do remember to add this flag to every <code>stack</code> command you’re using.</li>
 <li>Email notifications are disabled because they quickly become annoying. But the <code>notifications</code> section allows you to add a Slack integration, which can be handy.</li>
 </ol>
-<h2 id="reasoning-behind-such-a-ci-config">Reasoning behind such a CI config</h2>
+<h2 id="reasoning-behind-such-a-ci-config"><a href="#reasoning-behind-such-a-ci-config" class="anchor">Reasoning behind such a CI config</a></h2>
 <p>As you can see from the config, it contains several opinionated decisions, which can appear redundant or suboptimal. Here I am going to reveal the reasoning behind them.</p>
-<h3 id="why-both-cabal-and-stack">Why both cabal and stack?</h3>
+<h3 id="why-both-cabal-and-stack"><a href="#why-both-cabal-and-stack" class="anchor">Why both cabal and stack?</a></h3>
 <p>You may ask, why would I need to test my project with two build tools? The answer is to be friendlier to the rest of the Haskell community. Yes, there are several build tools for Haskell with <code>cabal</code> and <code>stack</code> being the most popular ones. But, unfortunately, if the project builds with one of the tools, it doesn’t guarantee that it would also build with the other (though it works in <em>most</em> cases).</p>
 <ol type="1">
 <li>If your project builds with <code>stack</code> it may still fail to build with <code>cabal</code>. For example, if you don’t specify library bounds in the <code>build-depends</code> section, cabal solver might not find a valid plan to build your package with.</li>
 <li>If your project builds with <code>cabal</code> it may still fail to build with <code>stack</code>. For example, some of your dependencies might not be in the Stackage snapshot, so you would need to add them into the <code>extra-deps</code> section in <code>stack.yaml</code>.</li>
 </ol>
 <p>If you test your Haskell package on CI with both Cabal and Stack you provide a better user experience for users of both the build tools. As a maintainer of multiple open-source libraries and applications, I try to make the life of the contributors and users of my packages easier by providing support for both <code>cabal</code> and <code>stack</code>. The fewer steps they need to do in order to make my project work in their current environment, the more chances they don’t give up halfway through fighting with the tooling. Also, if your Haskell package builds with <code>cabal</code> and <code>stack</code>, you can add it to both <a href="http://hackage.haskell.org/">Hackage</a> and <a href="https://www.stackage.org/">Stackage</a>.</p>
-<h3 id="why-latest-3-major-ghc-versions">Why latest 3 major GHC versions?</h3>
+<h3 id="why-latest-3-major-ghc-versions"><a href="#why-latest-3-major-ghc-versions" class="anchor">Why latest 3 major GHC versions?</a></h3>
 <p>It is a huge temptation to use only the latest GHC version for your package with all brand new cool features. But even if migration to a newer GHC version is usually a painless process, it takes time for the whole Haskell ecosystem to catch up. And users of your Haskell package may still use a two year old GHC version. This usually happens in big applications where you cannot switch to a newer GHC version unless each of your dependencies supports it.</p>
 <p>At the same time, it is highly desired to be able to bump up the version bounds only for some specific libraries (because of applied bug-fixes and performance improvements in the newer versions). But if newer versions require you to also switch to a newer compiler, you might not be able to do that because the migration of your application to a newer GHC version can be blocked by other libraries.</p>
 <p>You can see why it is nice when libraries support older compiler versions as well. However, maintaining support for very old GHC versions might be a thankless and time-consuming thing to do. Also, the more GHC versions you test against on the CI, the more time you need to wait until CI passes. That’s why the latest 3 seem reasonable enough.</p>
 <blockquote>
 <p><strong>NOTE:</strong> you may notice from the configuration that the latest 3 GHC versions are tested only for <code>cabal-install</code> while <code>stack</code> builds only most recent version. This is done merely for convenience since in Stackage snapshots GHC versions are tightly coupled with dependency versions.</p>
 </blockquote>
-<h2 id="conclusion">Conclusion</h2>
+<h2 id="conclusion"><a href="#conclusion" class="anchor">Conclusion</a></h2>
 <p>You can see now that it’s actually not that hard to run Travis CI for Haskell repositories! And the given configuration is easily extensible with more commands, like adding HLint, checking on a newer compiler version, building <a href="https://www.haskell.org/haddock/">Haddock</a> documentation, running benchmarks, etc. Dealing with CI errors requires time and patience. But at least with this config you don’t need to have multiple build tools and multiple GHC versions installed on your machine, you can delegate all this dirty work to the CI.</p>
-<h2 id="appendix">Appendix</h2>
+<h2 id="appendix"><a href="#appendix" class="anchor">Appendix</a></h2>
 <p>In some situations it’s not possible to run CI for your Haskell project with both build tools easily. So below I’m providing separate configurations for each build tool.</p>
-<h3 id="cabal-only-configuration">Cabal-only configuration</h3>
+<h3 id="cabal-only-configuration"><a href="#cabal-only-configuration" class="anchor">Cabal-only configuration</a></h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">sudo</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="fu">language</span><span class="kw">:</span><span class="at"> haskell</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
@@ -308,7 +310,7 @@
 <span id="cb4-27"><a href="#cb4-27"></a></span>
 <span id="cb4-28"><a href="#cb4-28"></a><span class="fu">notifications</span><span class="kw">:</span></span>
 <span id="cb4-29"><a href="#cb4-29"></a><span class="at">  </span><span class="fu">email</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span></code></pre></div>
-<h3 id="stack-only-configuration">Stack-only configuration</h3>
+<h3 id="stack-only-configuration"><a href="#stack-only-configuration" class="anchor">Stack-only configuration</a></h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">sudo</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="fu">language</span><span class="kw">:</span><span class="at"> haskell</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a></span>
