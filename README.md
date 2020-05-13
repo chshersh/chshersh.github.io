@@ -1,5 +1,7 @@
 # kodimensional.dev
 
+[![GitHub CI](https://github.com/chshersh/chshersh.github.io/workflows/CI/badge.svg)](https://github.com/chshersh/chshersh.github.io/actions)
+
 My personal web page:
 
 + [kodimensional](http://kodimensional.dev/)

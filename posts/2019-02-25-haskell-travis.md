@@ -67,10 +67,21 @@ notifications:
 
 > **NOTE:** Instead of copy-pasting this `.travis.yml` file to every project you can use [Summoner](https://github.com/kowainik/summoner) to scaffold completely configured production-level Haskell libraries and applications which would include Travis configurations corresponding to the user-configured/custom project settings.
 
-I want to point out some nice things about this config — it doesn't mention the project name anywhere and it doesn't rely on any additional shell scripts. Which means that you have the ability to paste it in any Haskell project and it **should just work** out of the box. Though, it's not the only reason why I recommend it. This config requires almost no maintenance, but at the same time, it is easily extensible. For example, if you want to check your code with [HLint](http://hackage.haskell.org/package/hlint) on every CI run, you just need to add the following line at the end of the `script` section:
+## Customization: HLint
+
+I want to point out some nice things about this config — it doesn't
+mention the project name anywhere and it doesn't rely on any
+additional shell scripts. Which means that you have the ability to
+paste it in any Haskell project and it **should just work** out of the
+box. Though, it's not the only reason why I recommend it. This config
+requires almost no maintenance, but at the same time, it is easily
+extensible. For example, if you want to check your code with
+[HLint](http://hackage.haskell.org/package/hlint) on every CI run, you
+just need to add the following line at the end of the `script`
+section:
 
 ```yaml
-  - curl -sSL https://raw.github.com/ndmitchell/neil/master/misc/travis.sh | sh -s -- hlint .
+- curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
 ```
 
 This command downloads the latest HLint version and runs the `hlint` executable on your project.
