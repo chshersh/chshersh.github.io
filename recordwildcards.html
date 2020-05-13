@@ -180,71 +180,71 @@
 <p><a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#record-wildcards">RecordWildCards</a> is one of the language extensions that improve the situation with records. However, it’s one of the most controversial extensions at the same time. Some people suggest avoiding this extension no matter what. Some prefer to use it everywhere. In this blog post, I’m going to review this extension under any possible angle and tell when to use and when not to use it.</p>
 <h2 id="what-is-recordwildcards"><a href="#what-is-recordwildcards" class="anchor">What is RecordWildCards?</a></h2>
 <p>Let’s start with talking about how records are implemented in Haskell. When you define the following data type:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">data</span> <span class="dt">User</span> <span class="ot">=</span> <span class="dt">User</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>    {<span class="ot"> name ::</span> <span class="dt">Text</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>    ,<span class="ot"> age  ::</span> <span class="dt">Int</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>    }</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">User</span> <span class="ot">=</span> <span class="dt">User</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    {<span class="ot"> name ::</span> <span class="dt">Text</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    ,<span class="ot"> age  ::</span> <span class="dt">Int</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    }</span></code></pre></div>
 <p>In Haskell it’s actually syntax sugar for the following code:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">data</span> <span class="dt">User</span> <span class="ot">=</span> <span class="dt">User</span> <span class="dt">Text</span> <span class="dt">Int</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="ot">name ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Text</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>name (<span class="dt">User</span> n _) <span class="ot">=</span> n</span>
-<span id="cb2-5"><a href="#cb2-5"></a></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="ot">age ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a>age (<span class="dt">User</span> _ a) <span class="ot">=</span> a</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">User</span> <span class="ot">=</span> <span class="dt">User</span> <span class="dt">Text</span> <span class="dt">Int</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="ot">name ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Text</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>name (<span class="dt">User</span> n _) <span class="ot">=</span> n</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="ot">age ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>age (<span class="dt">User</span> _ a) <span class="ot">=</span> a</span></code></pre></div>
 <blockquote>
 <p><strong>NOTE:</strong> in addition to generated functions each record also allows you to use record update syntax.</p>
 </blockquote>
 <p>As you can see, getter functions are generated with the same names and types as the corresponding fields. And you can operate with them as ordinary functions when you write code:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="ot">canBuyVodka ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>canBuyVodka user <span class="ot">=</span> age user <span class="op">&gt;=</span> <span class="dv">18</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ot">canBuyVodka ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>canBuyVodka user <span class="ot">=</span> age user <span class="op">&gt;=</span> <span class="dv">18</span></span></code></pre></div>
 <h3 id="deconstruction"><a href="#deconstruction" class="anchor">Deconstruction</a></h3>
 <p>The first feature that <code>RecordWildCards</code> allows you to do is to pattern-match on the constructor in a special way by bringing all its fields into scope not as functions but as values instead. So, using this extension we can rewrite code above in the following way:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="ot">canBuyVodka ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>canBuyVodka <span class="dt">User</span>{<span class="op">..</span>} <span class="ot">=</span> age <span class="op">&gt;=</span> <span class="dv">18</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ot">canBuyVodka ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>canBuyVodka <span class="dt">User</span>{<span class="op">..</span>} <span class="ot">=</span> age <span class="op">&gt;=</span> <span class="dv">18</span></span></code></pre></div>
 <p>In the snippet above <code>age</code> would be the value taken from <code>User</code> and it has type <code>Int</code>. It’s hard to see benefits in this small example. However, when you have a lot of fields and use them multiple times inside a single function, this extension becomes really handy.</p>
 <h3 id="construction"><a href="#construction" class="anchor">Construction</a></h3>
 <p>The second feature of <code>RecordWildCards</code> is the ability to construct values of the record type from identifiers in scope. Like this:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1"></a><span class="ot">readUser ::</span> <span class="dt">IO</span> <span class="dt">User</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>readUser <span class="ot">=</span> <span class="kw">do</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>    name <span class="ot">&lt;-</span> <span class="fu">getLine</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>    age  <span class="ot">&lt;-</span> <span class="fu">readLn</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>    <span class="fu">pure</span> <span class="dt">User</span>{<span class="op">..</span>}</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ot">readUser ::</span> <span class="dt">IO</span> <span class="dt">User</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>readUser <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    name <span class="ot">&lt;-</span> <span class="fu">getLine</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>    age  <span class="ot">&lt;-</span> <span class="fu">readLn</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    <span class="fu">pure</span> <span class="dt">User</span>{<span class="op">..</span>}</span></code></pre></div>
 <p>Values <code>name</code> and <code>age</code> are used as corresponding fields of the <code>User</code> constructor. This helps to avoid code duplication and eliminates the need to come up with different variable names.</p>
 <p>In the following sections, I’m going to highlight common concerns about this extension and recommend best-practices.</p>
 <h2 id="implicit-scope"><a href="#implicit-scope" class="anchor">Implicit scope</a></h2>
 <p>One of the reasons why some people don’t like <code>RecordWildCards</code> is because it’s not clear where the identifiers come from. Consider the following code:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1"></a><span class="ot">nameOnCard ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Job</span> <span class="ot">-&gt;</span> <span class="dt">Text</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>nameOnCard <span class="dt">User</span>{<span class="op">..</span>} <span class="dt">Job</span>{<span class="op">..</span>} <span class="ot">=</span> name <span class="op">&lt;&gt;</span> <span class="st">&quot; | &quot;</span> <span class="op">&lt;&gt;</span> title</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="ot">nameOnCard ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Job</span> <span class="ot">-&gt;</span> <span class="dt">Text</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>nameOnCard <span class="dt">User</span>{<span class="op">..</span>} <span class="dt">Job</span>{<span class="op">..</span>} <span class="ot">=</span> name <span class="op">&lt;&gt;</span> <span class="st">&quot; | &quot;</span> <span class="op">&lt;&gt;</span> title</span></code></pre></div>
 <p>The problem with this code is that it’s not obvious from what data types these fields come from: is <code>name</code> a field of <code>User</code> or <code>Job</code>? Hard to tell without looking at the definitions of the corresponding types. This makes code hard to read and maintain.</p>
 <p>One of the possible solutions some people recommend is to use <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#record-puns">NamedFieldPuns</a> extension. When this extension enabled, you can write the following code instead:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1"></a><span class="ot">nameOnCard ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Job</span> <span class="ot">-&gt;</span> <span class="dt">Text</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>nameOnCard <span class="dt">User</span>{name} <span class="dt">Job</span>{title} <span class="ot">=</span> name <span class="op">&lt;&gt;</span> <span class="st">&quot; | &quot;</span> <span class="op">&lt;&gt;</span> title</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="ot">nameOnCard ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Job</span> <span class="ot">-&gt;</span> <span class="dt">Text</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>nameOnCard <span class="dt">User</span>{name} <span class="dt">Job</span>{title} <span class="ot">=</span> name <span class="op">&lt;&gt;</span> <span class="st">&quot; | &quot;</span> <span class="op">&lt;&gt;</span> title</span></code></pre></div>
 <p><code>NamedFieldPuns</code> is similar to <code>RecordWildCards</code> but it forces you to specify explicitly what fields you are using. In this particular case, the extension solves the problem of figuring out where the variables come from, however, it has its own drawbacks:</p>
 <ol type="1">
 <li>When your records have a lot of fields and you use most of them, usage of this extension increases the size of your code significantly.</li>
 <li>It introduces code duplication. You write field names twice: on the pattern-matching side and on the call side.</li>
 </ol>
 <p>Let’s see how all these problems can be solved with <code>RecordWildCards</code>. Because record fields are top-level functions and because there is no function overloading in Haskell, you can’t have two data types with the same field names in scope (though see the section about <a href="#duplicaterecordfields">DuplicateRecordFields</a>). One of the popular solutions to this difficulty is to prefix field names with the data type name or its abbreviation if the data type name is too long. Turns out that this approach also solves the above problem with <code>RecordWildCards</code>. This naming convention is so common that JSON and <code>lens</code> libraries provide options to strip prefixes automatically. If we define our data type like this:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">data</span> <span class="dt">User</span> <span class="ot">=</span> <span class="dt">User</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>    {<span class="ot"> userName ::</span> <span class="dt">Text</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>    ,<span class="ot"> userAge  ::</span> <span class="dt">Int</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>    }</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">User</span> <span class="ot">=</span> <span class="dt">User</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>    {<span class="ot"> userName ::</span> <span class="dt">Text</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>    ,<span class="ot"> userAge  ::</span> <span class="dt">Int</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>    }</span></code></pre></div>
 <p>Then the function from our example becomes more readable!</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1"></a><span class="ot">nameOnCard ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Job</span> <span class="ot">-&gt;</span> <span class="dt">Text</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>nameOnCard <span class="dt">User</span>{<span class="op">..</span>} <span class="dt">Job</span>{<span class="op">..</span>} <span class="ot">=</span> userName <span class="op">&lt;&gt;</span> <span class="st">&quot; | &quot;</span> <span class="op">&lt;&gt;</span> jobTitle</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="ot">nameOnCard ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Job</span> <span class="ot">-&gt;</span> <span class="dt">Text</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>nameOnCard <span class="dt">User</span>{<span class="op">..</span>} <span class="dt">Job</span>{<span class="op">..</span>} <span class="ot">=</span> userName <span class="op">&lt;&gt;</span> <span class="st">&quot; | &quot;</span> <span class="op">&lt;&gt;</span> jobTitle</span></code></pre></div>
 <p><strong>Conclusion:</strong> prefix field names with the type name to solve two problems at the same time.</p>
 <h2 id="strict-construction"><a href="#strict-construction" class="anchor">Strict construction</a></h2>
 <p>If you construct values using <code>RecordWildCards</code>, you might forget to specify all fields like in the code below:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1"></a><span class="ot">defaultUser ::</span> <span class="dt">User</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>defaultUser <span class="ot">=</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a>    <span class="kw">let</span> userName <span class="ot">=</span> <span class="st">&quot;Ivan&quot;</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a>    <span class="kw">in</span> <span class="dt">User</span>{<span class="op">..</span>}</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="ot">defaultUser ::</span> <span class="dt">User</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>defaultUser <span class="ot">=</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>    <span class="kw">let</span> userName <span class="ot">=</span> <span class="st">&quot;Ivan&quot;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a>    <span class="kw">in</span> <span class="dt">User</span>{<span class="op">..</span>}</span></code></pre></div>
 <p>When GHC sees similar code, it outputs warning that not all fields are initialised. But it’s very easy to miss this warning and get a runtime error later. The answer to this problem is to mark every field of your data type with the strict annotation:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">data</span> <span class="dt">User</span> <span class="ot">=</span> <span class="dt">User</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>    {<span class="ot"> userName ::</span> <span class="op">!</span><span class="dt">Text</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>    ,<span class="ot"> userAge  ::</span> <span class="op">!</span><span class="dt">Int</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a>    }</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">User</span> <span class="ot">=</span> <span class="dt">User</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>    {<span class="ot"> userName ::</span> <span class="op">!</span><span class="dt">Text</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a>    ,<span class="ot"> userAge  ::</span> <span class="op">!</span><span class="dt">Int</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a>    }</span></code></pre></div>
 <blockquote>
 <p><strong>NOTE:</strong> you can make all your types strict by default by enabling the <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#strict-by-default-data-types">StrictData</a> language extension.</p>
 </blockquote>
@@ -255,11 +255,11 @@
 <p><strong>Conclusion:</strong> mark field as strict to have more compile time checks and to avoid potential performance problems.</p>
 <h2 id="compileless"><a href="#compileless" class="anchor">Compileless</a></h2>
 <p>Another popular concern about <code>RecordWildCards</code> is that you lose compile time checks during pattern-matching when you add more fields. For example, we want to implement <code>ToJSON</code> instance from the <a href="https://hackage.haskell.org/package/aeson">aeson</a> library for our <code>User</code> data type:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">instance</span> <span class="dt">ToJSON</span> <span class="dt">User</span> <span class="kw">where</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>    toJSON <span class="dt">User</span>{<span class="op">..</span>} <span class="ot">=</span> [<span class="st">&quot;name&quot;</span> <span class="op">.=</span> userName, <span class="st">&quot;age&quot;</span> <span class="op">.=</span> userAge]</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">ToJSON</span> <span class="dt">User</span> <span class="kw">where</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>    toJSON <span class="dt">User</span>{<span class="op">..</span>} <span class="ot">=</span> [<span class="st">&quot;name&quot;</span> <span class="op">.=</span> userName, <span class="st">&quot;age&quot;</span> <span class="op">.=</span> userAge]</span></code></pre></div>
 <p>Now, if we add one more field to the <code>User</code> type, GHC wouldn’t warn us that we need to update this instance. If we want to see compile time error we need to write this instance in a different way:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">instance</span> <span class="dt">ToJSON</span> <span class="dt">User</span> <span class="kw">where</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>    toJSON (<span class="dt">User</span> name age) <span class="ot">=</span> [<span class="st">&quot;name&quot;</span> <span class="op">.=</span> name, <span class="st">&quot;age&quot;</span> <span class="op">.=</span> age]</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">ToJSON</span> <span class="dt">User</span> <span class="kw">where</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>    toJSON (<span class="dt">User</span> name age) <span class="ot">=</span> [<span class="st">&quot;name&quot;</span> <span class="op">.=</span> name, <span class="st">&quot;age&quot;</span> <span class="op">.=</span> age]</span></code></pre></div>
 <p>But let’s look at this problem closer. This is the case where we want to use <em>each</em> field of the constructor. However, not all functions are like that. In our <code>nameOnCard</code> function from the previous paragraph, we don’t want to use all fields, we’re interested only in a subset of them. And we don’t want to update that function when we change definitions of the <code>User</code> or <code>Job</code> types. However, in <code>ToJSON</code> instance, we want to use <em>all</em> fields. So, the problem is not actually in <code>RecordWildCards</code>. We need to know where to apply this extension, though even here you can use <code>RecordWildCards</code> to make your life easier and here is why:</p>
 <ol type="1">
 <li>If you also define <code>FromJSON</code> instance, you should implement roundtrip property-based tests to make sure that your <code>FromJSON</code> and <code>ToJSON</code> satisfy this property. It’s not possible to skip <code>FromJSON</code> instance update because you will see compile time error if you don’t initialise all fields of the type. Thus, if you forget to update <code>ToJSON</code> instance, you observe test failure.</li>
@@ -274,35 +274,35 @@
 <p>Let’s say we want to build CLI for the tool that allows to query some data and filter it by <code>from</code> and <code>to</code> entries. Terminal command for this tool may look like this:</p>
 <pre><code>my-tool query --from 3 --to 42</code></pre>
 <p>We can use <a href="https://hackage.haskell.org/package/optparse-applicative">optparse-applicative</a> library to implement a parser for these options easily. Let’s start with creating our data type for the options:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">data</span> <span class="dt">Options</span> <span class="ot">=</span> <span class="dt">Options</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>    {<span class="ot"> optionsFrom ::</span> <span class="op">!</span><span class="dt">Int</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a>    ,<span class="ot"> optionsTo   ::</span> <span class="op">!</span><span class="dt">Int</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a>    }</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Options</span> <span class="ot">=</span> <span class="dt">Options</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>    {<span class="ot"> optionsFrom ::</span> <span class="op">!</span><span class="dt">Int</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>    ,<span class="ot"> optionsTo   ::</span> <span class="op">!</span><span class="dt">Int</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a>    }</span></code></pre></div>
 <p><code>optparse-applicative</code> is built around <code>Applicative</code> functors. So in order to implement a parser for the <code>Options</code> data type you need to write code like this:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1"></a>fromP,<span class="ot"> toP ::</span> <span class="dt">Parser</span> <span class="dt">Int</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="op">...</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a></span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="ot">optionsP ::</span> <span class="dt">Parser</span> <span class="dt">Options</span></span>
-<span id="cb16-5"><a href="#cb16-5"></a>optionsP <span class="ot">=</span> <span class="dt">Options</span></span>
-<span id="cb16-6"><a href="#cb16-6"></a>    <span class="op">&lt;$&gt;</span> fromP</span>
-<span id="cb16-7"><a href="#cb16-7"></a>    <span class="op">&lt;*&gt;</span> toP</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a>fromP,<span class="ot"> toP ::</span> <span class="dt">Parser</span> <span class="dt">Int</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a><span class="op">...</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a><span class="ot">optionsP ::</span> <span class="dt">Parser</span> <span class="dt">Options</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a>optionsP <span class="ot">=</span> <span class="dt">Options</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a>    <span class="op">&lt;$&gt;</span> fromP</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true"></a>    <span class="op">&lt;*&gt;</span> toP</span></code></pre></div>
 <p>One problem with writing code in this style is that it’s very easy to use the wrong order of <code>fromP</code> and <code>toP</code> parsers when defining a parser for <code>Options</code> and this can lead to bugs. In CLI you can write either <code>--from 3 --to 42</code> or <code>--to 42 --from 3</code> and both work correctly. But in code <code>Options &lt;$&gt; fromP &lt;*&gt; toP</code> is not the same as <code>Options &lt;$&gt; toP &lt;*&gt; fromP</code>. This semantic difference between real-world and expectations from code can lead to unexpected bugs.</p>
 <p>This is true in general for such applicative-style code but it’s more important with regards to CLI. Because it’s not that easy to test CLI and to my knowledge, not many people really write automatic tests for CLI. So in this area of our code, we want to be more careful not to introduce extra bugs.</p>
 <p>One of the solutions to the described problem is to introduce <code>newtype</code>s. But it might be too tedious to deal with lots of <code>newtype</code>s. Fortunately, we can use <code>RecordWildCards</code> and <code>ApplicativeDo</code> extension to solve this problem easier!</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1"></a><span class="ot">optionsP ::</span> <span class="dt">Parser</span> <span class="dt">Options</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a>optionsP <span class="ot">=</span> <span class="kw">do</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a>    optionsFrom <span class="ot">&lt;-</span> fromP</span>
-<span id="cb17-4"><a href="#cb17-4"></a>    optionsTo   <span class="ot">&lt;-</span> toP</span>
-<span id="cb17-5"><a href="#cb17-5"></a>    <span class="fu">pure</span> <span class="dt">Options</span>{<span class="op">..</span>}</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="ot">optionsP ::</span> <span class="dt">Parser</span> <span class="dt">Options</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>optionsP <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>    optionsFrom <span class="ot">&lt;-</span> fromP</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a>    optionsTo   <span class="ot">&lt;-</span> toP</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a>    <span class="fu">pure</span> <span class="dt">Options</span>{<span class="op">..</span>}</span></code></pre></div>
 <p>Now, even if you change the order of <code>optionsFrom</code> and <code>optionsTo</code> variables, the code still works.</p>
 <p><strong>Conclustion:</strong> <code>RecordWildCards</code> combined with <code>ApplicativeDo</code> allow you to write type-safe and maintainable code.</p>
 <h2 id="duplicaterecordfields"><a href="#duplicaterecordfields" class="anchor">DuplicateRecordFields</a></h2>
 <p>Due to the records implementation details, it’s not possible to have data types with the same field names in scope in standard Haskell code (as per Haskell2010). However, if you enable <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#duplicate-record-fields">DuplicateRecordFields</a> extension, it becomes possible. You can leverage this extension to convert between data types easily:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">data</span> <span class="dt">Man</span> <span class="ot">=</span> <span class="dt">Man</span> {<span class="ot"> name ::</span> <span class="op">!</span><span class="dt">Text</span> }</span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="kw">data</span> <span class="dt">Cat</span> <span class="ot">=</span> <span class="dt">Cat</span> {<span class="ot"> name ::</span> <span class="op">!</span><span class="dt">Text</span> }</span>
-<span id="cb18-3"><a href="#cb18-3"></a></span>
-<span id="cb18-4"><a href="#cb18-4"></a><span class="ot">evilMagic ::</span> <span class="dt">Man</span> <span class="ot">-&gt;</span> <span class="dt">Cat</span></span>
-<span id="cb18-5"><a href="#cb18-5"></a>evilMagic <span class="dt">Man</span>{<span class="op">..</span>} <span class="ot">=</span> <span class="dt">Cat</span>{<span class="op">..</span>}</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Man</span> <span class="ot">=</span> <span class="dt">Man</span> {<span class="ot"> name ::</span> <span class="op">!</span><span class="dt">Text</span> }</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Cat</span> <span class="ot">=</span> <span class="dt">Cat</span> {<span class="ot"> name ::</span> <span class="op">!</span><span class="dt">Text</span> }</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a><span class="ot">evilMagic ::</span> <span class="dt">Man</span> <span class="ot">-&gt;</span> <span class="dt">Cat</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a>evilMagic <span class="dt">Man</span>{<span class="op">..</span>} <span class="ot">=</span> <span class="dt">Cat</span>{<span class="op">..</span>}</span></code></pre></div>
 <p>However, such automatic conversion works only if fields of different types have the exact same names. So, if data types have different prefixes, you need to write mapping between fields explicitly. But if you decide not to add prefixes for the field names, some pieces of your code that do something else besides mere conversion between data types, can become less readable if you use <code>RecordWildCards</code> in them.</p>
 <p><strong>Conclusion:</strong> if you convert between data types more often than you use them, you can leverage the combination of <code>RecordWildCards</code> and <code>DuplicateRecordFields</code> extensions.</p>
 <h2 id="summary"><a href="#summary" class="anchor">Summary</a></h2>
