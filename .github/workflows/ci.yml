@@ -4,7 +4,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [master]
+    branches: [develop]
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      if: github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.ref == 'refs/heads/master'
+      if: github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.ref == 'refs/heads/develop'
 
     - uses: actions/setup-haskell@v1.1
       name: Setup Haskell
@@ -26,7 +26,7 @@ jobs:
         ghc-version: ${{ matrix.ghc }}
         cabal-version: ${{ matrix.cabal }}
 
-    - uses: actions/cache@v1
+    - uses: actions/cache@v1.1.1
       name: Cache ~/.cabal/store
       with:
         path: ~/.cabal/store
@@ -34,5 +34,4 @@ jobs:
 
     - name: Build
       run: |
-        cabal update
-        cabal build all --enable-tests --enable-benchmarks
+        cabal build all --enable-tests

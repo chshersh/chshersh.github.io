@@ -78,34 +78,38 @@ jobs:
     - uses: actions/checkout@v2
       if: github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.ref == 'refs/heads/master'
 
-    - uses: actions/setup-haskell@v1.1
+    - uses: actions/setup-haskell@v1.1.1
       id: setup-haskell-cabal
       name: Setup Haskell
       with:
         ghc-version: ${{ matrix.ghc }}
         cabal-version: ${{ matrix.cabal }}
 
+    - name: Freeze
+      run: |
+        cabal freeze
+
     - uses: actions/cache@v1
-      name: Cache cabal-store
+      name: Cache ~/.cabal/store
       with:
         path: ${{ steps.setup-haskell-cabal.outputs.cabal-store }}
-        key: ${{ runner.os }}-${{ matrix.ghc }}-cabal
+        key: ${{ runner.os }}-${{ matrix.ghc }}-${{ hashFiles('cabal.project.freeze') }}
 
     - name: Build
       run: |
-        cabal update
-        cabal build all --enable-tests --enable-benchmarks --write-ghc-environment-files=always
+        cabal configure --enable-tests --enable-benchmarks --test-show-details=direct
+        cabal build all
 
     - name: Test
       run: |
-        cabal test all --enable-tests
+        cabal test all
 
   stack:
     name: stack / ghc ${{ matrix.ghc }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        stack: ["2.1.3"]
+        stack: ["2.3.1"]
         ghc: ["8.8.3"]
 
     steps:
@@ -137,6 +141,12 @@ Enabling such CI for your projects is completely effortless. All you
 need to do is create a file named `.github/workflows/ci.yml` with the
 above content and push it to your repository. That's all! GitHub takes
 care of everything else for you.
+
+The above config is implemented as a
+[workflow template](https://github.blog/2020-06-22-promote-consistency-across-your-organization-with-workflow-templates/),
+and can be enabled in one click in all Kowainik repositories:
+
+* [kowainik/.github: Dead-simple CI](https://github.com/kowainik/.github/blob/master/workflow-templates/ci.yml)
 
 Once all build errors are fixed, you can enjoy your well-deserved
 green CI 💚
@@ -173,14 +183,23 @@ below is a short explanation:
    Ubuntu. The GitHub Actions virtual environment comes with GHC,
    Cabal and Stack already pre-installed in there, so the CI is faster
    on Linux than on Windows or macOS at the moment.
-3. Your project builds on macOS and Windows only using the latest GHC
+3. Cache for `cabal` builds is based on the _cabal freeze_ files. The
+   `cache` GitHub Action doesn't upload newer cache if the cache with
+   such key already exists. This can be problematic when you starting
+   developing a package and adding new dependencies. To improve the
+   situation, the cache key is based on all project
+   dependencies. Using this approach means that once you change
+   dependencies, your project and all dependencies will be rebuilt
+   from scratch. But when they are built, the whole cache will be
+   reused next time.
+4. Your project builds on macOS and Windows only using the latest GHC
    version. It usually won't give you a lot to build with multiple GHC
    versions on all three platforms. So instead of having a `N x M`
    matrix, it's enough to have a `N + M - 1` matrix. Though, you can
    easily change this behaviour by removing relevant `exclude`
    sections.
-4. The CI also configures the testing environment properly and runs
+5. The CI also configures the testing environment properly and runs
    your tests automatically with each build.
-5. The config is extensible and easily customizable. You can change
+6. The config is extensible and easily customizable. You can change
    step names and their commands, add new steps. You can even add
    releases in an easy way with such a system!
