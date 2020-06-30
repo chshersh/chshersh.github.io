@@ -148,6 +148,8 @@ and can be enabled in one click in all Kowainik repositories:
 
 * [kowainik/.github: Dead-simple CI](https://github.com/kowainik/.github/blob/master/workflow-templates/ci.yml)
 
+![Suggested workflow](https://user-images.githubusercontent.com/4276606/86161652-788da200-bb05-11ea-8757-46c03a9e3c53.png)
+
 Once all build errors are fixed, you can enjoy your well-deserved
 green CI 💚
 
