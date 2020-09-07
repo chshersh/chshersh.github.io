@@ -22,6 +22,11 @@ allProjects = traverse makeItem
         , projectDesc = "Composable contravariant comonadic logging library"
         }
     , Project
+        { projectName = "🌀 relude"
+        , projectLink = "https://github.com/kowainik/relude"
+        , projectDesc = "Alternative standard library for Haskell with modern idioms"
+        }
+    , Project
         { projectName = "🏝 tomland"
         , projectLink = "https://kowainik.github.io/posts/2019-01-14-tomland"
         , projectDesc = "Bidirectional TOML serialization library with monadic profunctors, theorem proving and prefix trees"
@@ -40,11 +45,6 @@ allProjects = traverse makeItem
         { projectName = "🎒 containers-backpack"
         , projectLink = "https://kowainik.github.io/posts/2018-08-19-picnic-put-containers-into-a-backpack"
         , projectDesc = "Backpack implementation of the uniform interface for containers in Haskell"
-        }
-    , Project
-        { projectName = "🌀 relude"
-        , projectLink = "https://github.com/kowainik/relude"
-        , projectDesc = "Alternative standard library for Haskell with modern idioms"
         }
     , Project
         { projectName = "🌋 idris-patricia"

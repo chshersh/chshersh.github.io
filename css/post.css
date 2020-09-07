@@ -7,6 +7,27 @@
 .post p, .post ul, .post li {
     color: black;
 }
+.post ul li {
+    list-style: none;
+}
+.post ol {list-style: none; counter-reset: li}
+.post ol li {counter-increment: li}
+
+.post li::before {
+  color: #ffc107; /* Change the color */
+  display: inline-block; /* Needed to add space between the bullet and the text */
+  width: 1em; /* Also needed for space (tweak if needed) */
+  margin-left: -1em; /* Also needed for space (tweak if needed) */
+}
+
+.post ul li::before {
+  content: "\2726";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+}
+
+.post ol li::before {
+  content: counter(li);
+}
+
 pre, code {text-align: left;}
 .info {
     min-height: 100%;
@@ -38,18 +59,31 @@ pre.comment {
     }
 }
 
-.post-body a img {
-    max-width: 80%;
-}
-
-.post-body img {
-    max-width: 80%;
+.post a img
+, .post figure img
+, .post img {
+    max-width: 100%;
+    text-align: center;
 }
 
 .post blockquote {
     padding-left: 2%;
     border-left: 4px solid #ffc107;
 }
+
+.thought {
+    padding: 2%;
+    max-width: 60%;
+    margin: 1%;
+    font-weight: bold;
+    font-size: 1.3rem;
+
+    -webkit-box-shadow: 0px 0px 10px 3px #ffc107;
+    -moz-box-shadow: 0px 0px 10px 3px #ffc107;
+    box-shadow: 0px 0px 10px 3px #ffc107;
+}
+.thought p { margin-bottom: 0;}
+
 .social-icons {width:100%;}
 .social-icons a {
     color: #ffc107 !important;
