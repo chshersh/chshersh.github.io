@@ -20,7 +20,7 @@ is one of the language extensions that improve the situation with records.
 However, it's one of the most controversial extensions at the same time. Some
 people suggest avoiding this extension no matter what. Some prefer to use it
 everywhere. In this blog post, I'm going to review this extension under any
-possible angle and tell when to use and when not to use it.
+possible angle and tell you when to use and when _not_ to use it.
 
 ## What is RecordWildCards?
 
@@ -110,8 +110,7 @@ fields come from: is `name` a field of `User` or `Job`? Hard to tell without
 looking at the definitions of the corresponding types. This makes code hard to
 read and maintain.
 
-One of the possible solutions some people recommend is to use
-[NamedFieldPuns](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#record-puns)
+One of the possible solutions some people recommend is to use the [NamedFieldPuns](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#record-puns)
 extension. When this extension enabled, you can write the following code
 instead:
 
@@ -167,10 +166,10 @@ fields like in the code below:
 defaultUser :: User
 defaultUser =
     let userName = "Ivan"
-    in User{..}
+     in User{..}
 ```
 
-When GHC sees similar code, it outputs warning that not all fields are
+When GHC sees similar code, it outputs a warning that not all fields are
 initialised. But it's very easy to miss this warning and get a runtime error
 later. The answer to this problem is to mark every field of your data type with
 the strict annotation:
@@ -187,21 +186,21 @@ data User = User
 > language extension.
 
 If you add `!` in front of each type, then all fields will become strict and you
-will see compiler error instead of warning when you forget to initialise some
-fields. Adding bangs also considered one of the best-practices to avoid space
-leaks. It's very rare when you want lazy fields of records.
+will see a compiler error instead of a warning when you forget to initialise some
+fields. Adding bangs is also considered one of the best-practices to avoid space
+leaks. It's very rare wanting to have _lazy_ fields of records.
 
 > **NOTE:** you can add `{-# OPTIONS_GHC -Werror=missing-fields #-}` to get
-> compile time error on unitialised lazy fields.
+> a compile time error on unitialised lazy fields.
 
-**Conclusion:** mark field as strict to have more compile time checks and to
+**Conclusion:** mark fields as strict to have more compile time checks and to
 avoid potential performance problems.
 
 ## Compileless
 
 Another popular concern about `RecordWildCards` is that you lose compile time
 checks during pattern-matching when you add more fields. For example, we want to
-implement `ToJSON` instance from the [aeson](@hackage) library for our `User`
+implement a `ToJSON` instance from the [aeson](@hackage) library for our `User`
 data type:
 
 ```haskell
@@ -210,7 +209,7 @@ instance ToJSON User where
 ```
 
 Now, if we add one more field to the `User` type, GHC wouldn't warn us that we
-need to update this instance. If we want to see compile time error we need to
+need to update this instance. If we want to see a compile time error we need to
 write this instance in a different way:
 
 ```haskell
@@ -223,16 +222,16 @@ _each_ field of the constructor. However, not all functions are like that. In
 our `nameOnCard` function from the previous paragraph, we don't want to use all
 fields, we're interested only in a subset of them. And we don't want to update
 that function when we change definitions of the `User` or `Job` types. However,
-in `ToJSON` instance, we want to use _all_ fields. So, the problem is not
+in the `ToJSON` instance, we want to use _all_ fields. So, the problem is not
 actually in `RecordWildCards`. We need to know where to apply this extension,
 though even here you can use `RecordWildCards` to make your life easier and here
 is why:
 
-1. If you also define `FromJSON` instance, you should implement roundtrip
+1. If you also define a `FromJSON` instance, you should implement roundtrip
    property-based tests to make sure that your `FromJSON` and `ToJSON` satisfy
-   this property. It's not possible to skip `FromJSON` instance update because
-   you will see compile time error if you don't initialise all fields of the
-   type. Thus, if you forget to update `ToJSON` instance, you observe test
+   this property. It's not possible to skip a `FromJSON` instance update because
+   you will see a compile time error if you don't initialise all fields of the
+   type. Thus, if you forget to update `ToJSON` instance, you will observe a test
    failure.
 2. If your `FromJSON/ToJSON` instances are trivial, you can use
    [generics](https://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-Generics.html#t:Generic)
@@ -243,7 +242,7 @@ is why:
    should care about not changing it accidentally. And for this, you need to
    provide golden tests.
 
-Forgetting to add field is not the scariest problem actually. A scarier problem
+Forgetting to add a field is not the scariest problem actually. A scarier problem
 is that you can change the type of some field, your roundtrip tests are still
 passing, but consumers of your JSON API will observe errors. So
 `RecordWildCards` is not the most dangerous thing you should worry about here.
@@ -264,7 +263,7 @@ advantages. Turns out that `RecorldWildCards` plays nicely with another language
 extension —
 [ApplicativeDo](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#applicative-do-notation).
 
-Let's say we want to build CLI for the tool that allows to query some data and
+Let's say we want to build CLI for a tool that allows to query some data and
 filter it by `from` and `to` entries. Terminal command for this tool may look
 like this:
 
@@ -297,19 +296,19 @@ optionsP = Options
 
 One problem with writing code in this style is that it's very easy to use the wrong
 order of `fromP` and `toP` parsers when defining a parser for `Options` and this
-can lead to bugs. In CLI you can write either `--from 3 --to 42` or `--to 42 --from 3`
+can lead to bugs. In a CLI you can write either `--from 3 --to 42` or `--to 42 --from 3`
 and both work correctly. But in code `Options <$> fromP <*> toP` is
 not the same as `Options <$> toP <*> fromP`. This semantic difference between
 real-world and expectations from code can lead to unexpected bugs.
 
 This is true in general for such applicative-style code but it's more important
-with regards to CLI. Because it's not that easy to test CLI and to my knowledge,
-not many people really write automatic tests for CLI. So in this area of our
+with regards to a CLI. Because it's not that easy to test a CLI and to my knowledge,
+not many people really write automatic tests for their CLIs. So in this area of our
 code, we want to be more careful not to introduce extra bugs.
 
 One of the solutions to the described problem is to introduce `newtype`s. But it
 might be too tedious to deal with lots of `newtype`s. Fortunately, we can use
-`RecordWildCards` and `ApplicativeDo` extension to solve this problem easier!
+`RecordWildCards` and the `ApplicativeDo` extension to solve this problem easier!
 
 ```haskell
 optionsP :: Parser Options
@@ -322,15 +321,14 @@ optionsP = do
 Now, even if you change the order of `optionsFrom` and `optionsTo` variables, the
 code still works.
 
-**Conclustion:** `RecordWildCards` combined with `ApplicativeDo` allow you to
+**Conclusion:** `RecordWildCards` combined with `ApplicativeDo` allows you to
 write type-safe and maintainable code.
 
 ## DuplicateRecordFields
 
 Due to the records implementation details, it's not possible to have data types
 with the same field names in scope in standard Haskell code (as per
-Haskell2010). However, if you enable
-[DuplicateRecordFields](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#duplicate-record-fields)
+Haskell2010). However, if you enable the [DuplicateRecordFields](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#duplicate-record-fields)
 extension, it becomes possible. You can leverage this extension to convert
 between data types easily:
 
@@ -343,8 +341,8 @@ evilMagic Man{..} = Cat{..}
 ```
 
 However, such automatic conversion works only if fields of different types have
-the exact same names. So, if data types have different prefixes, you need to
-write mapping between fields explicitly. But if you decide not to add prefixes
+the _exact_ same names. So, if data types have different prefixes, you need to
+write a mapping between fields explicitly. But if you decide not to add prefixes
 for the field names, some pieces of your code that do something else besides
 mere conversion between data types, can become less readable if you use
 `RecordWildCards` in them.
