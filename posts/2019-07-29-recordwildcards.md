@@ -166,7 +166,7 @@ fields like in the code below:
 defaultUser :: User
 defaultUser =
     let userName = "Ivan"
-     in User{..}
+    in User{..}
 ```
 
 When GHC sees similar code, it outputs a warning that not all fields are
