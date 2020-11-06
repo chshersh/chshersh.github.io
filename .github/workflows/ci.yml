@@ -1,6 +1,6 @@
 name: CI
 
-# Trigger the workflow on push or pull request, but only for the master branch
+# Trigger the workflow on push or pull request, but only for the develop branch
 on:
   pull_request:
   push:
