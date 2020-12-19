@@ -179,7 +179,7 @@ a cute badge to your `README.md`. Copy the following line and replace
 
 And it will look like this:
 
-[![GitHub CI](https://github.com/kowainik/validation-selective/workflows/CI/badge.svg)](https://github.com/kowainik/validation-selective/actions)
+[![GitHub CI](https://github.com/kowainik/stan/workflows/CI/badge.svg)](https://github.com/kowainik/stan/actions)
 
 ## Configuration explanation
 
