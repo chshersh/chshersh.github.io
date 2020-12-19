@@ -46,11 +46,11 @@ full config:
 ```yaml
 name: CI
 
-# Trigger the workflow on push or pull request, but only for the master branch
+# Trigger the workflow on push or pull request, but only for the main branch
 on:
   pull_request:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   cabal:
@@ -62,42 +62,49 @@ jobs:
         cabal: ["3.2"]
         ghc:
           - "8.6.5"
-          - "8.8.3"
-          - "8.10.1"
+          - "8.8.4"
+          - "8.10.2"
         exclude:
           - os: macOS-latest
-            ghc: 8.8.3
+            ghc: 8.8.4
           - os: macOS-latest
             ghc: 8.6.5
           - os: windows-latest
-            ghc: 8.8.3
+            ghc: 8.10.2
           - os: windows-latest
             ghc: 8.6.5
 
     steps:
     - uses: actions/checkout@v2
-      if: github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.ref == 'refs/heads/master'
+      if: github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.ref == 'refs/heads/main'
 
-    - uses: actions/setup-haskell@v1.1.1
+    - uses: actions/setup-haskell@v1.1.4
       id: setup-haskell-cabal
       name: Setup Haskell
       with:
         ghc-version: ${{ matrix.ghc }}
         cabal-version: ${{ matrix.cabal }}
 
+    - name: Configure
+      run: |
+        cabal configure --enable-tests --enable-benchmarks --test-show-details=direct
+
     - name: Freeze
       run: |
         cabal freeze
 
-    - uses: actions/cache@v1
+    - uses: actions/cache@v2.1.3
       name: Cache ~/.cabal/store
       with:
         path: ${{ steps.setup-haskell-cabal.outputs.cabal-store }}
         key: ${{ runner.os }}-${{ matrix.ghc }}-${{ hashFiles('cabal.project.freeze') }}
 
+    - name: Install dependencies
+      run: |
+        cabal build all --only-dependencies
+
     - name: Build
       run: |
-        cabal configure --enable-tests --enable-benchmarks --test-show-details=direct
         cabal build all
 
     - name: Test
@@ -110,23 +117,27 @@ jobs:
     strategy:
       matrix:
         stack: ["2.3.1"]
-        ghc: ["8.8.3"]
+        ghc: ["8.8.4"]
 
     steps:
     - uses: actions/checkout@v2
-      if: github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.ref == 'refs/heads/master'
+      if: github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.ref == 'refs/heads/main'
 
-    - uses: actions/setup-haskell@v1.1
+    - uses: actions/setup-haskell@v1.1.4
       name: Setup Haskell Stack
       with:
         ghc-version: ${{ matrix.ghc }}
         stack-version: ${{ matrix.stack }}
 
-    - uses: actions/cache@v1
+    - uses: actions/cache@v2.1.3
       name: Cache ~/.stack
       with:
         path: ~/.stack
         key: ${{ runner.os }}-${{ matrix.ghc }}-stack
+
+    - name: Install dependencies
+      run: |
+        stack build --system-ghc --test --bench --no-run-tests --no-run-benchmarks --only-dependencies
 
     - name: Build
       run: |
@@ -144,9 +155,10 @@ care of everything else for you.
 
 The above config is implemented as a
 [workflow template](https://github.blog/2020-06-22-promote-consistency-across-your-organization-with-workflow-templates/),
-and can be enabled in one click in all Kowainik repositories:
+and can be enabled in one click in all Kowainik repositories (you can
+copy-paste the file to your projects as well):
 
-* [kowainik/.github: Dead-simple CI](https://github.com/kowainik/.github/blob/master/workflow-templates/ci.yml)
+* [kowainik/.github: Dead-simple CI](https://github.com/kowainik/.github/blob/main/workflow-templates/ci.yml)
 
 ![Suggested workflow](https://user-images.githubusercontent.com/4276606/86161652-788da200-bb05-11ea-8757-46c03a9e3c53.png)
 
@@ -194,7 +206,7 @@ below is a short explanation:
    dependencies, your project and all dependencies will be rebuilt
    from scratch. But when they are built, the whole cache will be
    reused next time.
-4. Your project builds on macOS and Windows only using the latest GHC
+4. Your project builds on macOS and Windows only using the latest (or working) GHC
    version. It usually won't give you a lot to build with multiple GHC
    versions on all three platforms. So instead of having a `N x M`
    matrix, it's enough to have a `N + M - 1` matrix. Though, you can
@@ -202,6 +214,39 @@ below is a short explanation:
    sections.
 5. The CI also configures the testing environment properly and runs
    your tests automatically with each build.
-6. The config is extensible and easily customizable. You can change
+6. Dependencies are built in a separate step, so you can quickly see
+   from the overview, which building step has failed — dependencies or
+   your project.
+7. The config is extensible and easily customizable. You can change
    step names and their commands, add new steps. You can even add
    releases in an easy way with such a system!
+
+## Dependabot
+
+The presented CI configuration specifies versions of used GitHub
+Actions. They can become outdated with time, and this blog post is not
+updated automatically to the latest versions of each mentioned GitHub
+Action.
+
+Fortunately, you can use [Dependabot](https://dependabot.com/) to move
+the burden of updating actions versions from your shoulders to tools.
+
+To receive pull requests with version updates for used actions, add the
+`.github/dependabot.yml` file with the following content (assuming,
+that you already have labels `CI` and `library :books:` in your
+repository, but you can choose your own existing labels):
+
+```yaml
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "GA"
+      include: "scope"
+    labels:
+      - "CI"
+      - "library :books:"
+```
