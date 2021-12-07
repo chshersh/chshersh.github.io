@@ -7,8 +7,16 @@
         <description><![CDATA[This feed provides blog posts about using modern Haskell]]></description>
         <atom:link href="https://chshersh.github.io/rss.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Tue, 08 Sep 2020 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Wed, 08 Dec 2021 00:00:00 UT</lastBuildDate>
         <item>
+    <title>Haskell Beginners 2022 Course Announcement</title>
+    <link>https://chshersh.github.io/course.html</link>
+    <description><![CDATA[Announcing Haskell course for beginners]]></description>
+    <pubDate>Wed, 08 Dec 2021 00:00:00 UT</pubDate>
+    <guid>https://chshersh.github.io/course.html</guid>
+    <dc:creator>Dmitrii Kovanikov</dc:creator>
+</item>
+<item>
     <title>Be a goalkeeper</title>
     <link>https://chshersh.github.io/goalkeeper.html</link>
     <description><![CDATA[A secret weapon for increasing open-source productivity and communication]]></description>

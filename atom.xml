@@ -8,8 +8,16 @@
         <name>Dmitrii Kovanikov</name>
         <email>kovanikov@gmail.com</email>
     </author>
-    <updated>2020-09-08T00:00:00Z</updated>
+    <updated>2021-12-08T00:00:00Z</updated>
     <entry>
+    <title>Haskell Beginners 2022 Course Announcement</title>
+    <link href="https://chshersh.github.io/course.html" />
+    <id>https://chshersh.github.io/course.html</id>
+    <published>2021-12-08T00:00:00Z</published>
+    <updated>2021-12-08T00:00:00Z</updated>
+    <summary type="html"><![CDATA[Announcing Haskell course for beginners]]></summary>
+</entry>
+<entry>
     <title>Be a goalkeeper</title>
     <link href="https://chshersh.github.io/goalkeeper.html" />
     <id>https://chshersh.github.io/goalkeeper.html</id>
