@@ -3,6 +3,9 @@ module Website.Project
        , projectsContext
        ) where
 
+import Hakyll (Compiler, Context, Item (..), field, listField, makeItem)
+
+
 data Project = Project
     { projectName :: !String
     , projectLink :: !String

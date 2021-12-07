@@ -3,6 +3,9 @@ module Website.Experience
        , experienceContext
        ) where
 
+import Hakyll (Compiler, Context, Item (..), field, listField, makeItem)
+
+
 data Experience = Experience
     { experienceTitle   :: !String
     , experienceSite    :: !String

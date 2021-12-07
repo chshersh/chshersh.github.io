@@ -3,8 +3,9 @@ module Website.Main
        ) where
 
 import Hakyll (applyAsTemplate, compile, compressCss, compressCssCompiler, constRoute,
-               copyFileCompiler, create, createRedirects, defaultContext, hakyll, idRoute, match,
-               route, templateBodyCompiler, (.||.))
+               copyFileCompiler, create, createRedirects, defaultContext, hakyll, idRoute,
+               loadAndApplyTemplate, makeItem, match, relativizeUrls, route, templateBodyCompiler,
+               (.||.))
 import Hakyll.Web.Feed (renderAtom, renderRss)
 import Hakyll.Web.Sass (sassCompiler)
 

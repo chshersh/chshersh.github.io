@@ -3,6 +3,8 @@ module Website.Social
        , socialContext
        ) where
 
+import Hakyll (Compiler, Context, Item (..), field, listField, makeItem)
+
 
 data Social = Social
     { sName :: !String

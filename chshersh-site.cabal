@@ -1,27 +1,31 @@
 cabal-version:         2.4
 name:                  chshersh-site
-version:               0.0.3.0
+version:               1.0
 synopsis:              chshersh website
 description:           chshersh website
-homepage:              https://github.com/kowainik/chshersh.github.io
-bug-reports:           https://github.com/kowainik/chshersh.github.io/issues
+homepage:              https://github.com/chshersh/chshersh.github.io
+bug-reports:           https://github.com/chshersh/chshersh.github.io/issues
 license:               MPL-2.0
 license-file:          LICENSE
 author:                Dmitrii Kovanikov
 maintainer:            kovanikov@gmail.com
-copyright:             2019-2020 Dmitrii Kovanikov
+copyright:             2019-2021 Dmitrii Kovanikov
 category:              Web
 build-type:            Simple
 extra-doc-files:       README.md
-tested-with:           GHC == 8.8.3
+tested-with:           GHC == 8.10.7
 
 source-repository head
   type:                git
   location:            https://github.com/chshersh/chshersh.github.io.git
 
 common common-options
-  build-depends:       base-noprelude ^>= 4.13.0.0
-                     , relude ^>= 0.6.0.0
+  build-depends:       base ^>= 4.14
+                     , relude ^>= 1.0
+
+  mixins:              base hiding (Prelude)
+                     , relude (Relude as Prelude)
+                     , relude
 
   ghc-options:         -Wall
                        -Wcompat
@@ -55,14 +59,13 @@ library
                        Website.Posts
                        Website.Project
                        Website.Social
-                       Prelude
 
-  build-depends:       hakyll ^>= 4.13.3.0
+  build-depends:       hakyll ^>= 4.15
                      , hakyll-sass ^>= 0.2.4
                      , hakyll-shortcut-links ^>= 0.1.0.0
-                     , pandoc >= 2.8 && < 2.10
-                     , pandoc-types ^>= 1.20
-                     , text ^>= 1.2.3
+                     , pandoc ^>= 2.16
+                     , pandoc-types ^>= 1.22
+                     , text ^>= 1.2
 
 executable site
   import:              common-options

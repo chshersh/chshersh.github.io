@@ -5,11 +5,12 @@ module Website.Posts
        , postContext
        ) where
 
-import Hakyll (compile, composeRoutes, constField, constRoute, dateField, defaultContext,
-               defaultHakyllReaderOptions, defaultHakyllWriterOptions, functionField,
-               getResourceString, getTags, idRoute, loadAll, match, metadataRoute,
-               pandocCompilerWithTransformM, recentFirst, renderPandocWith, route, saveSnapshot,
-               setExtension, unsafeCompiler)
+import Hakyll (Compiler, Context, Item (..), Rules, compile, composeRoutes, constField, constRoute,
+               dateField, defaultContext, defaultHakyllReaderOptions, defaultHakyllWriterOptions,
+               field, functionField, getResourceString, getTags, idRoute, listField, loadAll,
+               loadAndApplyTemplate, makeItem, match, metadataRoute, pandocCompilerWithTransformM,
+               recentFirst, relativizeUrls, renderPandocWith, route, saveSnapshot, setExtension,
+               unsafeCompiler)
 import Hakyll.Core.Metadata (lookupString)
 import Hakyll.ShortcutLinks (applyAllShortcuts)
 import Text.Pandoc.Options (WriterOptions (..))

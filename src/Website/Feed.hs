@@ -2,7 +2,7 @@ module Website.Feed
        ( feedCompiler
        ) where
 
-import Hakyll (bodyField, loadAllSnapshots, recentFirst)
+import Hakyll (Compiler, Context, Item, bodyField, loadAllSnapshots, recentFirst)
 import Hakyll.Web.Feed (FeedConfiguration (..))
 
 import Website.Posts (postContext)
@@ -27,6 +27,6 @@ feedContext :: Context String
 feedContext = postContext [] <> bodyField "description"
 
 feedCompiler :: FeedRenderer -> Compiler (Item String)
-feedCompiler renderer =loadAllSnapshots "posts/*" "content"
+feedCompiler renderer = loadAllSnapshots "posts/*" "content"
     >>= fmap (take 10) . recentFirst
     >>= renderer feedConfiguration feedContext

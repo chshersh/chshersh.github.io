@@ -1,37 +1,50 @@
 name: CI
 
-# Trigger the workflow on push or pull request, but only for the develop branch
 on:
   pull_request:
+    types: [synchronize, opened, reopened]
   push:
     branches: [develop]
 
 jobs:
-  build:
-    name: ghc ${{ matrix.ghc }}
-    runs-on: ubuntu-latest
+  cabal:
+    name: ${{ matrix.os }} / ghc ${{ matrix.ghc }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        cabal: ["3.2"]
+        os: [ubuntu-latest]
+        cabal: ["3.6.2.0"]
         ghc:
-          - "8.8.3"
+          - "8.10.7"
 
     steps:
     - uses: actions/checkout@v2
-      if: github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.ref == 'refs/heads/develop'
 
-    - uses: actions/setup-haskell@v1.1
+    - uses: haskell/actions/setup@v1.2
+      id: setup-haskell-cabal
       name: Setup Haskell
       with:
         ghc-version: ${{ matrix.ghc }}
         cabal-version: ${{ matrix.cabal }}
 
-    - uses: actions/cache@v1.1.1
+    - name: Configure
+      run: |
+        cabal configure --enable-tests --enable-benchmarks --test-show-details=direct --write-ghc-environment-files=always
+
+    - name: Freeze
+      run: |
+        cabal freeze
+
+    - uses: actions/cache@v2
       name: Cache ~/.cabal/store
       with:
-        path: ~/.cabal/store
-        key: ${{ runner.os }}-${{ matrix.ghc }}-cabal
+        path: ${{ steps.setup-haskell-cabal.outputs.cabal-store }}
+        key: ${{ runner.os }}-${{ matrix.ghc }}-${{ hashFiles('cabal.project.freeze') }}
+
+    - name: Install dependencies
+      run: |
+        cabal build all --only-dependencies
 
     - name: Build
       run: |
-        cabal build all --enable-tests
+        cabal build all
