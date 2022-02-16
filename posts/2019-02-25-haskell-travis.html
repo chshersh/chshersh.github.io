@@ -148,7 +148,8 @@
 
       <section class="resume-section p-3 p-lg-5">
         <h2 class="text-center">Dead simple Haskell Travis settings for cabal and stack</h2>
-        <p class="text-center text-black">February 25, 2019</p>
+        <p class="text-center text-black"><strong>Created:</strong> February 25, 2019</p>
+        
 
         <div class="col-12 tag-block text-center">
             
@@ -240,7 +241,16 @@
 <p><strong>NOTE:</strong> Instead of copy-pasting this <code>.travis.yml</code> file to every project you can use <a href="https://github.com/kowainik/summoner">Summoner</a> to scaffold completely configured production-level Haskell libraries and applications which would include Travis configurations corresponding to the user-configured/custom project settings.</p>
 </blockquote>
 <h2 id="customization-hlint"><a href="#customization-hlint" class="anchor">Customization: HLint</a></h2>
-<p>I want to point out some nice things about this config — it doesn’t mention the project name anywhere and it doesn’t rely on any additional shell scripts. Which means that you have the ability to paste it in any Haskell project and it <strong>should just work</strong> out of the box. Though, it’s not the only reason why I recommend it. This config requires almost no maintenance, but at the same time, it is easily extensible. For example, if you want to check your code with <a href="http://hackage.haskell.org/package/hlint">HLint</a> on every CI run, you just need to add the following line at the end of the <code>script</code> section:</p>
+<p>I want to point out some nice things about this config — it doesn’t
+mention the project name anywhere and it doesn’t rely on any
+additional shell scripts. Which means that you have the ability to
+paste it in any Haskell project and it <strong>should just work</strong> out of the
+box. Though, it’s not the only reason why I recommend it. This config
+requires almost no maintenance, but at the same time, it is easily
+extensible. For example, if you want to check your code with
+<a href="http://hackage.haskell.org/package/hlint">HLint</a> on every CI run, you
+just need to add the following line at the end of the <code>script</code>
+section:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> curl -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .</span></span></code></pre></div>
 <p>This command downloads the latest HLint version and runs the <code>hlint</code> executable on your project.</p>
 <h2 id="how-to-set-up-travis-ci"><a href="#how-to-set-up-travis-ci" class="anchor">How to set up Travis CI</a></h2>
@@ -252,7 +262,10 @@
 </ol>
 <p>That’s all! Feel free to contact me if you have any problem setting up Travis CI for your Haskell projects with this config. I have done tons of <code>“Fix CI”</code> commits and learned about a lot of weird errors before figuring out the proper settings.</p>
 <blockquote>
-<p><strong>NOTE:</strong> If you build your project with <code>stack</code>, it is a good idea to put a fully configured <code>stack.yaml</code> file to the repository. There you can specify all the settings required for <code>stack</code> to build your project, but for basic cases, it should be enough to have only the resolver in there:</p>
+<p><strong>NOTE:</strong> If you build your project with <code>stack</code>, it is a good idea to put a
+fully configured <code>stack.yaml</code> file to the repository. There you can specify
+all the settings required for <code>stack</code> to build your project, but for basic
+cases, it should be enough to have only the resolver in there:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>resolver<span class="op">:</span> lts<span class="op">-</span><span class="fl">13.26</span></span></code></pre></div>
 </blockquote>
 <h2 id="explanation-of-the-configuration-commands"><a href="#explanation-of-the-configuration-commands" class="anchor">Explanation of the configuration commands</a></h2>
