@@ -3,6 +3,7 @@ title: Dead simple cross-platform GitHub Actions for Haskell
 description: GitHub Actions CI settings for Haskell projects with Cabal and Stack
 tags: haskell, ci, github-actions, cabal, stack
 shortName: github-actions
+updated: "February 17, 2022"
 ---
 
 I have been looking for the perfect Continuous Integration (CI) for my
@@ -46,11 +47,15 @@ full config:
 ```yaml
 name: CI
 
-# Trigger the workflow on push or pull request, but only for the main branch
 on:
+  workflow_dispatch:
   pull_request:
+    types: [synchronize, opened, reopened]
   push:
     branches: [main]
+  schedule:
+    # additionally run once per week (At 00:00 on Sunday) to maintain cache
+    - cron: '0 0 * * 0'
 
 jobs:
   cabal:
@@ -59,26 +64,26 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        cabal: ["3.2"]
+        cabal: ["3.6.2.0"]
         ghc:
-          - "8.6.5"
-          - "8.8.4"
-          - "8.10.2"
+          - "8.10.7"
+          - "9.0.2"
+          - "9.2.1"
         exclude:
           - os: macOS-latest
-            ghc: 8.8.4
+            ghc: 9.0.2
           - os: macOS-latest
-            ghc: 8.6.5
+            ghc: 8.10.7
+
           - os: windows-latest
-            ghc: 8.10.2
+            ghc: 9.0.2
           - os: windows-latest
-            ghc: 8.6.5
+            ghc: 8.10.7
 
     steps:
     - uses: actions/checkout@v2
-      if: github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.ref == 'refs/heads/main'
 
-    - uses: actions/setup-haskell@v1.1.4
+    - uses: haskell/actions/setup@v1.2
       id: setup-haskell-cabal
       name: Setup Haskell
       with:
@@ -87,13 +92,13 @@ jobs:
 
     - name: Configure
       run: |
-        cabal configure --enable-tests --enable-benchmarks --test-show-details=direct
+        cabal configure --enable-tests --enable-benchmarks --enable-documentation --test-show-details=direct --write-ghc-environment-files=always
 
     - name: Freeze
       run: |
         cabal freeze
 
-    - uses: actions/cache@v2.1.3
+    - uses: actions/cache@v2
       name: Cache ~/.cabal/store
       with:
         path: ${{ steps.setup-haskell-cabal.outputs.cabal-store }}
@@ -111,25 +116,28 @@ jobs:
       run: |
         cabal test all
 
+    - name: Documentation
+      run: |
+        cabal haddock
+
   stack:
     name: stack / ghc ${{ matrix.ghc }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        stack: ["2.3.1"]
-        ghc: ["8.8.4"]
+        stack: ["2.7.3"]
+        ghc: ["8.10.7"]
 
     steps:
     - uses: actions/checkout@v2
-      if: github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.ref == 'refs/heads/main'
 
-    - uses: actions/setup-haskell@v1.1.4
+    - uses: haskell/actions/setup@v1.2
       name: Setup Haskell Stack
       with:
         ghc-version: ${{ matrix.ghc }}
         stack-version: ${{ matrix.stack }}
 
-    - uses: actions/cache@v2.1.3
+    - uses: actions/cache@v2
       name: Cache ~/.stack
       with:
         path: ~/.stack
@@ -187,12 +195,12 @@ If you want to understand why the configuration looks like it looks,
 below is a short explanation:
 
 1. The configuration is powered by two GitHub Actions:
-   [setup-haskell](@github(actions)) and
-   [cache](@github(actions)). The `setup-haskell`
+   [haskell/actions/setup](@github(haskell):actions) and
+   [actions/cache](@github)). The `haskell/actions/setup`
    action is responsible for installing GHC, cabal and stack on
    different operating systems and providing some convenient
-   utilities. The `cache` action is responsible for caching your built
-   artefacts as you might guess.
+   utilities. The `actions/cache` action is responsible for caching your built
+   artifacts as you might guess.
 2. It builds your project using `cabal` with different GHC versions on
    Ubuntu. The GitHub Actions virtual environment comes with GHC,
    Cabal and Stack already pre-installed in there, so the CI is faster
@@ -207,8 +215,8 @@ below is a short explanation:
    from scratch. But when they are built, the whole cache will be
    reused next time.
 4. Your project builds on macOS and Windows only using the latest (or working) GHC
-   version. It usually won't give you a lot to build with multiple GHC
-   versions on all three platforms. So instead of having a `N x M`
+   version. Building with multiple GHC versions on all three platforms usually
+   doesn't give you much. So instead of having a `N x M`
    matrix, it's enough to have a `N + M - 1` matrix. Though, you can
    easily change this behaviour by removing relevant `exclude`
    sections.
@@ -220,6 +228,52 @@ below is a short explanation:
 7. The config is extensible and easily customizable. You can change
    step names and their commands, add new steps. You can even add
    releases in an easy way with such a system!
+
+## HLint
+
+One way you can improve this CI setup is by adding an HLint check to each CI
+run. This can be done pretty easily. For example, here is a separate job that
+downloads HLint and runs it:
+  
+```yaml
+  hlint:
+    name: hlint
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run HLint
+      env:
+         HLINT_VERSION: "3.2.7"
+      run: |
+        curl -L https://github.com/ndmitchell/hlint/releases/download/v${HLINT_VERSION}/hlint-${HLINT_VERSION}-x86_64-linux.tar.gz --output hlint.tar.gz
+        tar -xvf hlint.tar.gz
+        ./hlint-${HLINT_VERSION}/hlint src/ test/
+```
+
+If you project uses the alternative standard library [kowainik/relude](@github),
+you can utilise Relude-specific HLint rules by using the following CI config
+instead:
+
+```yaml
+  hlint:
+    name: hlint
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run HLint
+      env:
+         HLINT_VERSION: "3.2.7"
+         RELUDE_VERSION: "1.0.0.1"
+      run: |
+        curl https://raw.githubusercontent.com/kowainik/relude/v{$RELUDE_VERSION}/.hlint.yaml -o .hlint-relude.yaml
+        curl -L https://github.com/ndmitchell/hlint/releases/download/v${HLINT_VERSION}/hlint-${HLINT_VERSION}-x86_64-linux.tar.gz --output hlint.tar.gz
+        tar -xvf hlint.tar.gz
+        ./hlint-${HLINT_VERSION}/hlint src/ test/ -h .hlint-relude.yaml
+```
 
 ## Dependabot
 
@@ -233,7 +287,7 @@ the burden of updating actions versions from your shoulders to tools.
 
 To receive pull requests with version updates for used actions, add the
 `.github/dependabot.yml` file with the following content (assuming,
-that you already have labels `CI` and `library :books:` in your
+that you already have labels `CI` and `dependencies` in your
 repository, but you can choose your own existing labels):
 
 ```yaml
@@ -248,5 +302,5 @@ updates:
       include: "scope"
     labels:
       - "CI"
-      - "library :books:"
+      - "dependencies"
 ```
