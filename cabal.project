@@ -1,0 +1,9 @@
+packages: .
+
+source-repository-package
+    type: git
+    location: https://github.com/kowainik/relude.git
+    tag: 02c6c48ef209ecf80aad44f2ed61b46e1641dbc1
+
+allow-newer: hakyll-shortcut-links:base
+           , shortcut-links:base
