@@ -237,30 +237,35 @@ snippet:</p>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Just</span> userId <span class="ot">-&gt;</span> getEmailByUserId userId <span class="op">&gt;&gt;=</span> \<span class="kw">case</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Just</span> otherEmail</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>              <span class="op">|</span> email <span class="op">==</span> otherEmail <span class="ot">-&gt;</span> <span class="fu">pure</span> <span class="op">$</span> <span class="dt">Left</span> <span class="dt">UserAlreadyHasEmail</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>              <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">-&gt;</span> <span class="fu">pure</span> <span class="op">$</span> <span class="dt">Left</span> <span class="dt">UserHasDifferentEmail</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                <span class="op">|</span> email <span class="op">==</span> otherEmail <span class="ot">-&gt;</span> <span class="fu">pure</span> <span class="op">$</span> <span class="dt">Left</span> <span class="dt">UserAlreadyHasEmail</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">-&gt;</span> <span class="fu">pure</span> <span class="op">$</span> <span class="dt">Left</span> <span class="dt">UserHasDifferentEmail</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            <span class="dt">Nothing</span> <span class="ot">-&gt;</span> getUserIdByEmail email <span class="op">&gt;&gt;=</span> \<span class="kw">case</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                <span class="dt">Just</span> otherUserId <span class="ot">-&gt;</span> <span class="fu">pure</span> <span class="op">$</span> <span class="dt">Left</span> <span class="dt">EmailIsTaken</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                <span class="dt">Nothing</span> <span class="ot">-&gt;</span> insertUserEmail userId email <span class="op">&gt;&gt;=</span> \<span class="kw">case</span></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">Left</span> dbErr <span class="ot">-&gt;</span> <span class="fu">pure</span> <span class="op">$</span> <span class="dt">Left</span> <span class="op">$</span> <span class="dt">DbError</span> dbErr</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">Right</span> id' <span class="ot">-&gt;</span> <span class="fu">pure</span> <span class="op">$</span> <span class="dt">Right</span> id'</span></code></pre></div>
+<blockquote>
+<p>👩‍🔬 The above code snippet uses the
+<a href="https://downloads.haskell.org/ghc/latest/docs/html/users_guide/exts/lambda_case.html">LambdaCase</a>
+Haskell feature.</p>
+</blockquote>
 <p>This simple implementation doesn’t use any advanced features and is
 easy to read by Haskell beginners. However, it has several problems
 that we would like to solve:</p>
 <ul>
-<li><strong>The code is deeply nested.</strong> It’s slowly turns into a weird staircase as
-we add more steps.</li>
+<li><strong>The code is deeply nested.</strong> It slowly turns into a weird
+staircase as we add more steps.</li>
 <li><strong>It mixes business logic with pesky implementation details.</strong> The
-description of this function has only four clear steps but it’s
-extremely difficult to view them quickly from the
-implementation. The problem becomes more severe as you have more
-steps or start introducing more complicated logic (e.g. logging,
-monitoring, etc.).</li>
+high-level description of this function has only four clear steps
+but it’s extremely difficult to extract them quickly from this
+particular implementation. The problem becomes more severe as you
+add more steps or start introducing more complicated logic
+(e.g. logging, monitoring, etc.).</li>
 </ul>
 <h2 id="either-isation"><a href="#either-isation" class="anchor">Either-isation</a></h2>
 <p>A one possible approach to improving the situation would be to
-introduce a separate function for each individual step. Thouse
+introduce a separate function for each individual step. Those
 functions would return <code>Either AppError smth</code> and will hide the
 implementation details. The code will look like this:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">checkUserSession ::</span> <span class="dt">UserSession</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">Either</span> <span class="dt">AppError</span> <span class="dt">UserId</span>)</span>
@@ -283,7 +288,7 @@ implementation details. The code will look like this:</p>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="ot">checkEmailInsert ::</span> <span class="dt">UserId</span> <span class="ot">-&gt;</span> <span class="dt">Email</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">Either</span> <span class="dt">AppError</span> <span class="dt">ID</span>)</span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>checkEmailInsert userId email <span class="ot">=</span> insertUserEmail userId email <span class="op">&gt;&gt;=</span> \<span class="kw">case</span></span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Left</span> dbErr <span class="ot">-&gt;</span> <span class="fu">pure</span> <span class="op">$</span> <span class="dt">Left</span> <span class="op">$</span> <span class="dt">DbError</span> dbErr</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Right</span> id' <span class="ot">-&gt;</span> <span class="fu">pure</span> <span class="op">$</span> <span class="dt">Right</span> id'</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Right</span> id'  <span class="ot">-&gt;</span> <span class="fu">pure</span> <span class="op">$</span> <span class="dt">Right</span> id'</span>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>associateEmail</span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="ot">    ::</span> <span class="dt">UserSession</span></span>
@@ -304,12 +309,15 @@ will also become handy as we explore other approaches.</p>
 </blockquote>
 <p>This refactoring is simple and pretty straightforward but it doesn’t
 solved any of two problems we have above despite writing much more
-code (though, the code of <code>associateEmail</code> became slightly more
-understandable due to uniform handling of errors).</p>
+code. Though, the code of <code>associateEmail</code> became slightly more
+understandable due to uniform handling of errors and we’re now able to
+add more implementation details to each step without polluting the
+implementation of <code>associateEmail</code>.</p>
 <h2 id="exceptt"><a href="#exceptt" class="anchor">ExceptT</a></h2>
 <p>The problem with out-of-control nested indentation annoyed thousands
 of Haskell developers even before you and me. In this particular case,
-where all your functions return <code>IO (Either TheSameErrorType anything)</code>, you can use the <code>ExceptT</code> monad transformer.</p>
+where all your functions return <code>IO (Either TheSameErrorType anything)</code>, you can use the
+<a href="https://hackage.haskell.org/package/transformers-0.6.0.4/docs/Control-Monad-Trans-Except.html"><code>ExceptT</code> monad transformer</a>.</p>
 <p>I won’t go into much details about <code>ExcepT</code>. This blog post is not a
 monad transformer tutorial. But I’m going to mention this approach as
 it’s quite common and still pretty basic in terms of language
@@ -321,7 +329,7 @@ our case:</p>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="va">+checkUserSession :: UserSession -&gt; ExceptT AppError IO UserId</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">-checkUserSession userSession = validateUserSession userSession &gt;&gt;= \case</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="va">+checkUserSession userSession = ExceptT $ validateUserSession userSession &gt;&gt;= \case</span></span></code></pre></div>
-<p>After performing this refactoring to each function, we can update the
+<p>After applying this refactoring to each function, we can update the
 implementation of <code>associateEmail</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>associateEmail</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    ::</span> <span class="dt">UserSession</span></span>
@@ -372,13 +380,13 @@ be performed “with user session”.</li>
 <li>Added extra argument — continuation — a function of type
 <code>UserId -&gt; IO (Either AppError a)</code>. So <code>withUserSession</code> is a
 Higher-Order Function now. ⚠️ <strong>Important</strong>: the return type of our
-continuation is polymorphic (as well as return type of our
+continuation is polymorphic (as well as the return type of our
 function) to make usage more flexible.</li>
 <li>Split type signature into multiple lines as it’s became longer here.</li>
 <li>Returned <code>next userId</code> instead of <code>pure $ Right userId</code> in the end.</li>
 </ol>
 <p>Our transformed <code>withUserSession</code> function now either short-circuits
-with an error or runs a given action with <code>userId</code> in case of
+with an error or runs a given continuation with <code>userId</code> in case of
 success. It takes a continuation and passes the result to it, hence
 the name — Continuation-Passing Style.</p>
 <p>Now, we apply the CPS transformation to every function:</p>
@@ -408,7 +416,7 @@ the name — Continuation-Passing Style.</p>
 <span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">Either</span> <span class="dt">AppError</span> a)</span>
 <span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>withEmailInsert userId email next <span class="ot">=</span> insertUserEmail userId email <span class="op">&gt;&gt;=</span> \<span class="kw">case</span></span>
 <span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Left</span> dbErr <span class="ot">-&gt;</span> <span class="fu">pure</span> <span class="op">$</span> <span class="dt">Left</span> <span class="op">$</span> <span class="dt">DbError</span> dbErr</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Right</span> id' <span class="ot">-&gt;</span> next id'</span></code></pre></div>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Right</span> id'  <span class="ot">-&gt;</span> next id'</span></code></pre></div>
 <p>A few notes on the implementation:</p>
 <ul>
 <li>When we don’t have a meaningful argument to pass to continuation
@@ -421,7 +429,7 @@ and not necessarily in the end.</li>
 </ul>
 <p>After we’ve performed this refactoring, we can now use our
 CPS-transformed functions in <code>associateEmail</code>. We’re going to use the
-chain of nested continuations</p>
+chain of nested continuations:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>associateEmail</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    ::</span> <span class="dt">UserSession</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> <span class="dt">Email</span></span>
@@ -455,11 +463,12 @@ steps clearly but we still have this annoying alignment requirement.</p>
 <figure>
 <img src="./images/cps/haskell-indent.jpg" alt="Haskell indentation: The Neat part" /><figcaption aria-hidden="true">Haskell indentation: The Neat part</figcaption>
 </figure>
-<p>This works because Haskell rules around parsing layouts are quite
+<p>This works because Haskell parsing rules around layouts are quite
 flexible in this case. Semantically, everything “to the right of”
 lambda belongs to this lambda. So we don’t need this extra indentation
 here. This doesn’t work for <code>case-of</code> expressions and <code>do</code>-notation
-blocks but surprisingly works for lambdas.</p>
+blocks but surprisingly works for lambdas and arguments after <code>$</code>
+outside <code>do</code> blocks.</p>
 <p>You can go one step further in making this code look cleaner.
 I’m <a href="https://osa1.net/posts/2020-01-22-no-small-syntax-extensions.html">not a fan</a>
 of the
