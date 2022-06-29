@@ -13,7 +13,7 @@ copyright:             2019-2022 Dmitrii Kovanikov
 category:              Web
 build-type:            Simple
 extra-doc-files:       README.md
-tested-with:           GHC == 9.2.2
+tested-with:           GHC == 9.2.3
 
 source-repository head
   type:                git
