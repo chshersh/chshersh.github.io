@@ -22,7 +22,6 @@ allSocials = traverse makeItem
     , Social "reddit"         "https://www.reddit.com/user/chshersh"
     , Social "stack-overflow" "https://stackoverflow.com/users/2900502/shersh"
     , Social "linkedin"       "https://www.linkedin.com/in/chshersh/"
-    , Social "telegram"       "https://t.me/chshersh"
     ]
 
 socialContext :: Context a

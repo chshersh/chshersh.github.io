@@ -1,8 +1,8 @@
-cabal-version:         2.4
+cabal-version:         3.0
 name:                  chshersh-site
 version:               1.0
-synopsis:              chshersh website
-description:           chshersh website
+synopsis:              My personal website
+description:           A website build with Hakyll
 homepage:              https://github.com/chshersh/chshersh.github.io
 bug-reports:           https://github.com/chshersh/chshersh.github.io/issues
 license:               MPL-2.0
@@ -13,7 +13,7 @@ copyright:             2019-2022 Dmitrii Kovanikov
 category:              Web
 build-type:            Simple
 extra-doc-files:       README.md
-tested-with:           GHC == 9.2.3
+tested-with:           GHC == 9.2.4
 
 source-repository head
   type:                git

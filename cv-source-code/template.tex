@@ -1,0 +1,146 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Twenty Seconds Resume/CV
+% LaTeX Template
+% Version 1.1 (8/1/17)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Carmine Spagnuolo (cspagnuolo@unisa.it) with major modifications by
+% Vel (vel@LaTeXTemplates.com)
+%
+% License:
+% The MIT License (see included LICENSE file)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[letterpaper]{twentysecondcv} % a4paper for A4
+
+\hypersetup{pdfborder={0 0 0}, colorlinks=true}
+
+%----------------------------------------------------------------------------------------
+%	 PERSONAL INFORMATION
+%----------------------------------------------------------------------------------------
+
+% If you don't need one or more of the below, just remove the content leaving the command, e.g. \cvnumberphone{}
+
+\profilepic{ava_cv.jpg} % Profile picture
+
+\cvname{Dmitrii
+
+Kovanikov} % Your name
+\cvjobtitle{Haskell Developer} % Job title/career
+
+\cvdate{} % Date of birth
+\cvaddress{London, United Kingdom} % Short address/location, use \newline if more than 1 line is required
+\cvnumberphone{}
+\cvmail{kovanikov@gmail.com} % Email address
+\cvsite{\href{https://github.com/chshersh/}{chshersh}} % Personal website
+\cvlink{\href{https://www.linkedin.com/in/chshersh}{chshersh}}
+\cvso{\href{https://stackoverflow.com/users/2900502/shersh}{shersh}}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	 ABOUT ME
+%----------------------------------------------------------------------------------------
+
+\aboutme{I'm Haskell enthusiast and teacher with several years of experience in program development. Making-world-better-oriented focused person who pays attention to details and never stops learning new things and improving already existing skills.} % To have no About Me section, just remove all the text and leave \aboutme{}
+
+%----------------------------------------------------------------------------------------
+%	 SKILLS
+%----------------------------------------------------------------------------------------
+
+% Skill bar section, each skill must have a value between 0 an 6 (float)
+% \skills{{pursuer of rabbits/5.8},{good manners/4},{outgoing/4.3},{polite/4},{Java/0.01}}
+
+%------------------------------------------------
+
+% Skill text section, each skill must have a value between 0 an 6
+% \skillstext{{lovely/4},{narcissistic/3}}
+
+%----------------------------------------------------------------------------------------
+
+\makeprofile % Print the sidebar
+
+%----------------------------------------------------------------------------------------
+%	 INTERESTS
+%----------------------------------------------------------------------------------------
+
+\section{Interests}
+
+Functional programming, especially Haskell.
+
+%----------------------------------------------------------------------------------------
+%	 EDUCATION
+%----------------------------------------------------------------------------------------
+
+\section{Education}
+
+\begin{twenty} % Environment for a list with descriptions
+    \twentyitem{2015-2016}{Master degree}{ITMO University}{Information Technologies and Programming Faculty, Computer Technology Department, Majoring in Software Engineering and Service Design}
+	\twentyitem{2011-2015}{Bachelor degree}{ITMO University}{Information Technologies and Programming Faculty, Computer Technology Department, Majoring in Computer Science}
+	%\twentyitem{<dates>}{<title>}{<location>}{<description>}
+\end{twenty}
+
+%----------------------------------------------------------------------------------------
+%	 EXPERIENCE
+%----------------------------------------------------------------------------------------
+
+\section{Experience}
+
+\begin{twenty} % Environment for a list with descriptions
+    \twentyitem{2019 - now}{Quantitative Developer}{Standard Chartered}{Implementing and supporting pricing platform core features, working on a custom build tool and GHC infrastructure, developing web-services, enhancing products maintainability, monitoring and analysing project performance, improving continuous integration, continuous deployment and developing experience.}
+    \twentyitem{2018 - 2019}{Middle Haskell Developer}{Holmusk}{Backend development of the chronic disease management platform. Implementing web-application backend with type-level DSL, PostgreSQL, Protocol buffers.}
+    \twentyitem{06-08, 2019}{GSoC 2019 Mentor}{Haskell.org}{Mentorship during GSoC 2019. Curating student work for web-application with Haskell on backend and Elm on frontend.}
+	\twentyitem{2016 - 2018}{Middle Haskell Software Engineer}{Serokell}{Developing distributed cryptocurrency systems using Haskell. Implementing cryptocurrency protocols, creating logging framework, writing jekyll documentation in English, Haskell development and refactoring tooling support, performance optimizations, benchmarking, making world better.}
+    \twentyitem{2015 - 2018}{Haskell Tutor}{ITMO University}{Tutoring the course about functional programming and Haskell.
+
+Course page: \url{https://github.com/jagajaga/FP-Course-ITMO}}
+	\twentyitem{02-05, 2016}{Java Software Engineering Intern}{Yandex}{Developing monitoring system for microservices at Yandex.Metrics.}
+	\twentyitem{07-09, 2015}{Kotlin Software Engineering Intern}{JetBrains}{Integrating REPL for Kotlin programming language into Intellij IDEA.}
+    \twentyitem{04-06, 2015}{Computer Laboratory Assistant}{ITMO University}{Implementing feature ensemble system using Machine Learning algorithms.}
+    \twentyitem{01-03, 2015}{Android Software Engineering Intern}{BigBird}{Prototyping Android app for BigBird system: \url{http://bigbird.ru/}}
+	%\twentyitem{<dates>}{<title>}{<location>}{<description>}
+\end{twenty}
+
+%----------------------------------------------------------------------------------------
+%	 OTHER INFORMATION
+%----------------------------------------------------------------------------------------
+
+\section{Other information}
+
+\subsection{Review}
+
+I enjoy reading Programming Language books and articles, trying to catch up with modern researches in functional programming. I like to contribute to open-source projects and help beginners to start with implementing easy issues. I answer to StackOverflow questions (mostly in Haskell section) which I found useful both for my self-education and novice programmers. In my free from programming and self-learning time I like playing guitar and eat milk chocolate :)
+
+%----------------------------------------------------------------------------------------
+%	 SECOND PAGE EXAMPLE
+%----------------------------------------------------------------------------------------
+
+%\newpage % Start a new page
+
+%\makeprofile % Print the sidebar
+
+%\section{Other information}
+
+%\subsection{Review}
+
+%Alice approaches Wonderland as an anthropologist, but maintains a strong sense of noblesse oblige that comes with her class status. She has confidence in her social position, education, and the Victorian virtue of good manners. Alice has a feeling of entitlement, particularly when comparing herself to Mabel, whom she declares has a ``poky little house," and no toys. Additionally, she flaunts her limited information base with anyone who will listen and becomes increasingly obsessed with the importance of good manners as she deals with the rude creatures of Wonderland. Alice maintains a superior attitude and behaves with solicitous indulgence toward those she believes are less privileged.
+
+%\section{Other information}
+
+%\subsection{Review}
+
+%Alice approaches Wonderland as an anthropologist, but maintains a strong sense of noblesse oblige that comes with her class status. She has confidence in her social position, education, and the Victorian virtue of good manners. Alice has a feeling of entitlement, particularly when comparing herself to Mabel, whom she declares has a ``poky little house," and no toys. Additionally, she flaunts her limited information base with anyone who will listen and becomes increasingly obsessed with the importance of good manners as she deals with the rude creatures of Wonderland. Alice maintains a superior attitude and behaves with solicitous indulgence toward those she believes are less privileged.
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
