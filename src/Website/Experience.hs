@@ -24,18 +24,18 @@ eDate    = field "eDate"    $ pure . experienceDate    . itemBody
 allExperience :: Compiler [Item Experience]
 allExperience = traverse makeItem
     [ Experience
-        { experienceTitle   = "Co-founder & Maintainer"
-        , experienceSite    = "https://kowainik.github.io/"
-        , experienceCompany = "Kowainik"
-        , experienceDesc    = "Using Haskell to build better software. Improving Haskell ecosystem and making community friendlier. Mentoring people and help them to learn the programming language."
-        , experienceDate    = "March 2018 — Present"
+        { experienceTitle   = "Senior Software Engineer"
+        , experienceSite    = "https://feeld.co/"
+        , experienceCompany = "Feeld"
+        , experienceDesc    = "Development of the backend to support a dating app with high load, legacy code extraction, using latest techniques for performance profiling, mentorship, organization and workflow improvements."
+        , experienceDate    = "April 2022 — Present"
         }
     , Experience
         { experienceTitle   = "Quantitative Developer"
         , experienceSite    = "https://www.sc.com/en/"
         , experienceCompany = "Standard Chartered Bank"
         , experienceDesc    = "Implementing and supporting pricing platform core features, working on a custom build tool and GHC infrastructure, developing web-services, enhancing products maintainability, monitoring and analysing project performance, improving continuous integration, continuous deployment and developing experience."
-        , experienceDate    = "December 2019 — Present"
+        , experienceDate    = "December 2019 — April 2022"
         }
     , Experience
         { experienceTitle   = "Middle Haskell Developer"
@@ -43,6 +43,13 @@ allExperience = traverse makeItem
         , experienceCompany = "Holmusk"
         , experienceDesc    = "Backend development of web applications in Haskell. Working on healthcare projects that sync information from multiple sources and display them to users. Integration with machine learning models in other languages. Technologies included: Haskell, Elm, PostgreSQL, Amazon services (S3, SQS), Protocol buffers."
         , experienceDate    = "May 2018 — November 2019"
+        }
+    , Experience
+        { experienceTitle   = "Co-founder & Maintainer"
+        , experienceSite    = "https://kowainik.github.io/"
+        , experienceCompany = "Kowainik"
+        , experienceDesc    = "Using Haskell to build better software. Improving Haskell ecosystem and making community friendlier. Mentoring people and help them to learn the programming language."
+        , experienceDate    = "March 2018 — April 2022"
         }
     , Experience
         { experienceTitle   = "Haskell Software Engineer"
