@@ -63,6 +63,13 @@ pre.comment {
 , .post figure img
 , .post img {
     max-width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.post figcaption {
     text-align: center;
 }
 
