@@ -7,8 +7,16 @@
         <description><![CDATA[This feed provides blog posts about using modern Haskell]]></description>
         <atom:link href="https://chshersh.github.io/rss.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Thu, 30 Jun 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 08 Aug 2022 00:00:00 UT</lastBuildDate>
         <item>
+    <title>Avoiding space leaks at all costs</title>
+    <link>https://chshersh.github.io/space-leak.html</link>
+    <description><![CDATA[Guidelines for avoding space leaks in Haskell programs]]></description>
+    <pubDate>Mon, 08 Aug 2022 00:00:00 UT</pubDate>
+    <guid>https://chshersh.github.io/space-leak.html</guid>
+    <dc:creator>Dmitrii Kovanikov</dc:creator>
+</item>
+<item>
     <title>Using a 50-years old technique for solving modern issues</title>
     <link>https://chshersh.github.io/cps.html</link>
     <description><![CDATA[Utilising the CPS transformation for code maintainability]]></description>
