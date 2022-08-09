@@ -24,7 +24,8 @@ choices.
 
 Haskell programs are infamous for having lots of space leaks. This is
 the result of Haskell choosing the lazy evaluation model and not
-designing the language around preventing memory usage errors.
+designing the language around preventing such type of memory usage
+errors.
 
 Investigating and fixing space leaks brought tons of frustration to
 Haskell developers. Believe it or not, I'm not a fan of space leaks
@@ -459,7 +460,7 @@ the function implementor to think about potential space leaks.
 
 ::: {.thought}
 
-Use `Map` type and functions from `Data.Map.Strict` string and
+Use `Map` type and functions from the `Data.Map.Strict` module and
 `HashMap` from `Data.HashMap.Strict`
 
 :::
@@ -560,9 +561,15 @@ Unless you know the consequences of using the lazy version, I suggest
 defaulting to the strict State monad to avoid other places where you
 can have space leaks.
 
-Unfortunately, even [the strict State monad can cause space
-leaks][state-leaks] so the general suggestion is to avoid the state
-monad entirely unless you know what you're doing.
+Unfortunately, even
+[the strict State monad can cause space leaks][state-leaks] so the
+general suggestion is to avoid the state monad entirely unless you
+know what you're doing.
+
+> 👩‍🔬 Usages of the strict `State` monad still can be safe if your
+> state data type is strict and you're careful enough with updating
+> state using `put $! newState` or `modify'` and underlying monad in
+> `StateT` doesn't do anything funky.
 
 [state-leaks]: https://free.cofree.io/2021/12/13/space-leak/
 
