@@ -185,7 +185,8 @@ trade-offs. I’d like to talk about living with the consequences of our
 choices.</p>
 <p>Haskell programs are infamous for having lots of space leaks. This is
 the result of Haskell choosing the lazy evaluation model and not
-designing the language around preventing memory usage errors.</p>
+designing the language around preventing such type of memory usage
+errors.</p>
 <p>Investigating and fixing space leaks brought tons of frustration to
 Haskell developers. Believe it or not, I’m not a fan of space leaks
 either. However, instead of fighting the fire later, you can use
@@ -514,7 +515,7 @@ the function implementor to think about potential space leaks.</p>
 </figure>
 <h3 id="use-strict-containers"><a href="#use-strict-containers" class="anchor">Use strict containers</a></h3>
 <div class="thought">
-<p>Use <code>Map</code> type and functions from <code>Data.Map.Strict</code> string and
+<p>Use <code>Map</code> type and functions from the <code>Data.Map.Strict</code> module and
 <code>HashMap</code> from <code>Data.HashMap.Strict</code></p>
 </div>
 <p>The <a href="https://hackage.haskell.org/package/containers">containers</a> library implements the dictionary data
@@ -585,9 +586,16 @@ difference in various instances, e.g. the <code>Monad</code> one:</p>
 <p>Unless you know the consequences of using the lazy version, I suggest
 defaulting to the strict State monad to avoid other places where you
 can have space leaks.</p>
-<p>Unfortunately, even <a href="https://free.cofree.io/2021/12/13/space-leak/">the strict State monad can cause space
-leaks</a> so the general suggestion is to avoid the state
-monad entirely unless you know what you’re doing.</p>
+<p>Unfortunately, even
+<a href="https://free.cofree.io/2021/12/13/space-leak/">the strict State monad can cause space leaks</a> so the
+general suggestion is to avoid the state monad entirely unless you
+know what you’re doing.</p>
+<blockquote>
+<p>👩‍🔬 Usages of the strict <code>State</code> monad still can be safe if your
+state data type is strict and you’re careful enough with updating
+state using <code>put $! newState</code> or <code>modify'</code> and underlying monad in
+<code>StateT</code> doesn’t do anything funky.</p>
+</blockquote>
 <figure>
 <img src="./images/space-leak/space-leak-state.jpeg" alt="Impossible choice" /><figcaption aria-hidden="true">Impossible choice</figcaption>
 </figure>
