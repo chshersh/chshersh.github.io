@@ -761,5 +761,5 @@ to avoid having space leaks in the first place. The recommendations in
 this blog post may not give you 100% guarantee of not ever seeing a
 space leak but it's safer to drive with your seat belt fastened.
 
-[bang-patterns]: https://downloads.haskell.org/ghc/latest/docs/html/users_guide/exts/strict.html#bang-patterns-informal
-[strict-data]: https://downloads.haskell.org/ghc/latest/docs/html/users_guide/exts/strict.html#strict-by-default-data-types
+[bang-patterns]: https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#bang-patterns-and-strict-haskell
+[strict-data]: https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#strict-by-default-data-types
