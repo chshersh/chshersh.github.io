@@ -223,7 +223,7 @@ we're looking for here. What we want is to add numbers to our
 accumulator **immediately**.
 
 Fortunately, this is easily possible with Haskell. You need to enable
-the [BangPatterns](https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#bang-patterns-and-strict-haskell) feature and use exclamations `!` in
+the [BangPatterns][bang-patterns] feature and use exclamations `!` in
 front of patterns for variables where you want the evaluation to be
 performed eagerly.
 
@@ -288,7 +288,7 @@ survival chances at any cost.
 
 ::: {.thought}
 
-[BangPatterns](https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#bang-patterns-and-strict-haskell) is your second best friend.
+[BangPatterns][bang-patterns] is your second best friend.
 
 :::
 
@@ -330,7 +330,7 @@ Enable the `StrictData` feature.
 :::
 
 A simple thing you can do today to reduce the number of space leaks is
-to enable the [StrictData](https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts/strict.html?#extension-StrictData) language feature. Either in
+to enable the [StrictData][strict-data] language feature. Either in
 each module:
 
 ```haskell
@@ -693,7 +693,7 @@ just introduced a new space leak! 💥
 ![Unexpected Maybe destroys all your efforts](/images/space-leak/space-leak-maybe.jpg)
 
 This happens because evaluation with `!`-patterns doesn't evaluate
-values "deeply". Similarly, [StrictData](https://ghc.gitlab.haskell.org/ghc/doc/users_guide/exts/strict.html?#extension-StrictData) is applied only
+values "deeply". Similarly, [StrictData][strict-data] is applied only
 to modules where it's enabled but it's not enabled in the standard
 library.
 
@@ -761,5 +761,5 @@ to avoid having space leaks in the first place. The recommendations in
 this blog post may not give you 100% guarantee of not ever seeing a
 space leak but it's safer to drive with your seat belt fastened.
 
-[bang-patterns]: https://downloads.haskell.org/ghc/latest/docs/html/users_guide/exts/strict.html#bang-patterns-informal
-[strict-data]: https://downloads.haskell.org/ghc/latest/docs/html/users_guide/exts/strict.html#strict-by-default-data-types
+[bang-patterns]: https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#bang-patterns-and-strict-haskell
+[strict-data]: https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#strict-by-default-data-types
