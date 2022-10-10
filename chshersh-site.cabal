@@ -65,9 +65,9 @@ library
   build-depends:       hakyll ^>= 4.15
                      , hakyll-sass ^>= 0.2.4
                      , hakyll-shortcut-links ^>= 0.1.0.0
-                     , pandoc ^>= 2.16
+                     , pandoc ^>= 2.19.2
                      , pandoc-types ^>= 1.22
-                     , text ^>= 1.2
+                     , text >= 1.2 && < 2.1
 
 executable site
   main-is:             site.hs
