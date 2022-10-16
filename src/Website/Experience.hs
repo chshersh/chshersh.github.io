@@ -1,28 +1,29 @@
 module Website.Experience
        ( Experience (..)
-       , experienceContext
+       , workExperienceContext
+       , mentorshipExperienceContext
        ) where
 
 import Hakyll (Compiler, Context, Item (..), field, listField, makeItem)
 
 
 data Experience = Experience
-    { experienceTitle   :: !String
-    , experienceSite    :: !String
-    , experienceCompany :: !String
-    , experienceDesc    :: !String
-    , experienceDate    :: !String
+    { experienceTitle   :: String
+    , experienceSite    :: String
+    , experienceCompany :: String
+    , experienceDesc    :: String
+    , experienceDate    :: String
     }
 
 eTitle, eSite, eCompany, eDesc, eDate :: Context Experience
 eTitle   = field "eTitle"   $ pure . experienceTitle   . itemBody
-eSite    = field "eSite"    $ pure . experienceSite . itemBody
+eSite    = field "eSite"    $ pure . experienceSite    . itemBody
 eCompany = field "eCompany" $ pure . experienceCompany . itemBody
 eDesc    = field "eDesc"    $ pure . experienceDesc    . itemBody
 eDate    = field "eDate"    $ pure . experienceDate    . itemBody
 
-allExperience :: Compiler [Item Experience]
-allExperience = traverse makeItem
+workExperience :: Compiler [Item Experience]
+workExperience = traverse makeItem
     [ Experience
         { experienceTitle   = "Senior Software Engineer"
         , experienceSite    = "https://feeld.co/"
@@ -58,6 +59,24 @@ allExperience = traverse makeItem
         , experienceDesc    = "Developing distributed cryptocurrency systems using Haskell. Implementing cryptocurrency protocols, creating logging framework, writing jekyll documentation in English, Haskell development and refactoring tooling support, performance optimizations, benchmarking, making world better."
         , experienceDate    = "May 2016 — April 2018"
         }
+    ]
+
+mentorshipExperience :: Compiler [Item Experience]
+mentorshipExperience = traverse makeItem
+    [ Experience
+        { experienceTitle   = "OSS Maintainer"
+        , experienceSite    = "https://hacktoberfest.com/"
+        , experienceCompany = "Digital Ocean et al."
+        , experienceDesc    = "Mentoring Haskell beginners in various Haskell OSS projects and courses."
+        , experienceDate    = "October 2017, 2018, 2019, 2020, 2021, 2022"
+        }
+    , Experience
+        { experienceTitle   = "Mentor"
+        , experienceSite    = "https://summer.haskell.org/"
+        , experienceCompany = "Google Summer of Code (Haskell)"
+        , experienceDesc    = "Mentoring a person in the web application development using Haskell, Elm and PostgreSQL."
+        , experienceDate    = "May 2019 - September 2019"
+        }
     , Experience
         { experienceTitle   = "Haskell PL Tutor"
         , experienceSite    = "http://en.ifmo.ru/en/"
@@ -67,5 +86,8 @@ allExperience = traverse makeItem
         }
     ]
 
-experienceContext :: Context a
-experienceContext = listField "experience" (eTitle <> eSite <> eCompany <> eDesc <> eDate) allExperience
+workExperienceContext :: Context a
+workExperienceContext = listField "workExperience" (eTitle <> eSite <> eCompany <> eDesc <> eDate) workExperience
+
+mentorshipExperienceContext :: Context a
+mentorshipExperienceContext = listField "mentorshipExperience" (eTitle <> eSite <> eCompany <> eDesc <> eDate) mentorshipExperience

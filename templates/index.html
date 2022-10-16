@@ -91,6 +91,9 @@
           <a class="nav-link js-scroll-trigger" href="#experience">&#955; &rarr; EXPERIENCE</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#mentorship">&#955; &rarr; MENTORSHIP</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link js-scroll-trigger" href="#blog">&#955; &rarr; BLOG</a>
         </li>
         <li class="nav-item">
@@ -122,10 +125,10 @@
 
 	<div class="main-page">
           <ul>
-	    <li> 7+ years experience of using Haskell in production, OSS and mentoring </li>
-	    <li> 10+ talks on multiple conferences and meetups (YOW! Lambda Jam, Haskell Love et al.) </li>
-	    <li> 3 Haskell courses created </li>
-	    <li> 50+ open-source projects authored </li>
+	    <li> <strong>7+</strong> years experience of using Haskell in production, OSS and mentoring </li>
+	    <li> <strong>10+</strong> talks on multiple conferences and meetups (YOW! Lambda Jam, Haskell Love et al.) </li>
+	    <li> <strong>3</strong> Haskell courses created (see my latest <a class="js-scroll-trigger" href="#haskell-course"> Haskell Course </a>) </li>
+	    <li> <strong>50+</strong> open-source projects authored </li>
 	  </ul>
 	</div>
 
@@ -180,7 +183,7 @@
         </a>
         </div>
 
-        $for(experience)$
+        $for(workExperience)$
         <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
           <div class="resume-content">
             <h3 class="mb-0">$eTitle$</h3>
@@ -196,6 +199,80 @@
       </div>
 
     </section>
+
+    <hr class="m-0">
+
+    <section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="mentorship">
+      <div class="w-100">
+        <h2 class="mb-4">Mentorship</h2>
+
+	<p class="lead mb-3 text-black">
+	I offer <strong>free Haskell mentorship</strong> in several projects described below.
+	</br>
+	If you're interested in a unique mentorship approach (providing mentorship for Haskell Engineers in your company, having individual sessions, etc.),
+	<a class="js-scroll-trigger" href="#contacts">drop me a message</a> to discuss the details.
+	</p>
+
+        <h3 class="mt-5" id="haskell-course">Haskell Course</h2>
+
+	<p class="lead mb-3 text-black">
+	I provide mentorship in my
+	<a href="https://github.com/haskell-beginners-2022/course-plan" target="_blank">Haskell Course for complete beginners</a>.
+	<br/>
+	The entire course is completely <strong>free</strong>, doesn't require any prior knowledge of FP or Haskell and includes the following features:
+	</p>
+
+	<div class="main-page">
+          <ul>
+            <li>
+	      <a href="https://www.youtube.com/watch?v=6MsQcUprO9o&list=PLOJjn67NeYg9cWA4hyIWcxfaeX64pwo1c&ab_channel=chshersh" target="_blank">Four video lectures on YouTube</a>
+            </li>
+	    <li>
+	      <a href="https://slides.com/haskellbeginners2022" target="_blank"> Slides </a>
+	    </li>
+	    <li>
+	      <a href="https://github.com/haskell-beginners-2022/exercises" target="_blank"> Practical exercises and Haskell installation instructions </a>
+	    </li>
+	    <li>
+	      <strong>Review of your solutions to exercises!</strong>
+	    </li>
+	    <li>
+	      <strong>A personal certificate after successful completion!</strong>
+	    </li>
+	  </ul>
+	</div>
+
+        <h3 class="mt-5">Open Source Mentorship</h2>
+
+	<p class="lead mb-3 text-black">
+	Besides my Haskell course, I also offer free mentorship my
+	open-source project <a href="https://github.com/chshersh/iris" target="_blank"> Iris </a> — a Haskell CLI framework. The project contains
+	<a href="https://github.com/chshersh/iris/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22" target="_blank"> multiple beginner-friendly issues </a>
+	that you can take to get your feet wet in OSS and real-world Haskell applications!
+	</p>
+
+        <hr class="m-0">
+
+        <h2 class="mt-5" style="font-size: 3rem">Mentorship experience</h2>
+
+        $for(mentorshipExperience)$
+        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-4">
+          <div class="resume-content">
+            <h3 class="mb-0">$eTitle$</h3>
+            <div class="subheading mb-2"><a href="$eSite$" target="_blank">$eCompany$</a></div>
+            <p class="lead text-black">$eDesc$</p>
+          </div>
+            <div class="resume-date text-md-right">
+                <span class="text-primary">$eDate$</span>
+            </div>
+        </div>
+        $endfor$
+
+
+      </div>
+
+    </section>
+
 
     <hr class="m-0">
 

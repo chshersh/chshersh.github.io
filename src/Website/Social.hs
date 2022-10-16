@@ -19,6 +19,7 @@ allSocials :: Compiler [Item Social]
 allSocials = traverse makeItem
     [ Social "twitter"        "https://twitter.com/chshersh"
     , Social "github"         "https://github.com/chshersh"
+    , Social "youtube"        "https://youtube.com/c/chshersh"
     , Social "reddit"         "https://www.reddit.com/user/chshersh"
     , Social "stack-overflow" "https://stackoverflow.com/users/2900502/shersh"
     , Social "linkedin"       "https://www.linkedin.com/in/chshersh/"
