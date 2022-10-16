@@ -1,0 +1,19 @@
+.main-page li {
+    color: black;
+    font-size: 1.15rem;
+}
+
+.main-page ul li {
+    list-style: none;
+}
+
+.main-page li::before {
+  color: #ffc107; /* Change the color */
+  display: inline-block; /* Needed to add space between the bullet and the text */
+  width: 1em; /* Also needed for space (tweak if needed) */
+  margin-left: -1em; /* Also needed for space (tweak if needed) */
+}
+
+.main-page ul li::before {
+  content: "\2726";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+}
