@@ -30,19 +30,20 @@
 
   <!-- Custom styles for this template -->
   <link href="/css/resume.css" rel="stylesheet">
+  <link href="/css/main-page.css" rel="stylesheet">
 
   <!-- Metatags -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="kodimensional by Dmitrii Kovanikov" />
   <meta property="og:title" content="kodimensional" />
   <meta property="og:description" content="Dmitrii Kovanikov personal website: blog, experience, CV, main projects" />
-  <meta property="og:url" content="https://chshersh.github.io" />
+  <meta property="og:url" content="https://kodimensional.dev" />
   <meta property="og:image" content="/images/logo-yellow.png" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="kodimensional" />
   <meta name="twitter:description" content="Dmitrii Kovanikov personal website: blog, experience, CV, main projects" />
-  <meta name="twitter:image:src" content="https://chshersh.github.io/images/logo-yellow.png" />
-  <meta name="twitter:url" content="https://chshersh.github.io" />
+  <meta name="twitter:image:src" content="https://kodimensional.dev/images/logo-yellow.png" />
+  <meta name="twitter:url" content="https://kodimensional.dev" />
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -92,6 +93,9 @@
         <li class="nav-item">
           <a class="nav-link js-scroll-trigger" href="#blog">&#955; &rarr; BLOG</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#contacts">&#955; &rarr; CONTACTS</a>
+        </li>
       </ul>
     </div>
   </nav>
@@ -102,15 +106,33 @@
       <div class="w-100">
         <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="/images/logo-yellow.png" alt="">
         <h1 class="mb-0 text-uppercase"><span class="text-primary">ko</span> dimensional </h1>
-        <div class="subheading mb-5">
+        <div class="subheading mb-4">
             <span class="text-black">Dmitrii</span> <span class="text-primary">Ko</span><span class="text-black">vanikov</span>
         </div>
-        <p class="lead mb-5 text-black">I am a Haskell Adept: developer, teacher, enthusiast.
-        Here you can find information about me, my working experience and my
-            most notable work in the open-source community.
-            Oh, and don't forget to check out my <a class="js-scroll-trigger" href="#blog">blog</a>!
+        <p class="lead mb-3 text-black">Hi, I'm Dmitrii (he / him). Welcome to my web page! 👋
+	<br/>
+	I'm a Haskell &Rust developer. I currently work as Senior Software Engineer at <a href="https://feeld.co/" target="_blank"> Feeld </a>.
+	<br/>
+        On this page, you can find
+	<a class="js-scroll-trigger" href="#blog">my blog</a>,
+	more information about my diverse work and learn about services I offer.
+	<br/>
+	Below is a short summary of my experience:
         </p>
+
+	<div class="main-page">
+          <ul>
+	    <li> 7+ years experience of using Haskell in production, OSS and mentoring </li>
+	    <li> 10+ talks on multiple conferences and meetups (YOW! Lambda Jam, Haskell Love et al.) </li>
+	    <li> 3 Haskell courses created </li>
+	    <li> 50+ open-source projects authored </li>
+	  </ul>
+	</div>
+
         <div class="social-icons">
+	    <a href="mailto:&#107;&#111;&#100;&#105;&#109;&#101;&#110;&#115;&#105;&#111;&#110;&#97;&#108;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;?subject=Question">
+                <i class="fas fa-envelope"></i>
+            </a>
             <a href="https://github.com/sponsors/chshersh" target="_blank">
                 <i class="fas fa-heart"></i>
             </a>
@@ -119,7 +141,7 @@
                 <i class="fab fa-$socialName$"></i>
             </a>
           $endfor$
-            <a href="https://chshersh.github.io/rss.xml" target="_blank">
+            <a href="https://kodimensional.dev/rss.xml" target="_blank">
                 <i class="fas fa-rss"></i>
             </a>
         </div>
@@ -208,6 +230,45 @@
 
         </div>
         $endfor$
+      </div>
+    </section>
+
+    <hr class="m-0">
+
+    <section class="resume-section p-3 p-lg-5 d-flex" id="contacts">
+      <div class="w-100">
+        <h2 class="mb-3">Contacts</h2>
+
+	<div class="main-page">
+          <ul>
+	    <li> <strong>Location</strong>: London, UK </li>
+	    <li> <strong>Timezone</strong>: BST (UTC+1) </li>
+	    <li> <strong>Email address</strong>:
+                 <a href="mailto:&#107;&#111;&#100;&#105;&#109;&#101;&#110;&#115;&#105;&#111;&#110;&#97;&#108;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;?subject=Question">
+                                 &#107;&#111;&#100;&#105;&#109;&#101;&#110;&#115;&#105;&#111;&#110;&#97;&#108;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;
+                 </a>
+	    </li>
+	  </ul>
+	</div>
+
+
+        <div class="social-icons">
+	    <a href="mailto:&#107;&#111;&#100;&#105;&#109;&#101;&#110;&#115;&#105;&#111;&#110;&#97;&#108;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;?subject=Question">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <a href="https://github.com/sponsors/chshersh" target="_blank">
+                <i class="fas fa-heart"></i>
+            </a>
+          $for(socials)$
+            <a href="$socialLink$" target="_blank">
+                <i class="fab fa-$socialName$"></i>
+            </a>
+          $endfor$
+            <a href="https://kodimensional.dev/rss.xml" target="_blank">
+                <i class="fas fa-rss"></i>
+            </a>
+        </div>
+
       </div>
     </section>
 
