@@ -11,7 +11,7 @@ import Hakyll.Web.Sass (sassCompiler)
 
 import Website.Experience (experienceContext)
 import Website.Feed (feedCompiler)
-import Website.Posts (externalPostsContext, postsContextCompiler, postsRules)
+import Website.Posts (postsContextCompiler, postsRules)
 import Website.Project (currentProjectsContext)
 import Website.Social (socialContext)
 
@@ -47,7 +47,6 @@ main =  hakyll $ do
                    <> currentProjectsContext
                    <> socialContext
                    <> postsCtx
-                   <> externalPostsContext
 
             makeItem ""
                 >>= applyAsTemplate ctx
