@@ -85,10 +85,10 @@
           <a class="nav-link js-scroll-trigger" href="#about">&#955; &rarr; ABOUT</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#experience">&#955; &rarr; EXPERIENCE</a>
+          <a class="nav-link js-scroll-trigger" href="#projects">&#955; &rarr; PROJECTS</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#projects">&#955; &rarr; PROJECTS</a>
+          <a class="nav-link js-scroll-trigger" href="#experience">&#955; &rarr; EXPERIENCE</a>
         </li>
         <li class="nav-item">
           <a class="nav-link js-scroll-trigger" href="#blog">&#955; &rarr; BLOG</a>
@@ -150,6 +150,27 @@
 
     <hr class="m-0">
 
+    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="projects">
+      <div class="w-100">
+        <h2 class="mb-5">Projects</h2>
+
+        <p class="lead mb-4 text-black">My current open-source projects</p>
+
+        $for(currentProjects)$
+        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
+          <div class="resume-content">
+            <h3 class="mb-0"><a href="$pLink$" target="_blank">$pName$</a></h3>
+            <div class="subheading-description mb-3">$pDesc$</div>
+          </div>
+        </div>
+        $endfor$
+
+        <a class="btn btn-outline-warning" href="https://github.com/chshersh" target="_blank">See more of my projects</a>
+      </div>
+    </section>
+
+    <hr class="m-0">
+
     <section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="experience">
       <div class="w-100">
         <h2 class="mb-5">Experience</h2>
@@ -174,27 +195,6 @@
 
       </div>
 
-    </section>
-
-    <hr class="m-0">
-
-    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="projects">
-      <div class="w-100">
-        <h2 class="mb-5">Projects</h2>
-
-        <p class="lead mb-4 text-black">My open-source work and most notable projects.</p>
-
-        $for(projects)$
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
-          <div class="resume-content">
-            <h3 class="mb-0"><a href="$pLink$" target="_blank">$pName$</a></h3>
-            <div class="subheading-description mb-3">$pDesc$</div>
-          </div>
-        </div>
-        $endfor$
-
-        <a class="btn btn-outline-warning" href="https://github.com/kowainik" target="_blank">See more of my projects</a>
-      </div>
     </section>
 
     <hr class="m-0">

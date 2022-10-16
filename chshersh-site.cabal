@@ -37,18 +37,19 @@ common common-options
                        -Wmissing-export-lists
                        -Wpartial-fields
                        -Wmissing-deriving-strategies
-                       -Wunused-packages
                        -Winvalid-haddock
                        -Wredundant-bang-patterns
                        -Woperator-whitespace
 
   default-language:    Haskell2010
+
   default-extensions:  DeriveGeneric
                        GeneralizedNewtypeDeriving
                        LambdaCase
                        OverloadedStrings
                        RecordWildCards
                        ScopedTypeVariables
+                       StrictData
                        TypeApplications
 
 library
@@ -70,6 +71,7 @@ library
                      , text >= 1.2 && < 2.1
 
 executable site
+  import:              common-options
   main-is:             site.hs
   build-depends:       chshersh-site, base
   ghc-options:        -threaded
