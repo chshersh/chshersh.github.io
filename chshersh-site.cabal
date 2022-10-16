@@ -69,7 +69,6 @@ library
                      , pandoc ^>= 2.19.2
                      , pandoc-types ^>= 1.22
                      , text >= 1.2 && < 2.1
-                     , pretty-simple
 
 executable site
   import:              common-options

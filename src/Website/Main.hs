@@ -6,8 +6,6 @@ import Hakyll (applyAsTemplate, compile, compressCss, compressCssCompiler, const
                copyFileCompiler, create, createRedirects, defaultContext, hakyll, idRoute,
                loadAndApplyTemplate, makeItem, match, relativizeUrls, route, templateBodyCompiler,
                (.||.))
-import Hakyll.Core.Compiler.Internal (compilerUnsafeIO)
-import Hakyll.Core.Metadata (MonadMetadata (..))
 import Hakyll.Web.Feed (renderAtom, renderRss)
 import Hakyll.Web.Sass (sassCompiler)
 
@@ -16,8 +14,6 @@ import Website.Feed (feedCompiler)
 import Website.Posts (postsContextCompiler, postsRules)
 import Website.Project (currentProjectsContext)
 import Website.Social (socialContext)
-
-import Text.Pretty.Simple (pPrint)
 
 main :: IO ()
 main =  hakyll $ do
@@ -54,7 +50,7 @@ main =  hakyll $ do
 
             makeItem ""
                 >>= applyAsTemplate ctx
-                >>= (\x -> (getMetadata "workExperience" >>= compilerUnsafeIO . pPrint) >> loadAndApplyTemplate "templates/index.html" ctx x)
+                >>= loadAndApplyTemplate "templates/index.html" ctx
                 >>= relativizeUrls
 
     match "templates/*" $ compile templateBodyCompiler
