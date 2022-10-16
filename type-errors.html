@@ -38,13 +38,13 @@
   <meta property="og:site_name" content="kodimensional by Dmitrii Kovanikov" />
   <meta property="og:title" content="kodimensional :: A story told by Type Errors" />
   <meta property="og:description" content="Tutorial on custom type errors in Haskell with a lot of examples" />
-  <meta property="og:url" content="https://chshersh.github.io" />
+  <meta property="og:url" content="https://kodimensional.dev" />
   <meta property="og:image" content="/images/logo-yellow.png" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="kodimensional :: A story told by Type Errors" />
   <meta name="twitter:description" content="Tutorial on custom type errors in Haskell with a lot of examples" />
-  <meta name="twitter:image:src" content="https://chshersh.github.io/images/logo-yellow.png" />
-  <meta name="twitter:url" content="https://chshersh.github.io" />
+  <meta name="twitter:image:src" content="https://kodimensional.dev/images/logo-yellow.png" />
+  <meta name="twitter:url" content="https://kodimensional.dev" />
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -156,21 +156,21 @@
         </div>
 
         <div class="post toc-header"><ul>
-<li><a href="#motivation">Motivation</a></li>
-<li><a href="#what-is-typeerror">What is TypeError?</a>
+<li><a href="#motivation" id="toc-motivation">Motivation</a></li>
+<li><a href="#what-is-typeerror" id="toc-what-is-typeerror">What is TypeError?</a>
 <ul>
-<li><a href="#short-intro-to-type-families">Short intro to type families</a></li>
-<li><a href="#typeerror-type-family">TypeError type family</a></li>
-<li><a href="#short-intro-to-datakinds">Short intro to DataKinds</a></li>
-<li><a href="#errormessage-data-type">ErrorMessage data type</a></li>
+<li><a href="#short-intro-to-type-families" id="toc-short-intro-to-type-families">Short intro to type families</a></li>
+<li><a href="#typeerror-type-family" id="toc-typeerror-type-family">TypeError type family</a></li>
+<li><a href="#short-intro-to-datakinds" id="toc-short-intro-to-datakinds">Short intro to DataKinds</a></li>
+<li><a href="#errormessage-data-type" id="toc-errormessage-data-type">ErrorMessage data type</a></li>
 </ul></li>
-<li><a href="#motivating-example-adding-two-lists">Motivating example: adding two lists</a></li>
-<li><a href="#create-the-restricted-instance-eq-instance-for-the-function">Create the restricted instance: Eq instance for the function</a></li>
-<li><a href="#restrict-instance-externally-foldable">Restrict instance externally: Foldable</a></li>
-<li><a href="#deprecation-better-migration-guide">Deprecation: better migration guide</a></li>
-<li><a href="#analyse-generic-representation-of-a-type-names-fields-constructors">Analyse Generic representation of a type: names, fields, constructors</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
-<li><a href="#acknowledgements">Acknowledgements</a></li>
+<li><a href="#motivating-example-adding-two-lists" id="toc-motivating-example-adding-two-lists">Motivating example: adding two lists</a></li>
+<li><a href="#create-the-restricted-instance-eq-instance-for-the-function" id="toc-create-the-restricted-instance-eq-instance-for-the-function">Create the restricted instance: Eq instance for the function</a></li>
+<li><a href="#restrict-instance-externally-foldable" id="toc-restrict-instance-externally-foldable">Restrict instance externally: Foldable</a></li>
+<li><a href="#deprecation-better-migration-guide" id="toc-deprecation-better-migration-guide">Deprecation: better migration guide</a></li>
+<li><a href="#analyse-generic-representation-of-a-type-names-fields-constructors" id="toc-analyse-generic-representation-of-a-type-names-fields-constructors">Analyse Generic representation of a type: names, fields, constructors</a></li>
+<li><a href="#conclusion" id="toc-conclusion">Conclusion</a></li>
+<li><a href="#acknowledgements" id="toc-acknowledgements">Acknowledgements</a></li>
 </ul></div>
         <div class="post"><p>Custom type errors is an extremely powerful tool for improving the UX of Haskell
 libraries. However, they are not used frequently enough. Partially because this

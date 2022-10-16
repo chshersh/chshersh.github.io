@@ -38,13 +38,13 @@
   <meta property="og:site_name" content="kodimensional by Dmitrii Kovanikov" />
   <meta property="og:title" content="kodimensional :: Dead simple cross-platform GitHub Actions for Haskell" />
   <meta property="og:description" content="GitHub Actions CI settings for Haskell projects with Cabal and Stack" />
-  <meta property="og:url" content="https://chshersh.github.io" />
+  <meta property="og:url" content="https://kodimensional.dev" />
   <meta property="og:image" content="/images/logo-yellow.png" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="kodimensional :: Dead simple cross-platform GitHub Actions for Haskell" />
   <meta name="twitter:description" content="GitHub Actions CI settings for Haskell projects with Cabal and Stack" />
-  <meta name="twitter:image:src" content="https://chshersh.github.io/images/logo-yellow.png" />
-  <meta name="twitter:url" content="https://chshersh.github.io" />
+  <meta name="twitter:image:src" content="https://kodimensional.dev/images/logo-yellow.png" />
+  <meta name="twitter:url" content="https://kodimensional.dev" />
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -160,14 +160,14 @@
         </div>
 
         <div class="post toc-header"><ul>
-<li><a href="#motivation">Motivation</a></li>
-<li><a href="#the-config">The Config</a>
+<li><a href="#motivation" id="toc-motivation">Motivation</a></li>
+<li><a href="#the-config" id="toc-the-config">The Config</a>
 <ul>
-<li><a href="#badge">Badge</a></li>
+<li><a href="#badge" id="toc-badge">Badge</a></li>
 </ul></li>
-<li><a href="#configuration-explanation">Configuration explanation</a></li>
-<li><a href="#hlint">HLint</a></li>
-<li><a href="#dependabot">Dependabot</a></li>
+<li><a href="#configuration-explanation" id="toc-configuration-explanation">Configuration explanation</a></li>
+<li><a href="#hlint" id="toc-hlint">HLint</a></li>
+<li><a href="#dependabot" id="toc-dependabot">Dependabot</a></li>
 </ul></div>
         <div class="post"><p>I have been looking for the perfect Continuous Integration (CI) for my
 Haskell projects for a while and found
@@ -322,12 +322,14 @@ copy-paste the file to your projects as well):</p>
 <li><a href="https://github.com/kowainik/.github/blob/main/workflow-templates/ci.yml">kowainik/.github: Dead-simple CI</a></li>
 </ul>
 <figure>
-<img src="https://user-images.githubusercontent.com/4276606/86161652-788da200-bb05-11ea-8757-46c03a9e3c53.png" alt="Suggested workflow" /><figcaption aria-hidden="true">Suggested workflow</figcaption>
+<img src="https://user-images.githubusercontent.com/4276606/86161652-788da200-bb05-11ea-8757-46c03a9e3c53.png" alt="Suggested workflow" />
+<figcaption aria-hidden="true">Suggested workflow</figcaption>
 </figure>
 <p>Once all build errors are fixed, you can enjoy your well-deserved
 green CI 💚</p>
 <figure>
-<img src="https://user-images.githubusercontent.com/4276606/81208666-54ab5580-8fc7-11ea-9464-80e67ade7d7a.png" alt="All CI checks pass" /><figcaption aria-hidden="true">All CI checks pass</figcaption>
+<img src="https://user-images.githubusercontent.com/4276606/81208666-54ab5580-8fc7-11ea-9464-80e67ade7d7a.png" alt="All CI checks pass" />
+<figcaption aria-hidden="true">All CI checks pass</figcaption>
 </figure>
 <h3 id="badge"><a href="#badge" class="anchor">Badge</a></h3>
 <p>After you enable GitHub Actions CI for your project, you can also add

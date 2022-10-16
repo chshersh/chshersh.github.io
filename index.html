@@ -30,19 +30,20 @@
 
   <!-- Custom styles for this template -->
   <link href="./css/resume.css" rel="stylesheet">
+  <link href="./css/main-page.css" rel="stylesheet">
 
   <!-- Metatags -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="kodimensional by Dmitrii Kovanikov" />
   <meta property="og:title" content="kodimensional" />
   <meta property="og:description" content="Dmitrii Kovanikov personal website: blog, experience, CV, main projects" />
-  <meta property="og:url" content="https://chshersh.github.io" />
+  <meta property="og:url" content="https://kodimensional.dev" />
   <meta property="og:image" content="/images/logo-yellow.png" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="kodimensional" />
   <meta name="twitter:description" content="Dmitrii Kovanikov personal website: blog, experience, CV, main projects" />
-  <meta name="twitter:image:src" content="https://chshersh.github.io/images/logo-yellow.png" />
-  <meta name="twitter:url" content="https://chshersh.github.io" />
+  <meta name="twitter:image:src" content="https://kodimensional.dev/images/logo-yellow.png" />
+  <meta name="twitter:url" content="https://kodimensional.dev" />
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -84,13 +85,16 @@
           <a class="nav-link js-scroll-trigger" href="#about">λ &rarr; ABOUT</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#experience">λ &rarr; EXPERIENCE</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link js-scroll-trigger" href="#projects">λ &rarr; PROJECTS</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#experience">λ &rarr; EXPERIENCE</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link js-scroll-trigger" href="#blog">λ &rarr; BLOG</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link js-scroll-trigger" href="#contacts">λ &rarr; CONTACTS</a>
         </li>
       </ul>
     </div>
@@ -102,15 +106,33 @@
       <div class="w-100">
         <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="./images/logo-yellow.png" alt>
         <h1 class="mb-0 text-uppercase"><span class="text-primary">ko</span> dimensional </h1>
-        <div class="subheading mb-5">
+        <div class="subheading mb-4">
             <span class="text-black">Dmitrii</span> <span class="text-primary">Ko</span><span class="text-black">vanikov</span>
         </div>
-        <p class="lead mb-5 text-black">I am a Haskell Adept: developer, teacher, enthusiast.
-        Here you can find information about me, my working experience and my
-            most notable work in the open-source community.
-            Oh, and don't forget to check out my <a class="js-scroll-trigger" href="#blog">blog</a>!
+        <p class="lead mb-3 text-black">Hi, I'm Dmitrii (he / him). Welcome to my web page! 👋
+	<br />
+	I'm a Haskell &Rust developer. I currently work as Senior Software Engineer at <a href="https://feeld.co/" target="_blank"> Feeld </a>.
+	<br />
+        On this page, you can find
+	<a class="js-scroll-trigger" href="#blog">my blog</a>,
+	more information about my diverse work and learn about services I offer.
+	<br />
+	Below is a short summary of my experience:
         </p>
+
+	<div class="main-page">
+          <ul>
+	    <li> 7+ years experience of using Haskell in production, OSS and mentoring </li>
+	    <li> 10+ talks on multiple conferences and meetups (YOW! Lambda Jam, Haskell Love et al.) </li>
+	    <li> 3 Haskell courses created </li>
+	    <li> 50+ open-source projects authored </li>
+	  </ul>
+	</div>
+
         <div class="social-icons">
+	    <a href="mailto:kodimensional@gmail.com?subject=Question">
+                <i class="fas fa-envelope"></i>
+            </a>
             <a href="https://github.com/sponsors/chshersh" target="_blank">
                 <i class="fas fa-heart"></i>
             </a>
@@ -135,10 +157,59 @@
                 <i class="fab fa-linkedin"></i>
             </a>
           
-            <a href="https://chshersh.github.io/rss.xml" target="_blank">
+            <a href="https://kodimensional.dev/rss.xml" target="_blank">
                 <i class="fas fa-rss"></i>
             </a>
         </div>
+      </div>
+    </section>
+
+    <hr class="m-0">
+
+    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="projects">
+      <div class="w-100">
+        <h2 class="mb-5">Projects</h2>
+
+        <p class="lead mb-4 text-black">My current open-source projects</p>
+
+        
+        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
+          <div class="resume-content">
+            <h3 class="mb-0"><a href="https://github.com/chshersh/iris" target="_blank">🌈 iris</a></h3>
+            <div class="subheading-description mb-3">Haskell CLI Framework supporting Command Line Interface Guidelines</div>
+          </div>
+        </div>
+        
+        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
+          <div class="resume-content">
+            <h3 class="mb-0"><a href="https://github.com/chshersh/tool-sync" target="_blank">🧰 tool-sync</a></h3>
+            <div class="subheading-description mb-3">A CLI tool written in Rust for downloading pre-built binaries of all your favourite tools with a single command</div>
+          </div>
+        </div>
+        
+        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
+          <div class="resume-content">
+            <h3 class="mb-0"><a href="https://github.com/chshersh/dr-cabal" target="_blank">📊 dr-cabal</a></h3>
+            <div class="subheading-description mb-3">Haskell dependencies build times profiler</div>
+          </div>
+        </div>
+        
+        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
+          <div class="resume-content">
+            <h3 class="mb-0"><a href="https://github.com/chshersh/sauron" target="_blank">👁 sauron</a></h3>
+            <div class="subheading-description mb-3">A CLI tool that fetches top user tweets (written with Haskell and Iris)</div>
+          </div>
+        </div>
+        
+        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
+          <div class="resume-content">
+            <h3 class="mb-0"><a href="https://github.com/chshersh/ghc-plugin-non-empty" target="_blank">🧪 ghc-plugin-non-empty</a></h3>
+            <div class="subheading-description mb-3">A Haskell compiler plugin for writing type-safe programs easier</div>
+          </div>
+        </div>
+        
+
+        <a class="btn btn-outline-warning" href="https://github.com/chshersh" target="_blank">See more of my projects</a>
       </div>
     </section>
 
@@ -223,69 +294,6 @@
 
       </div>
 
-    </section>
-
-    <hr class="m-0">
-
-    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="projects">
-      <div class="w-100">
-        <h2 class="mb-5">Projects</h2>
-
-        <p class="lead mb-4 text-black">My open-source work and most notable projects.</p>
-
-        
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
-          <div class="resume-content">
-            <h3 class="mb-0"><a href="https://kowainik.github.io/posts/2018-09-25-co-log" target="_blank">📕 co-log</a></h3>
-            <div class="subheading-description mb-3">Composable contravariant comonadic logging library</div>
-          </div>
-        </div>
-        
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
-          <div class="resume-content">
-            <h3 class="mb-0"><a href="https://github.com/kowainik/relude" target="_blank">🌀 relude</a></h3>
-            <div class="subheading-description mb-3">Alternative standard library for Haskell with modern idioms</div>
-          </div>
-        </div>
-        
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
-          <div class="resume-content">
-            <h3 class="mb-0"><a href="https://kowainik.github.io/posts/2019-01-14-tomland" target="_blank">🏝 tomland</a></h3>
-            <div class="subheading-description mb-3">Bidirectional TOML serialization library with monadic profunctors, theorem proving and prefix trees</div>
-          </div>
-        </div>
-        
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
-          <div class="resume-content">
-            <h3 class="mb-0"><a href="https://github.com/chshersh/treap" target="_blank">🍃 treap</a></h3>
-            <div class="subheading-description mb-3">Efficient implementation of the implicit treap data structure</div>
-          </div>
-        </div>
-        
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
-          <div class="resume-content">
-            <h3 class="mb-0"><a href="https://github.com/chshersh/type-errors-pretty" target="_blank">🐞 type-errors-pretty</a></h3>
-            <div class="subheading-description mb-3">Combinators for writing pretty type errors easily</div>
-          </div>
-        </div>
-        
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
-          <div class="resume-content">
-            <h3 class="mb-0"><a href="https://kowainik.github.io/posts/2018-08-19-picnic-put-containers-into-a-backpack" target="_blank">🎒 containers-backpack</a></h3>
-            <div class="subheading-description mb-3">Backpack implementation of the uniform interface for containers in Haskell</div>
-          </div>
-        </div>
-        
-        <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-3">
-          <div class="resume-content">
-            <h3 class="mb-0"><a href="https://github.com/kowainik/idris-patricia" target="_blank">🌋 idris-patricia</a></h3>
-            <div class="subheading-description mb-3">Idris implementation of the patricia trees</div>
-          </div>
-        </div>
-        
-
-        <a class="btn btn-outline-warning" href="https://github.com/kowainik" target="_blank">See more of my projects</a>
-      </div>
     </section>
 
     <hr class="m-0">
@@ -385,70 +393,61 @@
             </div>
         </div>
         
+      </div>
+    </section>
 
-        <h2 class="mb-5 mt-5">External blog posts</h2>
+    <hr class="m-0">
 
-        
-        <div class="resume-item d-flex flex-column mb-1">
+    <section class="resume-section p-3 p-lg-5 d-flex" id="contacts">
+      <div class="w-100">
+        <h2 class="mb-3">Contacts</h2>
 
-          <div class="resume-content">
-              <h3 class="mb-0"><i class="fas fa-link fa-xs"></i> <a href="https://kowainik.github.io/posts/2019-01-14-tomland" target="_blank">tomland: Bidirectional TOML serialization</a></h3>
-            <div class="resume-date">
-              <span class="text-black">January 14, 2019</span>
-            </div>
-            <div class="subheading mb-3">Kowainik</div>
-          </div>
+	<div class="main-page">
+          <ul>
+	    <li> <strong>Location</strong>: London, UK </li>
+	    <li> <strong>Timezone</strong>: BST (UTC+1) </li>
+	    <li> <strong>Email address</strong>:
+                 <a href="mailto:kodimensional@gmail.com?subject=Question">
+                                 kodimensional@gmail.com
+                 </a>
+	    </li>
+	  </ul>
+	</div>
 
+
+        <div class="social-icons">
+	    <a href="mailto:kodimensional@gmail.com?subject=Question">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <a href="https://github.com/sponsors/chshersh" target="_blank">
+                <i class="fas fa-heart"></i>
+            </a>
+          
+            <a href="https://twitter.com/chshersh" target="_blank">
+                <i class="fab fa-twitter"></i>
+            </a>
+          
+            <a href="https://github.com/chshersh" target="_blank">
+                <i class="fab fa-github"></i>
+            </a>
+          
+            <a href="https://www.reddit.com/user/chshersh" target="_blank">
+                <i class="fab fa-reddit"></i>
+            </a>
+          
+            <a href="https://stackoverflow.com/users/2900502/shersh" target="_blank">
+                <i class="fab fa-stack-overflow"></i>
+            </a>
+          
+            <a href="https://www.linkedin.com/in/chshersh/" target="_blank">
+                <i class="fab fa-linkedin"></i>
+            </a>
+          
+            <a href="https://kodimensional.dev/rss.xml" target="_blank">
+                <i class="fas fa-rss"></i>
+            </a>
         </div>
-        
-        <div class="resume-item d-flex flex-column mb-1">
 
-          <div class="resume-content">
-              <h3 class="mb-0"><i class="fas fa-link fa-xs"></i> <a href="https://kowainik.github.io/posts/2018-11-18-state-pattern-matching" target="_blank">State monad comes to help sequential pattern matching</a></h3>
-            <div class="resume-date">
-              <span class="text-black">November 18, 2018</span>
-            </div>
-            <div class="subheading mb-3">Kowainik</div>
-          </div>
-
-        </div>
-        
-        <div class="resume-item d-flex flex-column mb-1">
-
-          <div class="resume-content">
-              <h3 class="mb-0"><i class="fas fa-link fa-xs"></i> <a href="https://kowainik.github.io/posts/2018-09-25-co-log" target="_blank">co-log: Composable Contravariant Combinatorial Comonadic Configurable Convenient Logging</a></h3>
-            <div class="resume-date">
-              <span class="text-black">September 25, 2018</span>
-            </div>
-            <div class="subheading mb-3">Kowainik</div>
-          </div>
-
-        </div>
-        
-        <div class="resume-item d-flex flex-column mb-1">
-
-          <div class="resume-content">
-              <h3 class="mb-0"><i class="fas fa-link fa-xs"></i> <a href="https://kowainik.github.io/posts/2018-08-19-picnic-put-containers-into-a-backpack" target="_blank">Picnic: put containers into a backpack</a></h3>
-            <div class="resume-date">
-              <span class="text-black">August 19, 2018</span>
-            </div>
-            <div class="subheading mb-3">Kowainik</div>
-          </div>
-
-        </div>
-        
-        <div class="resume-item d-flex flex-column mb-1">
-
-          <div class="resume-content">
-              <h3 class="mb-0"><i class="fas fa-link fa-xs"></i> <a href="https://kowainik.github.io/posts/2018-06-21-haskell-build-tools" target="_blank">Haskell: Build Tools</a></h3>
-            <div class="resume-date">
-              <span class="text-black">June 21, 2018</span>
-            </div>
-            <div class="subheading mb-3">Kowainik</div>
-          </div>
-
-        </div>
-        
       </div>
     </section>
 

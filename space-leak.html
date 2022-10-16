@@ -38,13 +38,13 @@
   <meta property="og:site_name" content="kodimensional by Dmitrii Kovanikov" />
   <meta property="og:title" content="kodimensional :: Avoiding space leaks at all costs" />
   <meta property="og:description" content="Guidelines for avoding space leaks in Haskell programs" />
-  <meta property="og:url" content="https://chshersh.github.io" />
+  <meta property="og:url" content="https://kodimensional.dev" />
   <meta property="og:image" content="/images/logo-yellow.png" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="kodimensional :: Avoiding space leaks at all costs" />
   <meta name="twitter:description" content="Guidelines for avoding space leaks in Haskell programs" />
-  <meta name="twitter:image:src" content="https://chshersh.github.io/images/logo-yellow.png" />
-  <meta name="twitter:url" content="https://chshersh.github.io" />
+  <meta name="twitter:image:src" content="https://kodimensional.dev/images/logo-yellow.png" />
+  <meta name="twitter:url" content="https://kodimensional.dev" />
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -154,22 +154,22 @@
         </div>
 
         <div class="post toc-header"><ul>
-<li><a href="#what-is-a-space-leak">What is a Space Leak?</a></li>
-<li><a href="#lazy-guidelines">Lazy guidelines</a>
+<li><a href="#what-is-a-space-leak" id="toc-what-is-a-space-leak">What is a Space Leak?</a></li>
+<li><a href="#lazy-guidelines" id="toc-lazy-guidelines">Lazy guidelines</a>
 <ul>
-<li><a href="#use-bangpatterns-in-strict-accumulators">Use BangPatterns in strict accumulators</a></li>
-<li><a href="#strictdata">StrictData</a></li>
-<li><a href="#consume-local-values-eagerly">Consume local values eagerly</a></li>
-<li><a href="#use-strict-containers">Use strict containers</a></li>
-<li><a href="#use-strict-text-types">Use strict text types</a></li>
-<li><a href="#dont-use-the-state-monad">Don’t use the State monad</a></li>
-<li><a href="#dont-use-the-writer-monad">Don’t use the Writer monad</a></li>
-<li><a href="#use-atomicmodifyioref">Use atomicModifyIORef’</a></li>
-<li><a href="#evaluate-before-putting-into-mutable-references">Evaluate before putting into mutable references</a></li>
-<li><a href="#pay-attention-to-the-usage-of-standard-types">Pay attention to the usage of standard types</a></li>
+<li><a href="#use-bangpatterns-in-strict-accumulators" id="toc-use-bangpatterns-in-strict-accumulators">Use BangPatterns in strict accumulators</a></li>
+<li><a href="#strictdata" id="toc-strictdata">StrictData</a></li>
+<li><a href="#consume-local-values-eagerly" id="toc-consume-local-values-eagerly">Consume local values eagerly</a></li>
+<li><a href="#use-strict-containers" id="toc-use-strict-containers">Use strict containers</a></li>
+<li><a href="#use-strict-text-types" id="toc-use-strict-text-types">Use strict text types</a></li>
+<li><a href="#dont-use-the-state-monad" id="toc-dont-use-the-state-monad">Don’t use the State monad</a></li>
+<li><a href="#dont-use-the-writer-monad" id="toc-dont-use-the-writer-monad">Don’t use the Writer monad</a></li>
+<li><a href="#use-atomicmodifyioref" id="toc-use-atomicmodifyioref">Use atomicModifyIORef’</a></li>
+<li><a href="#evaluate-before-putting-into-mutable-references" id="toc-evaluate-before-putting-into-mutable-references">Evaluate before putting into mutable references</a></li>
+<li><a href="#pay-attention-to-the-usage-of-standard-types" id="toc-pay-attention-to-the-usage-of-standard-types">Pay attention to the usage of standard types</a></li>
 </ul></li>
-<li><a href="#investigating-space-leaks">Investigating space leaks</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#investigating-space-leaks" id="toc-investigating-space-leaks">Investigating space leaks</a></li>
+<li><a href="#conclusion" id="toc-conclusion">Conclusion</a></li>
 </ul></div>
         <div class="post"><p>Haskell is a purely functional <strong>lazy</strong> programming language. The
 world doesn’t have a lot of lazy-by-default PLs. In fact, all
@@ -341,7 +341,7 @@ the first time.</p>
 we’re looking for here. What we want is to add numbers to our
 accumulator <strong>immediately</strong>.</p>
 <p>Fortunately, this is easily possible with Haskell. You need to enable
-the <a href="https://downloads.haskell.org/ghc/latest/docs/html/users_guide/exts/strict.html#bang-patterns-informal">BangPatterns</a> feature and use exclamations <code>!</code> in
+the <a href="https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#bang-patterns-and-strict-haskell">BangPatterns</a> feature and use exclamations <code>!</code> in
 front of patterns for variables where you want the evaluation to be
 performed eagerly.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE BangPatterns #-}</span></span>
@@ -388,7 +388,7 @@ space leak!</p>
 </blockquote>
 <h3 id="use-bangpatterns-in-strict-accumulators"><a href="#use-bangpatterns-in-strict-accumulators" class="anchor">Use BangPatterns in strict accumulators</a></h3>
 <div class="thought">
-<p><a href="https://downloads.haskell.org/ghc/latest/docs/html/users_guide/exts/strict.html#bang-patterns-informal">BangPatterns</a> is your second best friend.</p>
+<p><a href="https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#bang-patterns-and-strict-haskell">BangPatterns</a> is your second best friend.</p>
 </div>
 <p>The problem and the solution were demonstrated at the beginning of
 this article. The general suggestion is to use strict accumulators
@@ -410,14 +410,15 @@ the <code>acc</code> variable:</p>
 recursive steps with various functions, the strict pattern matching
 <code>!</code> comes to the rescue.</p>
 <figure>
-<img src="./images/space-leak/space-leak-bang-patterns.jpeg" alt="Using BangPatterns to reduce space leaks" /><figcaption aria-hidden="true">Using BangPatterns to reduce space leaks</figcaption>
+<img src="./images/space-leak/space-leak-bang-patterns.jpeg" alt="Using BangPatterns to reduce space leaks" />
+<figcaption aria-hidden="true">Using BangPatterns to reduce space leaks</figcaption>
 </figure>
 <h3 id="strictdata"><a href="#strictdata" class="anchor">StrictData</a></h3>
 <div class="thought">
 <p>Enable the <code>StrictData</code> feature.</p>
 </div>
 <p>A simple thing you can do today to reduce the number of space leaks is
-to enable the <a href="https://downloads.haskell.org/ghc/latest/docs/html/users_guide/exts/strict.html#strict-by-default-data-types">StrictData</a> language feature. Either in
+to enable the <a href="https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#strict-by-default-data-types">StrictData</a> language feature. Either in
 each module:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE StrictData #-}</span></span></code></pre></div>
 <p>Or, even better, in your package <code>.cabal</code> file globally:</p>
@@ -441,7 +442,8 @@ produce a compiler error instead of a warning when you
 <a href="https://kodimensional.dev/recordwildcards#strict-construction">forget to initialise some of the fields</a>.</p>
 </blockquote>
 <figure>
-<img src="./images/space-leak/space-leak-strict-data.jpg" alt="Enabling StrictData to fight space leaks" /><figcaption aria-hidden="true">Enabling StrictData to fight space leaks</figcaption>
+<img src="./images/space-leak/space-leak-strict-data.jpg" alt="Enabling StrictData to fight space leaks" />
+<figcaption aria-hidden="true">Enabling StrictData to fight space leaks</figcaption>
 </figure>
 <p>Lazy evaluation helps to avoid unnecessary evaluation when you don’t
 use all the arguments in the result. But the reality shows that with
@@ -511,7 +513,8 @@ visible outside of the function scope. So the function caller has no
 way of controlling their lifetime. Hence, it’s the responsibility of
 the function implementor to think about potential space leaks.</p>
 <figure>
-<img src="./images/space-leak/space-leak-consume.jpg" alt="Eat all local values!" /><figcaption aria-hidden="true">Eat all local values!</figcaption>
+<img src="./images/space-leak/space-leak-consume.jpg" alt="Eat all local values!" />
+<figcaption aria-hidden="true">Eat all local values!</figcaption>
 </figure>
 <h3 id="use-strict-containers"><a href="#use-strict-containers" class="anchor">Use strict containers</a></h3>
 <div class="thought">
@@ -597,7 +600,8 @@ state using <code>put $! newState</code> or <code>modify'</code> and underlying 
 <code>StateT</code> doesn’t do anything funky.</p>
 </blockquote>
 <figure>
-<img src="./images/space-leak/space-leak-state.jpeg" alt="Impossible choice" /><figcaption aria-hidden="true">Impossible choice</figcaption>
+<img src="./images/space-leak/space-leak-state.jpeg" alt="Impossible choice" />
+<figcaption aria-hidden="true">Impossible choice</figcaption>
 </figure>
 <h3 id="dont-use-the-writer-monad"><a href="#dont-use-the-writer-monad" class="anchor">Don’t use the Writer monad</a></h3>
 <div class="thought">
@@ -614,7 +618,8 @@ instead of outputting them immediately somewhere.</p>
 <p>So, unless you definitely know what you’re doing, a simple suggestion
 would be to avoid the <code>Writer</code> monad entirely.</p>
 <figure>
-<img src="./images/space-leak/space-leak-writer.jpeg" alt="Don’t use the Writer monad" /><figcaption aria-hidden="true">Don’t use the Writer monad</figcaption>
+<img src="./images/space-leak/space-leak-writer.jpeg" alt="Don’t use the Writer monad" />
+<figcaption aria-hidden="true">Don’t use the Writer monad</figcaption>
 </figure>
 <h3 id="use-atomicmodifyioref"><a href="#use-atomicmodifyioref" class="anchor">Use atomicModifyIORef’</a></h3>
 <div class="thought">
@@ -680,10 +685,11 @@ avoided all dangerous monads.</p>
 <code>Int</code> to <code>Maybe Int</code> and all your efforts are perished in vain. You’ve
 just introduced a new space leak! 💥</p>
 <figure>
-<img src="./images/space-leak/space-leak-maybe.jpg" alt="Unexpected Maybe destroys all your efforts" /><figcaption aria-hidden="true">Unexpected Maybe destroys all your efforts</figcaption>
+<img src="./images/space-leak/space-leak-maybe.jpg" alt="Unexpected Maybe destroys all your efforts" />
+<figcaption aria-hidden="true">Unexpected Maybe destroys all your efforts</figcaption>
 </figure>
 <p>This happens because evaluation with <code>!</code>-patterns doesn’t evaluate
-values “deeply”. Similarly, <a href="https://downloads.haskell.org/ghc/latest/docs/html/users_guide/exts/strict.html#strict-by-default-data-types">StrictData</a> is applied only
+values “deeply”. Similarly, <a href="https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#strict-by-default-data-types">StrictData</a> is applied only
 to modules where it’s enabled but it’s not enabled in the standard
 library.</p>
 <p>You have several options to solve this problem:</p>

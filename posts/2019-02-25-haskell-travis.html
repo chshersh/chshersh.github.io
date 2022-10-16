@@ -38,13 +38,13 @@
   <meta property="og:site_name" content="kodimensional by Dmitrii Kovanikov" />
   <meta property="og:title" content="kodimensional :: Dead simple Haskell Travis settings for cabal and stack" />
   <meta property="og:description" content="Travis CI settings for Haskell projects with cabal and stack" />
-  <meta property="og:url" content="https://chshersh.github.io" />
+  <meta property="og:url" content="https://kodimensional.dev" />
   <meta property="og:image" content="/images/logo-yellow.png" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="kodimensional :: Dead simple Haskell Travis settings for cabal and stack" />
   <meta name="twitter:description" content="Travis CI settings for Haskell projects with cabal and stack" />
-  <meta name="twitter:image:src" content="https://chshersh.github.io/images/logo-yellow.png" />
-  <meta name="twitter:url" content="https://chshersh.github.io" />
+  <meta name="twitter:image:src" content="https://kodimensional.dev/images/logo-yellow.png" />
+  <meta name="twitter:url" content="https://kodimensional.dev" />
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -160,20 +160,20 @@
         </div>
 
         <div class="post toc-header"><ul>
-<li><a href="#the-config">The Config</a></li>
-<li><a href="#customization-hlint">Customization: HLint</a></li>
-<li><a href="#how-to-set-up-travis-ci">How to set up Travis CI</a></li>
-<li><a href="#explanation-of-the-configuration-commands">Explanation of the configuration commands</a></li>
-<li><a href="#reasoning-behind-such-a-ci-config">Reasoning behind such a CI config</a>
+<li><a href="#the-config" id="toc-the-config">The Config</a></li>
+<li><a href="#customization-hlint" id="toc-customization-hlint">Customization: HLint</a></li>
+<li><a href="#how-to-set-up-travis-ci" id="toc-how-to-set-up-travis-ci">How to set up Travis CI</a></li>
+<li><a href="#explanation-of-the-configuration-commands" id="toc-explanation-of-the-configuration-commands">Explanation of the configuration commands</a></li>
+<li><a href="#reasoning-behind-such-a-ci-config" id="toc-reasoning-behind-such-a-ci-config">Reasoning behind such a CI config</a>
 <ul>
-<li><a href="#why-both-cabal-and-stack">Why both cabal and stack?</a></li>
-<li><a href="#why-latest-3-major-ghc-versions">Why latest 3 major GHC versions?</a></li>
+<li><a href="#why-both-cabal-and-stack" id="toc-why-both-cabal-and-stack">Why both cabal and stack?</a></li>
+<li><a href="#why-latest-3-major-ghc-versions" id="toc-why-latest-3-major-ghc-versions">Why latest 3 major GHC versions?</a></li>
 </ul></li>
-<li><a href="#conclusion">Conclusion</a></li>
-<li><a href="#appendix">Appendix</a>
+<li><a href="#conclusion" id="toc-conclusion">Conclusion</a></li>
+<li><a href="#appendix" id="toc-appendix">Appendix</a>
 <ul>
-<li><a href="#cabal-only-configuration">Cabal-only configuration</a></li>
-<li><a href="#stack-only-configuration">Stack-only configuration</a></li>
+<li><a href="#cabal-only-configuration" id="toc-cabal-only-configuration">Cabal-only configuration</a></li>
+<li><a href="#stack-only-configuration" id="toc-stack-only-configuration">Stack-only configuration</a></li>
 </ul></li>
 </ul></div>
         <div class="post"><p>Today I am going to share a simple <a href="https://travis-ci.com/">Travis CI</a> configuration for Haskell projects with you. The <code>.travis.yml</code> file presented in this blog post allows you to painlessly test your repository on the continuous integration service under multiple GHC versions and with both build tools — <a href="https://www.haskell.org/cabal/users-guide/">cabal-install</a> and <a href="https://docs.haskellstack.org/en/stable/README/">stack</a>. Note that the suggested settings do not include complex configuration steps that could possibly be required for some projects. However, they work amazingly well for most Haskell libraries and applications where a basic setup is enough!</p>

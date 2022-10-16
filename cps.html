@@ -38,13 +38,13 @@
   <meta property="og:site_name" content="kodimensional by Dmitrii Kovanikov" />
   <meta property="og:title" content="kodimensional :: Using a 50-years old technique for solving modern issues" />
   <meta property="og:description" content="Utilising the CPS transformation for code maintainability" />
-  <meta property="og:url" content="https://chshersh.github.io" />
+  <meta property="og:url" content="https://kodimensional.dev" />
   <meta property="og:image" content="/images/logo-yellow.png" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="kodimensional :: Using a 50-years old technique for solving modern issues" />
   <meta name="twitter:description" content="Utilising the CPS transformation for code maintainability" />
-  <meta name="twitter:image:src" content="https://chshersh.github.io/images/logo-yellow.png" />
-  <meta name="twitter:url" content="https://chshersh.github.io" />
+  <meta name="twitter:image:src" content="https://kodimensional.dev/images/logo-yellow.png" />
+  <meta name="twitter:url" content="https://kodimensional.dev" />
 
   <!-- Favicon -->
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -156,12 +156,12 @@
         </div>
 
         <div class="post toc-header"><ul>
-<li><a href="#problem">Problem</a></li>
-<li><a href="#baseline">Baseline</a></li>
-<li><a href="#either-isation">Either-isation</a></li>
-<li><a href="#exceptt">ExceptT</a></li>
-<li><a href="#cps-transformation">CPS transformation</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#problem" id="toc-problem">Problem</a></li>
+<li><a href="#baseline" id="toc-baseline">Baseline</a></li>
+<li><a href="#either-isation" id="toc-either-isation">Either-isation</a></li>
+<li><a href="#exceptt" id="toc-exceptt">ExceptT</a></li>
+<li><a href="#cps-transformation" id="toc-cps-transformation">CPS transformation</a></li>
+<li><a href="#conclusion" id="toc-conclusion">Conclusion</a></li>
 </ul></div>
         <div class="post"><p>While implementing Haskell functions with deeply nested logic, I’ve
 discovered a particular trick that allows writing more modular code by
@@ -455,7 +455,8 @@ steps clearly but we still have this annoying alignment requirement.</p>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    withEmailInsert userId email <span class="op">$</span> \id' <span class="ot">-&gt;</span></span>
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pure</span> <span class="op">$</span> <span class="dt">Right</span> id'</span></code></pre></div>
 <figure>
-<img src="./images/cps/haskell-indent.jpg" alt="Haskell indentation: The Neat part" /><figcaption aria-hidden="true">Haskell indentation: The Neat part</figcaption>
+<img src="./images/cps/haskell-indent.jpg" alt="Haskell indentation: The Neat part" />
+<figcaption aria-hidden="true">Haskell indentation: The Neat part</figcaption>
 </figure>
 <p>This works because Haskell parsing rules around layouts are quite
 flexible in this case. Semantically, everything “to the right of”
