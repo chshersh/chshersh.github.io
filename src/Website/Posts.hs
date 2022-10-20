@@ -11,7 +11,7 @@ import Hakyll (Compiler, Context, Item (..), Rules, compile, composeRoutes, cons
                loadAndApplyTemplate, makeItem, match, metadataRoute, pandocCompilerWithTransformM,
                recentFirst, relativizeUrls, renderPandocWith, route, saveSnapshot, setExtension,
                unsafeCompiler)
-import Hakyll.Core.Metadata (lookupString)
+import Hakyll.Core.Metadata (MonadMetadata (..), lookupString)
 import Hakyll.ShortcutLinks (applyAllShortcuts)
 import Text.Pandoc.Options (WriterOptions (..))
 import Text.Pandoc.Templates (compileTemplate)
@@ -81,8 +81,16 @@ makeLinks =
 
 postsContextCompiler :: Compiler (Context String)
 postsContextCompiler = do
-    posts <- recentFirst =<< loadAll "posts/*"
+    posts <- loadAll "posts/*" >>= filterM isPost >>= recentFirst
     pure $ listField "posts" (postContext []) (pure posts)
+  where
+    isPost :: Item a -> Compiler Bool
+    isPost postItem = do
+        metadata <- getMetadata $ itemIdentifier postItem
+        pure $ case lookupString "title" metadata of
+            Nothing                       -> True
+            Just "Haskell Revitalisation" -> False
+            Just _other                   -> True
 
 -- | Removes the @.html@ suffix in the post URLs.
 stripHtmlContext :: Context a
@@ -96,6 +104,7 @@ postContext tags = mconcat
     [ listField "tagsList" (field "tag" $ pure . itemBody) (traverse makeItem tags)
     , stripHtmlContext
     , dateField "date" "%B %e, %Y"
+    , field "displayCreated" $ \_ -> pure "yes"
     , defaultContext
     ]
 
