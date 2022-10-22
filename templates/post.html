@@ -118,8 +118,15 @@
 
       <section class="resume-section p-3 p-lg-5" >
         <h2 class="text-center">$title$</h2>
-        $if(showCreated)$<p class="text-center text-black"><strong>Created:</strong> $date$</p>$endif$
-        $if(updated)$<p class="text-center text-black"><strong>Last updated:</strong> $updated$</p>$endif$
+
+        $if(hideCreated)$
+	$else$
+	  <p class="text-center text-black"><strong>Created:</strong> $date$</p>
+	$endif$
+
+        $if(updated)$
+          <p class="text-center text-black"><strong>Last updated:</strong> $updated$</p>
+	$endif$
 
         <div class="col-12 tag-block text-center">
             $for(tagsList)$
