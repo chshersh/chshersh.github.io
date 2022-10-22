@@ -7,8 +7,8 @@ import Hakyll (Compiler, Context, Item (..), field, listField, makeItem)
 
 
 data Social = Social
-    { sName :: !String
-    , sLink :: !String
+    { sName :: String
+    , sLink :: String
     }
 
 socialName, socialLink :: Context Social
