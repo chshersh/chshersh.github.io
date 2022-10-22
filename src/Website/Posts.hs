@@ -104,7 +104,6 @@ postContext tags = mconcat
     [ listField "tagsList" (field "tag" $ pure . itemBody) (traverse makeItem tags)
     , stripHtmlContext
     , dateField "date" "%B %e, %Y"
-    , field "displayCreated" $ \_ -> pure "yes"
     , defaultContext
     ]
 

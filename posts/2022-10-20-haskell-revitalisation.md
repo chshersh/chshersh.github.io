@@ -3,7 +3,7 @@ title: Haskell Revitalisation
 description: Updating and modernising Haskell packages
 tags: haskell, consultancy
 shortName: haskell-revitalisation
-showCreated:
+hideCreated: yes
 ---
 
 **TL;DR** I'm offering paid consultancy services for improving the maintainability, sustainability and code quality of your Haskell packages:
