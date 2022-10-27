@@ -642,9 +642,3 @@ You can see that custom type errors is a really powerful mechanism. It can
 increase the quality of type errors by a lot. But they require some effort from
 the developers. And sometimes they require some advanced Haskell knowledge and
 understanding of more challenging topics. But in the end, it pays off a lot.
-
-## Acknowledgements
-
-I want to thank [Veronika Romashkina](https://vrom911.github.io/) for her
-support and help with the blog post. I spent a lot of time and effort compiling
-and explaining all the examples and I couldn't do this without her help.

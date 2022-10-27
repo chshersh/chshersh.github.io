@@ -5,8 +5,6 @@ tags: open-source, haskell
 shortName: goalkeeper
 ---
 
-![Be a goalkeeper](/images/goalkeeper.png)
-
 During many years of open-source development I have come to the
 helpful habit that severely increases productivity of my work, and
 greatly increases projects maintainability and sustainability. I also
@@ -339,8 +337,3 @@ healthy, so you would like to engage in that community more?
 
 And maybe together we could help Haskell by establishing some concrete
 goals.
-
-## Acknowledgement
-
-Thanks to [Veronika Romashkina](https://vrom911.github.io/) for the
-inspiration, illustrations and support!
