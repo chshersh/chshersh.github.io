@@ -86,7 +86,7 @@
 \newcommand*\icon[1]{\tikz[baseline=(char.base)]{\node[shape=circle,draw,inner sep=1pt, fill=mainblue,mainblue,text=white] (char) {#1};}}
 
 % Command for printing skill progress bars
-\newcommand\skills[1]{
+\newcommand\skills[1]{ 
 	\renewcommand{\skills}{
 		\begin{tikzpicture}
 			\foreach [count=\i] \x/\y in {#1}{
@@ -99,10 +99,10 @@
 }
 
 % Command for printing skills text
-\newcommand\skillstext[1]{
+\newcommand\skillstext[1]{ 
 	\renewcommand{\skillstext}{
 		\begin{flushleft}
-			\foreach [count=\i] \x/\y in {#1}{
+			\foreach [count=\i] \x/\y in {#1}{ 
 				\x$ \star $\y
 			}
 		\end{flushleft}
@@ -121,9 +121,9 @@
 	%------------------------------------------------
 
 	\begin{textblock}{6}(0.5, 0.2)
-
+			
 		%------------------------------------------------
-
+		
 		\ifthenelse{\equal{\profilepic}{}}{}{
 			\begin{center}
 				\begin{tikzpicture}[x=\imagescale,y=-\imagescale]
@@ -148,14 +148,14 @@
 			\ifthenelse{\equal{\cvdate}{}}{}{\textsc{\Large\icon{\Info}} & \cvdate\\}
 			\ifthenelse{\equal{\cvaddress}{}}{}{\textsc{\Large\icon{\Letter}} & \cvaddress\\}
 			\ifthenelse{\equal{\cvnumberphone}{}}{}{\textsc{\Large\icon{\Telefon}} & \cvnumberphone\\}
-			\ifthenelse{\equal{\cvsite}{}}{}{\textsc{\Large\icon{\faGithub}} & \cvsite\\}
-            \ifthenelse{\equal{\cvlink}{}}{}{\textsc{\Large\icon{\faLinkedin}} & \cvlink\\}
-            \ifthenelse{\equal{\cvso}{}}{}{\textsc{\Large\icon{\faStackOverflow}} & \cvso\\}
+			\ifthenelse{\equal{\cvsite}{}}{}{\textsc{\Large\icon{\faHtml5}} & \cvsite\\}
+                \ifthenelse{\equal{\cvlink}{}}{}{\textsc{\Large\icon{\faLinkedin}} & \cvlink\\}
+                \ifthenelse{\equal{\cvso}{}}{}{\textsc{\Large\icon{\faStackOverflow}} & \cvso\\}
 			\ifthenelse{\equal{\cvmail}{}}{}{\textsc{\large\icon{@}} & \href{mailto:\cvmail}{\cvmail}}
 		\end{tabular}
 
 		%------------------------------------------------
-
+		
 		\ifthenelse{\equal{\aboutme}{}}{}{
 			\profilesection{About me}
 			\begin{flushleft}
@@ -169,23 +169,20 @@
 
 		\skills
 		\skillstext
-		Haskell \textbf{(mtl, servant, hedgehog)},
-
-        Elm \textbf{(create-elm-app, http, json)},
-
-        SQL \textbf{(PostgreSQL, MySQL, SQLite)},
-
-        Kotlin, Java, C++,
-
-        CI (GitHub Actions, Travis, AppVeyor, Circle CI),
-
-        Git/GitHub, Ubuntu, Bash,
-
-        AWS, LaTeX, YouTrack, Vim, Emacs
-
+		Haskell, Rust, Dhall, Elm, Kotlin, Java,
+  
+            PostgreSQL, SQLite, MySQL, MongoDB,
+  
+            K8S, Docker, Helm, GCP, AWS,
+            
+            GitHub Actions, Circle CI,
+            
+            Git, Ubuntu, Bash,
+            
+            Vim, Emacs
 
 		%------------------------------------------------
-
+			
 	\end{textblock}
 }
 
