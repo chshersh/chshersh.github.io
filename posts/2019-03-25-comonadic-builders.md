@@ -22,14 +22,16 @@ and only then create a value using the configuration.
 > patterns. Check out this blog post: [OOP Comonads][oop-comonads].
 
 To make our problem entertaining, we want some of the configuration options to
-depend on the values of other options. I can give you a real example. In Haskell
-scaffolding tool [Summoner][summoner] we have a huge `Settings` data type that
-controls how the generated project looks like. This data type contains a lot of
-fields but there are dependencies between some of them. For example, you can
-specify flags whether you want [GitHub](http://github.com/) or
-[Travis](https://travis-ci.org/) integration enabled. However, if you disable
-GitHub integration, you shouldn't be able to specify Travis integration because
-it doesn't make sense to have it locally.
+depend on the values of other options.
+
+For example, let's say you have a huge `Settings` data type that
+controls the properties of project scaffolding tool. This data type
+contains a lot of fields but there are dependencies between some of
+them. For example, you can specify flags whether you want
+[GitHub](http://github.com/) or [Travis](https://travis-ci.org/)
+integration enabled. However, if you disable GitHub integration, you
+shouldn't be able to specify Travis integration because it doesn't
+make sense to have it locally.
 
 Of course, you can let users specify whatever they want and figure out fields
 dependencies later during value creation in one single place. However, there are
@@ -175,10 +177,6 @@ type `m` and you need to make it work with two values of that type and you also
 know that `m` is a `Monoid` then it is easy — just squash those two values with
 `mappend` and pass to your function.
 
-> **NOTE:** This instance is also useful for logging! See
-> [co-log](https://kowainik.github.io/posts/2018-09-25-co-log#comonads) for an
-> example.
-
 We are going to use the `(->)` instance above as a fundamental piece of our
 interface in the following section.
 
@@ -204,9 +202,8 @@ And `Builder` is a comonad! However, it requires from `Config` to have the
 
 ### Monoidal settings
 
-Let's use a simpler version of the `Settings` data type from
-[Summoner][summoner] in our example as the configuration. This data type has the
-following fields:
+Let's use a simpler version of the `Settings` data type in our example
+as the configuration. This data type has the following fields:
 
 1. Flag that tells whether the project has a library or not (disabled by default).
 2. Flag to enable GitHub integration (disabled by default).
@@ -458,7 +455,6 @@ Here is the gist with the complete code:
 
 [builder]: https://en.wikipedia.org/wiki/Builder_pattern
 [oop-comonads]: http://www.haskellforall.com/2013/02/you-could-have-invented-comonads.html
-[summoner]: https://github.com/kowainik/summoner
 [comonad]: https://hackage.haskell.org/package/comonad
 [er]: http://www.haskellforall.com/2013/12/equational-reasoning.html
 [Traced]: https://hackage.haskell.org/package/comonad-5.0.4/docs/Control-Comonad-Trans-Traced.html#t:TracedT

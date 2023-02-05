@@ -161,15 +161,6 @@ need to do is create a file named `.github/workflows/ci.yml` with the
 above content and push it to your repository. That's all! GitHub takes
 care of everything else for you.
 
-The above config is implemented as a
-[workflow template](https://github.blog/2020-06-22-promote-consistency-across-your-organization-with-workflow-templates/),
-and can be enabled in one click in all Kowainik repositories (you can
-copy-paste the file to your projects as well):
-
-* [kowainik/.github: Dead-simple CI](https://github.com/kowainik/.github/blob/main/workflow-templates/ci.yml)
-
-![Suggested workflow](https://user-images.githubusercontent.com/4276606/86161652-788da200-bb05-11ea-8757-46c03a9e3c53.png)
-
 Once all build errors are fixed, you can enjoy your well-deserved
 green CI 💚
 
@@ -184,10 +175,6 @@ a cute badge to your `README.md`. Copy the following line and replace
 ```
 [![GitHub CI](https://github.com/userName/repoName/workflows/CI/badge.svg)](https://github.com/userName/repoName/actions)
 ```
-
-And it will look like this:
-
-[![GitHub CI](https://github.com/kowainik/stan/workflows/CI/badge.svg)](https://github.com/kowainik/stan/actions)
 
 ## Configuration explanation
 
@@ -234,7 +221,7 @@ below is a short explanation:
 One way you can improve this CI setup is by adding an HLint check to each CI
 run. This can be done pretty easily. For example, here is a separate job that
 downloads HLint and runs it:
-  
+
 ```yaml
   hlint:
     name: hlint
@@ -250,29 +237,6 @@ downloads HLint and runs it:
         curl -L https://github.com/ndmitchell/hlint/releases/download/v${HLINT_VERSION}/hlint-${HLINT_VERSION}-x86_64-linux.tar.gz --output hlint.tar.gz
         tar -xvf hlint.tar.gz
         ./hlint-${HLINT_VERSION}/hlint src/ test/
-```
-
-If you project uses the alternative standard library [kowainik/relude](@github),
-you can utilise Relude-specific HLint rules by using the following CI config
-instead:
-
-```yaml
-  hlint:
-    name: hlint
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Run HLint
-      env:
-         HLINT_VERSION: "3.2.7"
-         RELUDE_VERSION: "1.0.0.1"
-      run: |
-        curl https://raw.githubusercontent.com/kowainik/relude/v{$RELUDE_VERSION}/.hlint.yaml -o .hlint-relude.yaml
-        curl -L https://github.com/ndmitchell/hlint/releases/download/v${HLINT_VERSION}/hlint-${HLINT_VERSION}-x86_64-linux.tar.gz --output hlint.tar.gz
-        tar -xvf hlint.tar.gz
-        ./hlint-${HLINT_VERSION}/hlint src/ test/ -h .hlint-relude.yaml
 ```
 
 ## Dependabot

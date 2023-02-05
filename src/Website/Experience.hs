@@ -39,21 +39,14 @@ workExperience = traverse makeItem
         , experienceDate    = "December 2019 — April 2022"
         }
     , Experience
-        { experienceTitle   = "Middle Haskell Developer"
+        { experienceTitle   = "Software Engineer"
         , experienceSite    = "https://www.holmusk.com/"
         , experienceCompany = "Holmusk"
         , experienceDesc    = "Backend development of web applications in Haskell. Working on healthcare projects that sync information from multiple sources and display them to users. Integration with machine learning models in other languages. Technologies included: Haskell, Elm, PostgreSQL, Amazon services (S3, SQS), Protocol buffers."
         , experienceDate    = "May 2018 — November 2019"
         }
     , Experience
-        { experienceTitle   = "Co-founder & Maintainer"
-        , experienceSite    = "https://kowainik.github.io/"
-        , experienceCompany = "Kowainik"
-        , experienceDesc    = "Using Haskell to build better software. Improving Haskell ecosystem and making community friendlier. Mentoring people and help them to learn the programming language."
-        , experienceDate    = "March 2018 — April 2022"
-        }
-    , Experience
-        { experienceTitle   = "Haskell Software Engineer"
+        { experienceTitle   = "Software Engineer"
         , experienceSite    = "https://serokell.io/"
         , experienceCompany = "Serokell"
         , experienceDesc    = "Developing distributed cryptocurrency systems using Haskell. Implementing cryptocurrency protocols, creating logging framework, writing jekyll documentation in English, Haskell development and refactoring tooling support, performance optimizations, benchmarking, making world better."

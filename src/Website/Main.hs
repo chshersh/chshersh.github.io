@@ -12,7 +12,7 @@ import Hakyll.Web.Sass (sassCompiler)
 import Website.Experience (mentorshipExperienceContext, workExperienceContext)
 import Website.Feed (feedCompiler)
 import Website.Posts (postsContextCompiler, postsRules)
-import Website.Project (currentProjectsContext)
+import Website.Project (projectsContext)
 import Website.Social (socialContext)
 
 main :: IO ()
@@ -44,7 +44,7 @@ main =  hakyll $ do
             let ctx = defaultContext
                    <> workExperienceContext
                    <> mentorshipExperienceContext
-                   <> currentProjectsContext
+                   <> projectsContext
                    <> socialContext
                    <> postsCtx
 

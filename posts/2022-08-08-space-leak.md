@@ -294,10 +294,8 @@ survival chances at any cost.
 
 The problem and the solution were demonstrated at the beginning of
 this article. The general suggestion is to use strict accumulators
-when using the [recursive go pattern][go] or similar to avoid the
+when using the _recursive go pattern_ or similar to avoid the
 accumulation of unevaluated expressions in a single variable.
-
-[go]: https://kowainik.github.io/posts/haskell-mini-patterns#recursive-go
 
 You don't need to add `!` blindly everywhere. For example, the
 following code evaluates the accumulator of type `Set` on every
@@ -349,10 +347,7 @@ Or, even better, in your package `.cabal` file globally:
 
 > 👩‍🔬 It's extremely rare when you need lazy fields intentionally
 > (you can use `~` to mark fields as lazy when `StrictData` is
-> enabled). One example when lazy fields are needed explicitly is [the
-> `Message` type in the `co-log` logging library][co-log].
-
-[co-log]: https://github.com/co-log/co-log/blob/65b89152d0ae61ac99a56fbe645ed28cfacd717e/src/Colog/Message.hs#L107-L111
+> enabled).
 
 In fact, enabling `StrictData` by default in your `.cabal` file today
 is the simplest thing you can do to avoid half of the space leaks! 👏
@@ -655,7 +650,7 @@ Boom 💥 You have a space leak!
 
 You don't evaluate the `responses` value before putting it inside
 `MVar`. So it'll remain unevaluated until some other thread tries to
-consume the value inside and evaluate it. And may happen way in the
+consume the value inside and evaluate it. And it may happen way in the
 future while your program requires extra unneccessary memory.
 
 The solution to this problem is very simple though. You need to change

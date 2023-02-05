@@ -110,7 +110,8 @@ fields come from: is `name` a field of `User` or `Job`? Hard to tell without
 looking at the definitions of the corresponding types. This makes code hard to
 read and maintain.
 
-One of the possible solutions some people recommend is to use the [NamedFieldPuns](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#record-puns)
+One of the possible solutions some people recommend is to use the
+[NamedFieldPuns](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#record-puns)
 extension. When this extension enabled, you can write the following code
 instead:
 

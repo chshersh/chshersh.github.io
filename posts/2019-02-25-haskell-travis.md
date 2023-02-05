@@ -65,8 +65,6 @@ notifications:
   email: false
 ```
 
-> **NOTE:** Instead of copy-pasting this `.travis.yml` file to every project you can use [Summoner](https://github.com/kowainik/summoner) to scaffold completely configured production-level Haskell libraries and applications which would include Travis configurations corresponding to the user-configured/custom project settings.
-
 ## Customization: HLint
 
 I want to point out some nice things about this config — it doesn't

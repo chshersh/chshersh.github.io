@@ -252,10 +252,6 @@ This use case is not particularly useful but it should demonstrate how to
 construct and use custom type errors. In the following sections I'm going to
 explain how to implement a lot of cool and useful stuff with type errors.
 
-> You can construct text of error messages much easier by using
-> the [type-errors-pretty](@github(chshersh)) library.
-
-
 ## Motivating example: adding two lists
 
 One of the most common Haskell typeclasses is the `Num` typeclass. It contains a
@@ -499,15 +495,7 @@ use slow `elem` instead of fast `member` function.
 
 Fortunately, it's still possible to have useful `Foldable` instances for `Set`
 and `HashSet` but produce a compile-time error message when you are using `elem`
-or `notElem` from `Foldable`. This trick is implemented in the
-[relude](@github(kowainik)) alternative prelude. See the full
-code in the repository:
-
-* [Implementation](https://github.com/kowainik/relude/blob/559ed98a1d3e2c15f2ec36a1c94e3b9b4e9484a1/src/Relude/Foldable/Fold.hs#L137-L138)
-
-> **NOTE:** Code in `relude` also contains tests for custom error messages using
-> [doctest](@hackage). With such an approach, you can automatically check your
-> compile-time messages at runtime.
+or `notElem` from `Foldable`.
 
 The idea behind the implementation is to reexport our own version of the `elem`
 function which just delegates the implementation to `elem` from `Data.Foldable`
