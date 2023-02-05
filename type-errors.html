@@ -377,10 +377,6 @@ will see the following error message:</p>
 <p>This use case is not particularly useful but it should demonstrate how to
 construct and use custom type errors. In the following sections I’m going to
 explain how to implement a lot of cool and useful stuff with type errors.</p>
-<blockquote>
-<p>You can construct text of error messages much easier by using
-the <a href="https://github.com/chshersh/type-errors-pretty">type-errors-pretty</a> library.</p>
-</blockquote>
 <h2 id="motivating-example-adding-two-lists"><a href="#motivating-example-adding-two-lists" class="anchor">Motivating example: adding two lists</a></h2>
 <p>One of the most common Haskell typeclasses is the <code>Num</code> typeclass. It contains a
 lot of arithmetic operations, including number addition:</p>
@@ -571,17 +567,7 @@ but haven’t been accepted.</p>
 </blockquote>
 <p>Fortunately, it’s still possible to have useful <code>Foldable</code> instances for <code>Set</code>
 and <code>HashSet</code> but produce a compile-time error message when you are using <code>elem</code>
-or <code>notElem</code> from <code>Foldable</code>. This trick is implemented in the
-<a href="https://github.com/kowainik/relude">relude</a> alternative prelude. See the full
-code in the repository:</p>
-<ul>
-<li><a href="https://github.com/kowainik/relude/blob/559ed98a1d3e2c15f2ec36a1c94e3b9b4e9484a1/src/Relude/Foldable/Fold.hs#L137-L138">Implementation</a></li>
-</ul>
-<blockquote>
-<p><strong>NOTE:</strong> Code in <code>relude</code> also contains tests for custom error messages using
-<a href="https://hackage.haskell.org/package/doctest">doctest</a>. With such an approach, you can automatically check your
-compile-time messages at runtime.</p>
-</blockquote>
+or <code>notElem</code> from <code>Foldable</code>.</p>
 <p>The idea behind the implementation is to reexport our own version of the <code>elem</code>
 function which just delegates the implementation to <code>elem</code> from <code>Data.Foldable</code>
 but it has an additional constraint over the argument that pattern-matches on

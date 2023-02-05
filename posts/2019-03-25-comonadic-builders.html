@@ -207,14 +207,15 @@ and only then create a value using the configuration.</p>
 patterns. Check out this blog post: <a href="http://www.haskellforall.com/2013/02/you-could-have-invented-comonads.html">OOP Comonads</a>.</p>
 </blockquote>
 <p>To make our problem entertaining, we want some of the configuration options to
-depend on the values of other options. I can give you a real example. In Haskell
-scaffolding tool <a href="https://github.com/kowainik/summoner">Summoner</a> we have a huge <code>Settings</code> data type that
-controls how the generated project looks like. This data type contains a lot of
-fields but there are dependencies between some of them. For example, you can
-specify flags whether you want <a href="http://github.com/">GitHub</a> or
-<a href="https://travis-ci.org/">Travis</a> integration enabled. However, if you disable
-GitHub integration, you shouldn’t be able to specify Travis integration because
-it doesn’t make sense to have it locally.</p>
+depend on the values of other options.</p>
+<p>For example, let’s say you have a huge <code>Settings</code> data type that
+controls the properties of project scaffolding tool. This data type
+contains a lot of fields but there are dependencies between some of
+them. For example, you can specify flags whether you want
+<a href="http://github.com/">GitHub</a> or <a href="https://travis-ci.org/">Travis</a>
+integration enabled. However, if you disable GitHub integration, you
+shouldn’t be able to specify Travis integration because it doesn’t
+make sense to have it locally.</p>
 <p>Of course, you can let users specify whatever they want and figure out fields
 dependencies later during value creation in one single place. However, there are
 reasons why this might not be desired:</p>
@@ -336,11 +337,6 @@ is a no-brainer as well. If you have a function that takes a single value of
 type <code>m</code> and you need to make it work with two values of that type and you also
 know that <code>m</code> is a <code>Monoid</code> then it is easy — just squash those two values with
 <code>mappend</code> and pass to your function.</p>
-<blockquote>
-<p><strong>NOTE:</strong> This instance is also useful for logging! See
-<a href="https://kowainik.github.io/posts/2018-09-25-co-log#comonads">co-log</a> for an
-example.</p>
-</blockquote>
 <p>We are going to use the <code>(-&gt;)</code> instance above as a fundamental piece of our
 interface in the following section.</p>
 <h2 id="builder-pattern-using-comonad"><a href="#builder-pattern-using-comonad" class="anchor">Builder pattern using Comonad</a></h2>
@@ -358,9 +354,8 @@ produces a value:</p>
 <p>And <code>Builder</code> is a comonad! However, it requires from <code>Config</code> to have the
 <code>Monoid</code> instance in order to make the whole thing work.</p>
 <h3 id="monoidal-settings"><a href="#monoidal-settings" class="anchor">Monoidal settings</a></h3>
-<p>Let’s use a simpler version of the <code>Settings</code> data type from
-<a href="https://github.com/kowainik/summoner">Summoner</a> in our example as the configuration. This data type has the
-following fields:</p>
+<p>Let’s use a simpler version of the <code>Settings</code> data type in our example
+as the configuration. This data type has the following fields:</p>
 <ol type="1">
 <li>Flag that tells whether the project has a library or not (disabled by default).</li>
 <li>Flag to enable GitHub integration (disabled by default).</li>

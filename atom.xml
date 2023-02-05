@@ -42,14 +42,6 @@
     <summary type="html"><![CDATA[Announcing Haskell course for beginners]]></summary>
 </entry>
 <entry>
-    <title>Be a goalkeeper</title>
-    <link href="https://chshersh.github.io/goalkeeper.html" />
-    <id>https://chshersh.github.io/goalkeeper.html</id>
-    <published>2020-09-08T00:00:00Z</published>
-    <updated>2020-09-08T00:00:00Z</updated>
-    <summary type="html"><![CDATA[A secret weapon for increasing open-source productivity and communication]]></summary>
-</entry>
-<entry>
     <title>Dead simple cross-platform GitHub Actions for Haskell</title>
     <link href="https://chshersh.github.io/github-actions.html" />
     <id>https://chshersh.github.io/github-actions.html</id>

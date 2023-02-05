@@ -414,7 +414,7 @@ space leak!</p>
 </div>
 <p>The problem and the solution were demonstrated at the beginning of
 this article. The general suggestion is to use strict accumulators
-when using the <a href="https://kowainik.github.io/posts/haskell-mini-patterns#recursive-go">recursive go pattern</a> or similar to avoid the
+when using the <em>recursive go pattern</em> or similar to avoid the
 accumulation of unevaluated expressions in a single variable.</p>
 <p>You don’t need to add <code>!</code> blindly everywhere. For example, the
 following code evaluates the accumulator of type <code>Set</code> on every
@@ -453,8 +453,7 @@ is more cumbersome and error-prone.</p>
 <blockquote>
 <p>👩‍🔬 It’s extremely rare when you need lazy fields intentionally
 (you can use <code>~</code> to mark fields as lazy when <code>StrictData</code> is
-enabled). One example when lazy fields are needed explicitly is <a href="https://github.com/co-log/co-log/blob/65b89152d0ae61ac99a56fbe645ed28cfacd717e/src/Colog/Message.hs#L107-L111">the
-<code>Message</code> type in the <code>co-log</code> logging library</a>.</p>
+enabled).</p>
 </blockquote>
 <p>In fact, enabling <code>StrictData</code> by default in your <code>.cabal</code> file today
 is the simplest thing you can do to avoid half of the space leaks! 👏</p>
@@ -683,7 +682,7 @@ strict functions.</p>
 <p>Boom 💥 You have a space leak!</p>
 <p>You don’t evaluate the <code>responses</code> value before putting it inside
 <code>MVar</code>. So it’ll remain unevaluated until some other thread tries to
-consume the value inside and evaluate it. And may happen way in the
+consume the value inside and evaluate it. And it may happen way in the
 future while your program requires extra unneccessary memory.</p>
 <p>The solution to this problem is very simple though. You need to change
 a single line by adding <code>!</code> in front of the variable to evaluate it

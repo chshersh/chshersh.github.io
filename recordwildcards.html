@@ -265,7 +265,8 @@ not clear where the identifiers come from. Consider the following code:</p>
 fields come from: is <code>name</code> a field of <code>User</code> or <code>Job</code>? Hard to tell without
 looking at the definitions of the corresponding types. This makes code hard to
 read and maintain.</p>
-<p>One of the possible solutions some people recommend is to use the <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#record-puns">NamedFieldPuns</a>
+<p>One of the possible solutions some people recommend is to use the
+<a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#record-puns">NamedFieldPuns</a>
 extension. When this extension enabled, you can write the following code
 instead:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">nameOnCard ::</span> <span class="dt">User</span> <span class="ot">-&gt;</span> <span class="dt">Job</span> <span class="ot">-&gt;</span> <span class="dt">Text</span></span>
