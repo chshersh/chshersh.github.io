@@ -26,10 +26,17 @@ workExperience :: Compiler [Item Experience]
 workExperience = traverse makeItem
     [ Experience
         { experienceTitle   = "Senior Software Engineer"
+        , experienceSite    = "https://www.bloomberg.com/uk"
+        , experienceCompany = "Bloomberg"
+        , experienceDesc    = "Implementation of a trade engine using OCaml"
+        , experienceDate    = "May 2023 — Present"
+        }
+    , Experience
+        { experienceTitle   = "Senior Software Engineer"
         , experienceSite    = "https://feeld.co/"
         , experienceCompany = "Feeld"
         , experienceDesc    = "Development of the backend to support a dating app with high load, legacy code extraction, using latest techniques for performance profiling, mentorship, organization and workflow improvements."
-        , experienceDate    = "April 2022 — Present"
+        , experienceDate    = "April 2022 — April 2023"
         }
     , Experience
         { experienceTitle   = "Quantitative Developer"
