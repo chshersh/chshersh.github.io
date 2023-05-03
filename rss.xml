@@ -7,16 +7,8 @@
         <description><![CDATA[This feed provides blog posts about using modern Haskell]]></description>
         <atom:link href="https://chshersh.com/rss.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Thu, 20 Oct 2022 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>Mon, 08 Aug 2022 00:00:00 UT</lastBuildDate>
         <item>
-    <title>Haskell Revitalisation</title>
-    <link>https://chshersh.com/haskell-revitalisation.html</link>
-    <description><![CDATA[Updating and modernising Haskell packages]]></description>
-    <pubDate>Thu, 20 Oct 2022 00:00:00 UT</pubDate>
-    <guid>https://chshersh.com/haskell-revitalisation.html</guid>
-    <dc:creator>Dmitrii Kovanikov</dc:creator>
-</item>
-<item>
     <title>Avoiding space leaks at all costs</title>
     <link>https://chshersh.com/space-leak.html</link>
     <description><![CDATA[Guidelines for avoding space leaks in Haskell programs]]></description>
