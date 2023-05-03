@@ -10,11 +10,11 @@ import Website.Posts (postContext)
 
 feedConfiguration :: FeedConfiguration
 feedConfiguration = FeedConfiguration
-    { feedTitle       = "kodimensional :: Haskell blog posts"
+    { feedTitle       = "chshersh :: Haskell blog posts"
     , feedDescription = "This feed provides blog posts about using modern Haskell"
     , feedAuthorName  = "Dmitrii Kovanikov"
     , feedAuthorEmail = "kovanikov@gmail.com"
-    , feedRoot        = "https://chshersh.github.io"
+    , feedRoot        = "https://chshersh.com"
     }
 
 type FeedRenderer =

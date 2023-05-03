@@ -1,10 +1,10 @@
-# kodimensional.dev
+# chshersh.com
 
 [![GitHub CI](https://github.com/chshersh/chshersh.github.io/workflows/CI/badge.svg)](https://github.com/chshersh/chshersh.github.io/actions)
 
 My personal web page:
 
-+ [kodimensional](http://kodimensional.dev/)
++ [chshersh.com](http://chshersh.com/)
 
 ## How to update this web page
 

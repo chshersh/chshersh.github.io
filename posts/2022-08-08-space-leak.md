@@ -356,7 +356,7 @@ is the simplest thing you can do to avoid half of the space leaks! 👏
 > produce a compiler error instead of a warning when you
 > [forget to initialise some of the fields][record-fields].
 
-[record-fields]: https://kodimensional.dev/recordwildcards#strict-construction
+[record-fields]: https://chshersh.com/recordwildcards#strict-construction
 
 ![Enabling StrictData to fight space leaks](/images/space-leak/space-leak-strict-data.jpg)
 

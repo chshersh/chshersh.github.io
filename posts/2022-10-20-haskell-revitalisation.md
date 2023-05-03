@@ -85,7 +85,7 @@ The following section describes in detail the full package of my services to boo
 
 These are the main examples to give you an idea of what can be done. If you have something different in mind, don't hesitate to mention it!
 
-[github-actions]: https://kodimensional.dev/github-actions
+[github-actions]: https://chshersh.com/github-actions
 
 ### Example projects
 
@@ -107,4 +107,4 @@ There's no refund if you're unsatisfied with the quality of my work. The example
 
 However, if I don't finish something we discussed and agreed on, I'll finish it at no extra cost to you.
 
-[contacts]: https://kodimensional.dev/#contacts
+[contacts]: https://chshersh.com/#contacts

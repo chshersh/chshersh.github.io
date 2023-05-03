@@ -19,7 +19,7 @@ to set up the GitHub Actions CI for Haskell projects I come up with.
 ## Motivation
 
 In one of my previous blog posts I've described
-[Dead simple Travis CI settings](https://kodimensional.dev/posts/2019-02-25-haskell-travis)
+[Dead simple Travis CI settings](https://chshersh.com/posts/2019-02-25-haskell-travis)
 for Haskell projects. There I've also explained why it's important to
 support both build tools and multiple GHC versions on CI. However,
 it's tricky to define Travis CI config with a matrix for multiple GHC
