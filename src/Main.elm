@@ -1,59 +1,34 @@
-module Main exposing (main)
+module Main exposing (..)
 
-import Browser
+import Element exposing (Element, alignRight, centerY, el, fill, padding, rgb255, row, spacing, text, width)
+import Element.Background as Background
+import Element.Border as Border
+import Element.Font as Font
 import Html exposing (Html)
-import Html.Events exposing (onClick)
+import Msg exposing (Msg)
 
 
-type Msg
-    = IncrementClicked
-    | DecrementClicked
+main : Html Msg
+main =
+    Element.layout []
+        myRowOfStuff
 
 
-type alias Model =
-    { count : Int
-    }
-
-
-init : () -> ( Model, Cmd Msg )
-init () =
-    ( { count = 0
-      }
-    , Cmd.none
-    )
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        IncrementClicked ->
-            ( { model | count = model.count + 1 }, Cmd.none )
-
-        DecrementClicked ->
-            ( { model | count = model.count - 1 }, Cmd.none )
-
-
-subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Sub.none
-
-
-view : Model -> Html Msg
-view model =
-    Html.div []
-        [ Html.button [ onClick DecrementClicked ]
-            [ Html.text "-" ]
-        , Html.text (" " ++ String.fromInt model.count ++ " ")
-        , Html.button [ onClick IncrementClicked ]
-            [ Html.text "+" ]
+myRowOfStuff : Element msg
+myRowOfStuff =
+    row [ width fill, centerY, spacing 30 ]
+        [ myElement
+        , myElement
+        , el [ alignRight ] myElement
         ]
 
 
-main : Program () Model Msg
-main =
-    Browser.element
-        { init = init
-        , view = view
-        , update = update
-        , subscriptions = subscriptions
-        }
+myElement : Element msg
+myElement =
+    el
+        [ Background.color (rgb255 240 0 245)
+        , Font.color (rgb255 255 255 255)
+        , Border.rounded 3
+        , padding 30
+        ]
+        (text "stylish!")
