@@ -1,4 +1,0 @@
-packages: .
-
-allow-newer: hakyll-shortcut-links:base
-           , shortcut-links:base
