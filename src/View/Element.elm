@@ -5,10 +5,19 @@ module View.Element exposing (..)
 
 import Element exposing (Element, el)
 import Element.Font as Font
-import View.Font exposing (monoFont)
 import View.Color exposing (..)
+import View.Font exposing (monoFont)
 
 
-txt : String -> Element msg
-txt s =
-    el [ Font.family monoFont, Font.color gainsboro ] (Element.text s)
+t : List (Element.Attribute msg) -> String -> Element msg
+t attrs s =
+    let
+        customAttrs =
+            [ Font.family monoFont, Font.color gainsboro ]
+    in
+    el (customAttrs ++ attrs) (Element.text s)
+
+
+t_ : String -> Element msg
+t_ =
+    t []
