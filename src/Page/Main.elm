@@ -7,7 +7,7 @@ import Element.Events exposing (..)
 import Element.Font as Font
 import FontAwesome as Icon exposing (Icon)
 import FontAwesome.Styles
-import Model.Link as Link
+import Model.Social as Social
 import Msg exposing (..)
 import View.Color as Color
 import View.Element exposing (..)
@@ -48,33 +48,28 @@ title =
 
 links : Element Msg
 links =
-    column
+    row
         [ centerX
         , Font.size 24
         , spacing 10
         , paddingEach { edges | top = 40 }
         ]
-        (List.map link Link.all)
+        (List.map social Social.all)
 
 
-link : Link.T -> Element Msg
-link l =
-    row
+social : Social.T -> Element Msg
+social s =
+    newTabLink
         [ paddingEach { top = 10, left = 10, right = 10, bottom = 10 }
         , width fill
         , Background.color Color.elevatedGrey
+        , Font.color Color.gainsboro
         , Border.rounded 4
+        , mouseOver [ Background.color Color.yellow, Font.color Color.elevatedGrey ]
         ]
-        [ icon l.icon
-        , t_ " "
-        , t_ l.name
-        ]
+        { url = s.url, label = icon s.icon }
 
 
 icon : Icon hasId -> Element msg
 icon i =
-    el
-        [ Font.color Color.gainsboro
-        , paddingEach { edges | right = 10 }
-        ]
-        (html <| Icon.view i)
+    el [] (html <| Icon.view i)
