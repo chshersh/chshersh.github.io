@@ -1,20 +1,27 @@
 module Page.Main exposing (..)
 
 import Element exposing (..)
+import Element.Background as Background
+import Element.Border as Border
 import Element.Events exposing (..)
 import Element.Font as Font
 import FontAwesome as Icon exposing (Icon)
 import FontAwesome.Styles
 import Model.Link as Link
 import Msg exposing (..)
-import View.Color exposing (gainsboro)
+import View.Color as Color
 import View.Element exposing (..)
 import View.SayMyName as Logo
 
 
 page : Element Msg
 page =
-    column [ centerX, centerY ] [ logo, title, links ]
+    column [ centerX, centerY ]
+        [ html FontAwesome.Styles.css
+        , logo
+        , title
+        , links
+        ]
 
 
 edges : { top : Int, right : Int, bottom : Int, left : Int }
@@ -33,7 +40,7 @@ logo =
 
 title : Element Msg
 title =
-    column [ centerX, Font.size 24, paddingEach { edges | top = 10 } ]
+    column [ centerX, Font.size 24, paddingEach { edges | top = 40 } ]
         [ t [ centerX ] "Dmitrii Kovanikov"
         , t [ centerX ] "Senior Software Engineer @ Bloomberg"
         ]
@@ -41,18 +48,33 @@ title =
 
 links : Element Msg
 links =
-    column [ centerX, Font.size 24, paddingEach { edges | top = 40 } ]
-        (html FontAwesome.Styles.css :: List.map link Link.all)
+    column
+        [ centerX
+        , Font.size 24
+        , spacing 10
+        , paddingEach { edges | top = 40 }
+        ]
+        (List.map link Link.all)
 
 
 link : Link.T -> Element Msg
 link l =
-    row [ paddingEach { edges | top = 15 } ]
+    row
+        [ paddingEach { top = 10, left = 10, right = 10, bottom = 10 }
+        , width fill
+        , Background.color Color.elevatedGrey
+        , Border.rounded 4
+        ]
         [ icon l.icon
+        , t_ " "
         , t_ l.name
         ]
 
 
 icon : Icon hasId -> Element msg
 icon i =
-    el [ Font.color gainsboro, paddingEach { edges | right = 10 } ] (html <| Icon.view i)
+    el
+        [ Font.color Color.gainsboro
+        , paddingEach { edges | right = 10 }
+        ]
+        (html <| Icon.view i)

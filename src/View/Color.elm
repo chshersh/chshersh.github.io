@@ -9,7 +9,7 @@ grey n =
 
 
 
--- #121212
+-- | #121212
 
 
 darkGrey : Color
@@ -18,7 +18,16 @@ darkGrey =
 
 
 
--- #E2E2E2
+-- | #1E1E1E
+
+
+elevatedGrey : Color
+elevatedGrey =
+    grey 30
+
+
+
+-- | #E2E2E2
 
 
 gainsboro : Color
@@ -27,7 +36,7 @@ gainsboro =
 
 
 
--- #FFC107
+-- | #FFC107
 
 
 yellow : Color
