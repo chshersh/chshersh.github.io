@@ -16,7 +16,7 @@ import View.SayMyName as Logo
 
 page : Element Msg
 page =
-    column [ centerX, centerY ]
+    column [ centerX, centerY, spacing 40 ]
         [ html FontAwesome.Styles.css
         , logo
         , title
@@ -40,7 +40,12 @@ logo =
 
 title : Element Msg
 title =
-    column [ centerX, Font.size 24, paddingEach { edges | top = 40 } ]
+    column
+        [ centerX
+        , Font.size 24
+        , padding 10
+        , Background.color Color.elevatedGrey
+        ]
         [ t [ centerX ] "Dmitrii Kovanikov"
         , t [ centerX ] "Senior Software Engineer @ Bloomberg"
         ]
@@ -52,7 +57,6 @@ links =
         [ centerX
         , Font.size 24
         , spacing 10
-        , paddingEach { edges | top = 40 }
         ]
         (List.map social Social.all)
 
