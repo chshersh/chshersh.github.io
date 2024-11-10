@@ -11,4 +11,4 @@ import View.Element exposing (..)
 
 main : Html Msg
 main =
-    layout [ Background.color Color.yellow ] <| Main.page
+    layout [ Background.color Color.darkGrey ] <| Main.page
