@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  pull_request:
+    types: [synchronize, opened, reopened]
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: ${{ matrix.os }} / Elm
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - uses: jorelali/setup-elm@v6
+        with:
+          elm-version: 0.19.1
+
+      - run: elm make src/Main.elm
