@@ -34,6 +34,10 @@ all =
       , icon = Icon.linkedin
       , url = "https://www.linkedin.com/in/chshersh/"
       }
+    , { name = "BlueSky"
+      , icon = Icon.bluesky
+      , url = "https://bsky.app/profile/chshersh.com"
+      }
     , { name = "Contact Me"
       , icon = Icon.envelope
       , url = "mailto:chshersh@gmail.com?subject=Question"

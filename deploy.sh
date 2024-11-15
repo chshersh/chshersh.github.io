@@ -6,6 +6,9 @@ set -Eeuxo pipefail
 # This script deploys an already built website #
 ################################################
 
+# Store commit message in a variable to reuse later
+commit_message=$(git log -1 --pretty=%B)
+
 # Create a temporary directory
 tmp_dir=$(mktemp --tmpdir --directory chshersh.com-XXXX)
 
@@ -31,6 +34,6 @@ git add CNAME
 # Prepare repo and push
 git config user.name "github-actions[bot]"
 git config user.email "github-actions[bot]@users.noreply.github.com"
-git commit -m "Deploy latest build to main" || echo "No changes to commit"
+git commit -m "$commit_message" || echo "No changes to commit"
 git remote set-url --push origin https://chshersh:$GITHUB_TOKEN@github.com/chshersh/chshersh.github.io
 git push origin main --force
