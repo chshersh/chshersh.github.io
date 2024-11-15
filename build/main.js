@@ -2719,7 +2719,7 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		F: func(record.F),
+		G: func(record.G),
 		aR: record.aR,
 		aL: record.aL
 	}
@@ -2989,7 +2989,7 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.F;
+		var message = !tag ? value : tag < 3 ? value.a : value.G;
 		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aR;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
@@ -4509,7 +4509,7 @@ var $author$project$View$Color$grey = function (n) {
 	return A3($mdgriffith$elm_ui$Element$rgb255, n, n, n);
 };
 var $author$project$View$Color$darkGrey = $author$project$View$Color$grey(18);
-var $mdgriffith$elm_ui$Internal$Style$classes = {bO: 'a', ax: 'atv', bQ: 'ab', bR: 'cx', bS: 'cy', bT: 'acb', bU: 'accx', bV: 'accy', bW: 'acr', aW: 'al', aX: 'ar', bX: 'at', ay: 'ah', az: 'av', bZ: 's', b1: 'bh', b2: 'b', b4: 'w7', b6: 'bd', b7: 'bdt', al: 'bn', b8: 'bs', am: 'cpe', cd: 'cp', ce: 'cpx', cf: 'cpy', D: 'c', ao: 'ctr', ap: 'cb', aq: 'ccx', E: 'ccy', ad: 'cl', ar: 'cr', ch: 'ct', ci: 'cptr', cj: 'ctxt', cs: 'fcs', a3: 'focus-within', ct: 'fs', cu: 'g', aD: 'hbh', aE: 'hc', a7: 'he', aF: 'hf', a8: 'hfp', cw: 'hv', cy: 'ic', cA: 'fr', at: 'lbl', cC: 'iml', cD: 'imlf', cE: 'imlp', cF: 'implw', cG: 'it', cH: 'i', be: 'lnk', Z: 'nb', bh: 'notxt', cL: 'ol', cN: 'or', Q: 'oq', cR: 'oh', bl: 'pg', bm: 'p', cS: 'ppe', cW: 'ui', u: 'r', cZ: 'sb', c_: 'sbx', c$: 'sby', c0: 'sbt', c2: 'e', c4: 'cap', c5: 'sev', db: 'sk', p: 't', de: 'tc', df: 'w8', dg: 'w2', dh: 'w9', di: 'tj', av: 'tja', dj: 'tl', dk: 'w3', dl: 'w5', dm: 'w4', dn: 'tr', $7: 'w6', dp: 'w1', dq: 'tun', bC: 'ts', T: 'clr', dv: 'u', aS: 'wc', bJ: 'we', aT: 'wf', bK: 'wfp', aU: 'wrp'};
+var $mdgriffith$elm_ui$Internal$Style$classes = {bO: 'a', ax: 'atv', bQ: 'ab', bR: 'cx', bS: 'cy', bT: 'acb', bU: 'accx', bV: 'accy', bW: 'acr', aW: 'al', aX: 'ar', bX: 'at', ay: 'ah', az: 'av', bZ: 's', b1: 'bh', b2: 'b', b4: 'w7', b6: 'bd', b7: 'bdt', al: 'bn', b8: 'bs', am: 'cpe', cd: 'cp', ce: 'cpx', cf: 'cpy', D: 'c', ao: 'ctr', ap: 'cb', aq: 'ccx', E: 'ccy', ad: 'cl', ar: 'cr', ch: 'ct', ci: 'cptr', cj: 'ctxt', cs: 'fcs', a3: 'focus-within', ct: 'fs', cu: 'g', aD: 'hbh', aE: 'hc', a7: 'he', aF: 'hf', a8: 'hfp', cw: 'hv', cy: 'ic', cA: 'fr', at: 'lbl', cC: 'iml', cD: 'imlf', cE: 'imlp', cF: 'implw', cG: 'it', cH: 'i', be: 'lnk', Z: 'nb', bh: 'notxt', cL: 'ol', cN: 'or', R: 'oq', cR: 'oh', bl: 'pg', bm: 'p', cS: 'ppe', cW: 'ui', u: 'r', cZ: 'sb', c_: 'sbx', c$: 'sby', c0: 'sbt', c2: 'e', c4: 'cap', c5: 'sev', db: 'sk', p: 't', de: 'tc', df: 'w8', dg: 'w2', dh: 'w9', di: 'tj', av: 'tja', dj: 'tl', dk: 'w3', dl: 'w5', dm: 'w4', dn: 'tr', $7: 'w6', dp: 'w1', dq: 'tun', bC: 'ts', U: 'clr', dv: 'u', aS: 'wc', bJ: 'we', aT: 'wf', bK: 'wfp', aU: 'wrp'};
 var $mdgriffith$elm_ui$Internal$Model$Attr = function (a) {
 	return {$: 1, a: a};
 };
@@ -5908,14 +5908,14 @@ var $mdgriffith$elm_ui$Internal$Style$baseSheet = _List_fromArray(
 					])),
 				A2(
 				$mdgriffith$elm_ui$Internal$Style$Descriptor,
-				$mdgriffith$elm_ui$Internal$Style$dot($mdgriffith$elm_ui$Internal$Style$classes.T),
+				$mdgriffith$elm_ui$Internal$Style$dot($mdgriffith$elm_ui$Internal$Style$classes.U),
 				_List_fromArray(
 					[
 						A2($mdgriffith$elm_ui$Internal$Style$Prop, 'opacity', '0')
 					])),
 				A2(
 				$mdgriffith$elm_ui$Internal$Style$Descriptor,
-				$mdgriffith$elm_ui$Internal$Style$dot($mdgriffith$elm_ui$Internal$Style$classes.Q),
+				$mdgriffith$elm_ui$Internal$Style$dot($mdgriffith$elm_ui$Internal$Style$classes.R),
 				_List_fromArray(
 					[
 						A2($mdgriffith$elm_ui$Internal$Style$Prop, 'opacity', '1')
@@ -5923,7 +5923,7 @@ var $mdgriffith$elm_ui$Internal$Style$baseSheet = _List_fromArray(
 				A2(
 				$mdgriffith$elm_ui$Internal$Style$Descriptor,
 				$mdgriffith$elm_ui$Internal$Style$dot(
-					_Utils_ap($mdgriffith$elm_ui$Internal$Style$classes.cw, $mdgriffith$elm_ui$Internal$Style$classes.T)) + ':hover',
+					_Utils_ap($mdgriffith$elm_ui$Internal$Style$classes.cw, $mdgriffith$elm_ui$Internal$Style$classes.U)) + ':hover',
 				_List_fromArray(
 					[
 						A2($mdgriffith$elm_ui$Internal$Style$Prop, 'opacity', '0')
@@ -5931,7 +5931,7 @@ var $mdgriffith$elm_ui$Internal$Style$baseSheet = _List_fromArray(
 				A2(
 				$mdgriffith$elm_ui$Internal$Style$Descriptor,
 				$mdgriffith$elm_ui$Internal$Style$dot(
-					_Utils_ap($mdgriffith$elm_ui$Internal$Style$classes.cw, $mdgriffith$elm_ui$Internal$Style$classes.Q)) + ':hover',
+					_Utils_ap($mdgriffith$elm_ui$Internal$Style$classes.cw, $mdgriffith$elm_ui$Internal$Style$classes.R)) + ':hover',
 				_List_fromArray(
 					[
 						A2($mdgriffith$elm_ui$Internal$Style$Prop, 'opacity', '1')
@@ -5939,7 +5939,7 @@ var $mdgriffith$elm_ui$Internal$Style$baseSheet = _List_fromArray(
 				A2(
 				$mdgriffith$elm_ui$Internal$Style$Descriptor,
 				$mdgriffith$elm_ui$Internal$Style$dot(
-					_Utils_ap($mdgriffith$elm_ui$Internal$Style$classes.cs, $mdgriffith$elm_ui$Internal$Style$classes.T)) + ':focus',
+					_Utils_ap($mdgriffith$elm_ui$Internal$Style$classes.cs, $mdgriffith$elm_ui$Internal$Style$classes.U)) + ':focus',
 				_List_fromArray(
 					[
 						A2($mdgriffith$elm_ui$Internal$Style$Prop, 'opacity', '0')
@@ -5947,7 +5947,7 @@ var $mdgriffith$elm_ui$Internal$Style$baseSheet = _List_fromArray(
 				A2(
 				$mdgriffith$elm_ui$Internal$Style$Descriptor,
 				$mdgriffith$elm_ui$Internal$Style$dot(
-					_Utils_ap($mdgriffith$elm_ui$Internal$Style$classes.cs, $mdgriffith$elm_ui$Internal$Style$classes.Q)) + ':focus',
+					_Utils_ap($mdgriffith$elm_ui$Internal$Style$classes.cs, $mdgriffith$elm_ui$Internal$Style$classes.R)) + ':focus',
 				_List_fromArray(
 					[
 						A2($mdgriffith$elm_ui$Internal$Style$Prop, 'opacity', '1')
@@ -5955,7 +5955,7 @@ var $mdgriffith$elm_ui$Internal$Style$baseSheet = _List_fromArray(
 				A2(
 				$mdgriffith$elm_ui$Internal$Style$Descriptor,
 				$mdgriffith$elm_ui$Internal$Style$dot(
-					_Utils_ap($mdgriffith$elm_ui$Internal$Style$classes.ax, $mdgriffith$elm_ui$Internal$Style$classes.T)) + ':active',
+					_Utils_ap($mdgriffith$elm_ui$Internal$Style$classes.ax, $mdgriffith$elm_ui$Internal$Style$classes.U)) + ':active',
 				_List_fromArray(
 					[
 						A2($mdgriffith$elm_ui$Internal$Style$Prop, 'opacity', '0')
@@ -5963,7 +5963,7 @@ var $mdgriffith$elm_ui$Internal$Style$baseSheet = _List_fromArray(
 				A2(
 				$mdgriffith$elm_ui$Internal$Style$Descriptor,
 				$mdgriffith$elm_ui$Internal$Style$dot(
-					_Utils_ap($mdgriffith$elm_ui$Internal$Style$classes.ax, $mdgriffith$elm_ui$Internal$Style$classes.Q)) + ':active',
+					_Utils_ap($mdgriffith$elm_ui$Internal$Style$classes.ax, $mdgriffith$elm_ui$Internal$Style$classes.R)) + ':active',
 				_List_fromArray(
 					[
 						A2($mdgriffith$elm_ui$Internal$Style$Prop, 'opacity', '1')
@@ -7102,7 +7102,7 @@ var $elm$core$String$concat = function (strings) {
 var $mdgriffith$elm_ui$Internal$Style$Intermediate = $elm$core$Basics$identity;
 var $mdgriffith$elm_ui$Internal$Style$emptyIntermediate = F2(
 	function (selector, closing) {
-		return {an: closing, i: _List_Nil, H: _List_Nil, v: selector};
+		return {an: closing, i: _List_Nil, J: _List_Nil, v: selector};
 	});
 var $mdgriffith$elm_ui$Internal$Style$renderRules = F2(
 	function (_v0, rulesToRender) {
@@ -7116,10 +7116,10 @@ var $mdgriffith$elm_ui$Internal$Style$renderRules = F2(
 						return _Utils_update(
 							rendered,
 							{
-								H: A2(
+								J: A2(
 									$elm$core$List$cons,
 									_Utils_Tuple2(name, val),
-									rendered.H)
+									rendered.J)
 							});
 					case 3:
 						var _v2 = rule.a;
@@ -7131,7 +7131,7 @@ var $mdgriffith$elm_ui$Internal$Style$renderRules = F2(
 							{
 								i: A2(
 									$elm$core$List$cons,
-									{an: '\n}', i: _List_Nil, H: props, v: '@supports (' + (prop + (':' + (value + (') {' + parent.v))))},
+									{an: '\n}', i: _List_Nil, J: props, v: '@supports (' + (prop + (':' + (value + (') {' + parent.v))))},
 									rendered.i)
 							});
 					case 5:
@@ -7223,11 +7223,11 @@ var $mdgriffith$elm_ui$Internal$Style$renderCompact = function (styleClasses) {
 				values));
 	};
 	var renderClass = function (rule) {
-		var _v2 = rule.H;
+		var _v2 = rule.J;
 		if (!_v2.b) {
 			return '';
 		} else {
-			return rule.v + ('{' + (renderValues(rule.H) + (rule.an + '}')));
+			return rule.v + ('{' + (renderValues(rule.J) + (rule.an + '}')));
 		}
 	};
 	var renderIntermediate = function (_v0) {
@@ -7357,7 +7357,7 @@ var $mdgriffith$elm_ui$Internal$Model$fontName = function (font) {
 			var url = font.b;
 			return '\"' + (name + '\"');
 		default:
-			var name = font.a.O;
+			var name = font.a.H;
 			return '\"' + (name + '\"');
 	}
 };
@@ -8694,11 +8694,11 @@ var $mdgriffith$elm_ui$Internal$Model$createElement = F3(
 				return $mdgriffith$elm_ui$Internal$Model$Unstyled(
 					A5(
 						$mdgriffith$elm_ui$Internal$Model$finalizeNode,
-						rendered.M,
 						rendered.P,
+						rendered.Q,
 						rendered.ak,
 						$mdgriffith$elm_ui$Internal$Model$Keyed(
-							A3($mdgriffith$elm_ui$Internal$Model$addKeyedChildren, 'nearby-element-pls', keyed, rendered.J)),
+							A3($mdgriffith$elm_ui$Internal$Model$addKeyedChildren, 'nearby-element-pls', keyed, rendered.M)),
 						$mdgriffith$elm_ui$Internal$Model$NoStyleSheet));
 			} else {
 				var allStyles = newStyles;
@@ -8706,11 +8706,11 @@ var $mdgriffith$elm_ui$Internal$Model$createElement = F3(
 					{
 						cx: A4(
 							$mdgriffith$elm_ui$Internal$Model$finalizeNode,
-							rendered.M,
 							rendered.P,
+							rendered.Q,
 							rendered.ak,
 							$mdgriffith$elm_ui$Internal$Model$Keyed(
-								A3($mdgriffith$elm_ui$Internal$Model$addKeyedChildren, 'nearby-element-pls', keyed, rendered.J))),
+								A3($mdgriffith$elm_ui$Internal$Model$addKeyedChildren, 'nearby-element-pls', keyed, rendered.M))),
 						dc: allStyles
 					});
 			}
@@ -8728,11 +8728,11 @@ var $mdgriffith$elm_ui$Internal$Model$createElement = F3(
 				return $mdgriffith$elm_ui$Internal$Model$Unstyled(
 					A5(
 						$mdgriffith$elm_ui$Internal$Model$finalizeNode,
-						rendered.M,
 						rendered.P,
+						rendered.Q,
 						rendered.ak,
 						$mdgriffith$elm_ui$Internal$Model$Unkeyed(
-							A2($mdgriffith$elm_ui$Internal$Model$addChildren, unkeyed, rendered.J)),
+							A2($mdgriffith$elm_ui$Internal$Model$addChildren, unkeyed, rendered.M)),
 						$mdgriffith$elm_ui$Internal$Model$NoStyleSheet));
 			} else {
 				var allStyles = newStyles;
@@ -8740,11 +8740,11 @@ var $mdgriffith$elm_ui$Internal$Model$createElement = F3(
 					{
 						cx: A4(
 							$mdgriffith$elm_ui$Internal$Model$finalizeNode,
-							rendered.M,
 							rendered.P,
+							rendered.Q,
 							rendered.ak,
 							$mdgriffith$elm_ui$Internal$Model$Unkeyed(
-								A2($mdgriffith$elm_ui$Internal$Model$addChildren, unkeyed, rendered.J))),
+								A2($mdgriffith$elm_ui$Internal$Model$addChildren, unkeyed, rendered.M))),
 						dc: allStyles
 					});
 			}
@@ -9299,9 +9299,9 @@ var $mdgriffith$elm_ui$Internal$Model$gatherAttrRecursive = F8(
 							$elm$core$List$cons,
 							$elm$html$Html$Attributes$class(classes),
 							attrs),
-						J: children,
-						M: has,
-						P: node,
+						M: children,
+						P: has,
+						Q: node,
 						dc: styles
 					};
 				} else {
@@ -9311,9 +9311,9 @@ var $mdgriffith$elm_ui$Internal$Model$gatherAttrRecursive = F8(
 							$elm$core$List$cons,
 							$elm$html$Html$Attributes$class(classes + (' ' + _class)),
 							attrs),
-						J: children,
-						M: has,
-						P: node,
+						M: children,
+						P: has,
+						Q: node,
 						dc: A2(
 							$elm$core$List$cons,
 							$mdgriffith$elm_ui$Internal$Model$Transform(transform),
@@ -10354,7 +10354,7 @@ var $mdgriffith$elm_ui$Internal$Model$renderFontClassName = F2(
 							$elm$core$String$words(
 								$elm$core$String$toLower(name)));
 					default:
-						var name = font.a.O;
+						var name = font.a.H;
 						return A2(
 							$elm$core$String$join,
 							'-',
@@ -10485,18 +10485,25 @@ var $mdgriffith$elm_ui$Internal$Model$unstyled = A2($elm$core$Basics$composeL, $
 var $mdgriffith$elm_ui$Element$html = $mdgriffith$elm_ui$Internal$Model$unstyled;
 var $lattyware$elm_fontawesome$FontAwesome$IconDef = F4(
 	function (prefix, name, size, paths) {
-		return {O: name, cT: paths, cU: prefix, c3: size};
+		return {H: name, cT: paths, cU: prefix, c3: size};
 	});
+var $lattyware$elm_fontawesome$FontAwesome$Brands$Definitions$bluesky = A4(
+	$lattyware$elm_fontawesome$FontAwesome$IconDef,
+	'fab',
+	'bluesky',
+	_Utils_Tuple2(576, 512),
+	_Utils_Tuple2('M407.8 294.7c-3.3-.4-6.7-.8-10-1.3c3.4 .4 6.7 .9 10 1.3zM288 227.1C261.9 176.4 190.9 81.9 124.9 35.3C61.6-9.4 37.5-1.7 21.6 5.5C3.3 13.8 0 41.9 0 58.4S9.1 194 15 213.9c19.5 65.7 89.1 87.9 153.2 80.7c3.3-.5 6.6-.9 10-1.4c-3.3 .5-6.6 1-10 1.4C74.3 308.6-9.1 342.8 100.3 464.5C220.6 589.1 265.1 437.8 288 361.1c22.9 76.7 49.2 222.5 185.6 103.4c102.4-103.4 28.1-156-65.8-169.9c-3.3-.4-6.7-.8-10-1.3c3.4 .4 6.7 .9 10 1.3c64.1 7.1 133.6-15.1 153.2-80.7C566.9 194 576 75 576 58.4s-3.3-44.7-21.6-52.9c-15.8-7.1-40-14.9-103.2 29.8C385.1 81.9 314.1 176.4 288 227.1z', $elm$core$Maybe$Nothing));
+var $lattyware$elm_fontawesome$FontAwesome$Internal$Icon = $elm$core$Basics$identity;
+var $lattyware$elm_fontawesome$FontAwesome$present = function (icon) {
+	return {ak: _List_Nil, F: icon, aG: $elm$core$Maybe$Nothing, aK: $elm$core$Maybe$Nothing, aN: 'img', ds: $elm$core$Maybe$Nothing, aw: _List_Nil};
+};
+var $lattyware$elm_fontawesome$FontAwesome$Brands$bluesky = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Brands$Definitions$bluesky);
 var $lattyware$elm_fontawesome$FontAwesome$Regular$Definitions$envelope = A4(
 	$lattyware$elm_fontawesome$FontAwesome$IconDef,
 	'far',
 	'envelope',
 	_Utils_Tuple2(512, 512),
 	_Utils_Tuple2('M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z', $elm$core$Maybe$Nothing));
-var $lattyware$elm_fontawesome$FontAwesome$Internal$Icon = $elm$core$Basics$identity;
-var $lattyware$elm_fontawesome$FontAwesome$present = function (icon) {
-	return {ak: _List_Nil, N: icon, aG: $elm$core$Maybe$Nothing, aK: $elm$core$Maybe$Nothing, aN: 'img', ds: $elm$core$Maybe$Nothing, aw: _List_Nil};
-};
 var $lattyware$elm_fontawesome$FontAwesome$Regular$envelope = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Regular$Definitions$envelope);
 var $lattyware$elm_fontawesome$FontAwesome$Brands$Definitions$github = A4(
 	$lattyware$elm_fontawesome$FontAwesome$IconDef,
@@ -10535,12 +10542,13 @@ var $lattyware$elm_fontawesome$FontAwesome$Brands$Definitions$youtube = A4(
 var $lattyware$elm_fontawesome$FontAwesome$Brands$youtube = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Brands$Definitions$youtube);
 var $author$project$Model$Social$all = _List_fromArray(
 	[
-		{N: $lattyware$elm_fontawesome$FontAwesome$Brands$github, O: 'GitHub', U: 'https://github.com/chshersh'},
-		{N: $lattyware$elm_fontawesome$FontAwesome$Brands$youtube, O: 'YouTube', U: 'https://youtube.com/c/chshersh'},
-		{N: $lattyware$elm_fontawesome$FontAwesome$Brands$xTwitter, O: 'ex-Twitter', U: 'https://x.com/chshersh'},
-		{N: $lattyware$elm_fontawesome$FontAwesome$Brands$twitch, O: 'Twitch', U: 'https://www.twitch.tv/chshersh'},
-		{N: $lattyware$elm_fontawesome$FontAwesome$Brands$linkedin, O: 'LinkedIn', U: 'https://www.linkedin.com/in/chshersh/'},
-		{N: $lattyware$elm_fontawesome$FontAwesome$Regular$envelope, O: 'Contact Me', U: 'mailto:chshersh@gmail.com?subject=Question'}
+		{F: $lattyware$elm_fontawesome$FontAwesome$Brands$github, H: 'GitHub', L: 'https://github.com/chshersh'},
+		{F: $lattyware$elm_fontawesome$FontAwesome$Brands$youtube, H: 'YouTube', L: 'https://youtube.com/c/chshersh'},
+		{F: $lattyware$elm_fontawesome$FontAwesome$Brands$xTwitter, H: 'ex-Twitter', L: 'https://x.com/chshersh'},
+		{F: $lattyware$elm_fontawesome$FontAwesome$Brands$twitch, H: 'Twitch', L: 'https://www.twitch.tv/chshersh'},
+		{F: $lattyware$elm_fontawesome$FontAwesome$Brands$linkedin, H: 'LinkedIn', L: 'https://www.linkedin.com/in/chshersh/'},
+		{F: $lattyware$elm_fontawesome$FontAwesome$Brands$bluesky, H: 'BlueSky', L: 'https://bsky.app/profile/chshersh.com'},
+		{F: $lattyware$elm_fontawesome$FontAwesome$Regular$envelope, H: 'Contact Me', L: 'mailto:chshersh@gmail.com?subject=Question'}
 	]);
 var $mdgriffith$elm_ui$Internal$Model$AsRow = 0;
 var $mdgriffith$elm_ui$Internal$Model$asRow = 0;
@@ -10620,7 +10628,7 @@ var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $elm$svg$Svg$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$svg$Svg$title = $elm$svg$Svg$trustedNode('title');
 var $lattyware$elm_fontawesome$FontAwesome$Internal$topLevelDimensions = function (_v1) {
-	var icon = _v1.N;
+	var icon = _v1.F;
 	var outer = _v1.aK;
 	return A2(
 		$elm$core$Maybe$withDefault,
@@ -10628,7 +10636,7 @@ var $lattyware$elm_fontawesome$FontAwesome$Internal$topLevelDimensions = functio
 		A2($elm$core$Maybe$map, $lattyware$elm_fontawesome$FontAwesome$Internal$topLevelDimensionsInternal, outer));
 };
 var $lattyware$elm_fontawesome$FontAwesome$Internal$topLevelDimensionsInternal = function (_v0) {
-	var icon = _v0.N;
+	var icon = _v0.F;
 	var outer = _v0.aK;
 	return A2(
 		$elm$core$Maybe$withDefault,
@@ -10802,7 +10810,7 @@ var $lattyware$elm_fontawesome$FontAwesome$Svg$viewWithTransform = F3(
 	});
 var $lattyware$elm_fontawesome$FontAwesome$Svg$viewInColor = F2(
 	function (color, fullIcon) {
-		var icon = fullIcon.N;
+		var icon = fullIcon.F;
 		var transforms = fullIcon.aw;
 		var id = fullIcon.aG;
 		var outer = fullIcon.aK;
@@ -10878,7 +10886,7 @@ var $lattyware$elm_fontawesome$FontAwesome$Svg$view = $lattyware$elm_fontawesome
 var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
 var $lattyware$elm_fontawesome$FontAwesome$internalView = F2(
 	function (fullIcon, extraAttributes) {
-		var icon = fullIcon.N;
+		var icon = fullIcon.F;
 		var transforms = fullIcon.aw;
 		var role = fullIcon.aN;
 		var id = fullIcon.aG;
@@ -10922,7 +10930,7 @@ var $lattyware$elm_fontawesome$FontAwesome$internalView = F2(
 		var classes = _List_fromArray(
 			[
 				'svg-inline--fa',
-				'fa-' + icon.O,
+				'fa-' + icon.H,
 				'fa-w-' + $elm$core$String$fromInt(aspectRatio)
 			]);
 		return A2(
@@ -11115,7 +11123,7 @@ var $elm$html$Html$Attributes$rel = _VirtualDom_attribute('rel');
 var $elm$html$Html$Attributes$target = $elm$html$Html$Attributes$stringProperty('target');
 var $mdgriffith$elm_ui$Element$newTabLink = F2(
 	function (attrs, _v0) {
-		var url = _v0.U;
+		var url = _v0.L;
 		var label = _v0.cI;
 		return A4(
 			$mdgriffith$elm_ui$Internal$Model$element,
@@ -11217,8 +11225,8 @@ var $author$project$Page$Main$social = function (s) {
 					]))
 			]),
 		{
-			cI: $author$project$Page$Main$icon(s.N),
-			U: s.U
+			cI: $author$project$Page$Main$icon(s.F),
+			L: s.L
 		});
 };
 var $mdgriffith$elm_ui$Internal$Model$SpacingStyle = F3(
@@ -11263,8 +11271,8 @@ var $mdgriffith$elm_ui$Internal$Model$ImportFont = F2(
 		return {$: 4, a: a, b: b};
 	});
 var $mdgriffith$elm_ui$Element$Font$external = function (_v0) {
-	var url = _v0.U;
-	var name = _v0.O;
+	var url = _v0.L;
+	var name = _v0.H;
 	return A2($mdgriffith$elm_ui$Internal$Model$ImportFont, name, url);
 };
 var $mdgriffith$elm_ui$Internal$Model$Monospace = {$: 2};
@@ -11273,7 +11281,7 @@ var $author$project$View$Font$monoFont = _List_fromArray(
 	[
 		$mdgriffith$elm_ui$Element$Font$monospace,
 		$mdgriffith$elm_ui$Element$Font$external(
-		{O: 'Noto Sans Mono', U: 'https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Noto+Sans+Mono&display=swap'})
+		{H: 'Noto Sans Mono', L: 'https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Noto+Sans+Mono&display=swap'})
 	]);
 var $mdgriffith$elm_ui$Element$text = function (content) {
 	return $mdgriffith$elm_ui$Internal$Model$Text(content);
