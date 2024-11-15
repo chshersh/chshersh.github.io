@@ -14,7 +14,7 @@ clone_dir="$tmp_dir/chshersh.github.io"
 git clone \
   --branch main \
   --depth 3 \
-  git@github.com:chshersh/chshersh.github.io.git \
+  https://github.com/chshersh/chshersh.github.io.git \
   "$clone_dir"
 
 # Copy all relevant files to the cloned repo
