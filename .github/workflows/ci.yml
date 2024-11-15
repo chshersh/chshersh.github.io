@@ -8,19 +8,20 @@ on:
 
 jobs:
   build:
-    name: ${{ matrix.os }} / Elm
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
+    name: "Elm: Build and Deploy"
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - uses: jorelali/setup-elm@v6
         with:
           elm-version: 0.19.1
 
-      - run: elm make src/Main.elm
+      - name: Build the Elm application
+        run: elm make --optimize src/Main.elm --output=build/main.js
+
+      - name: Deploy
+        if: github.ref_name == 'develop'
+        run: ./deploy.sh
