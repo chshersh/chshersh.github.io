@@ -7,18 +7,18 @@ import Element.Events exposing (..)
 import Element.Font as Font
 import FontAwesome as Icon exposing (Icon)
 import FontAwesome.Styles
+import Model.Msg exposing (Msg)
 import Model.Social as Social
-import Msg exposing (..)
 import View.Color as Color
 import View.Element exposing (..)
 import View.SayMyName as Logo
 
 
-page : Element Msg
-page =
+page : Int -> Element Msg
+page logoFontSize =
     column [ centerX, centerY, spacing 40 ]
         [ html FontAwesome.Styles.css
-        , logo
+        , logo logoFontSize
         , title
         , links
         ]
@@ -33,9 +33,13 @@ edges =
     }
 
 
-logo : Element Msg
-logo =
-    column [] (List.map t_ Logo.youGoddamnRight)
+logo : Int -> Element Msg
+logo logoFontSize =
+    let
+        toLogoLine =
+            t [ Font.size logoFontSize ]
+    in
+    column [] (List.map toLogoLine Logo.youGoddamnRight)
 
 
 title : Element Msg

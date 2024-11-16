@@ -16,7 +16,7 @@ tmp_dir=$(mktemp --tmpdir --directory chshersh.com-XXXX)
 clone_dir="$tmp_dir/chshersh.github.io"
 git clone \
   --branch main \
-  --depth 3 \
+  --depth 1 \
   https://github.com/chshersh/chshersh.github.io.git \
   "$clone_dir"
 
@@ -32,8 +32,6 @@ git add build/main.js
 git add CNAME
 
 # Prepare repo and push
-git config user.name "github-actions[bot]"
-git config user.email "github-actions[bot]@users.noreply.github.com"
 git commit -m "$commit_message" || echo "No changes to commit"
 git remote set-url --push origin https://chshersh:$GITHUB_TOKEN@github.com/chshersh/chshersh.github.io
 git push origin main --force
