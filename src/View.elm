@@ -33,28 +33,30 @@ view model =
                 ( BigDesktop, _ ) ->
                     bigDesktopLayout
     in
-    layout [ Background.color Color.darkGrey, height fill, width fill ] responsiveLayout
+    layout
+        [ Background.color Color.darkGrey, height fill, width fill ]
+        (responsiveLayout model)
 
 
 
 -- LAYOUTS
 
 
-phoneLayout : Element Msg
+phoneLayout : Model -> Element Msg
 phoneLayout =
     pagePhone
 
 
-tabletLayout : Element Msg
+tabletLayout : Model -> Element Msg
 tabletLayout =
     pageDefault
 
 
-desktopLayout : Element Msg
+desktopLayout : Model -> Element Msg
 desktopLayout =
     pageDefault
 
 
-bigDesktopLayout : Element Msg
+bigDesktopLayout : Model -> Element Msg
 bigDesktopLayout =
     pageDefault

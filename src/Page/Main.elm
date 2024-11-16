@@ -1,21 +1,26 @@
 module Page.Main exposing (..)
 
+import Animator
+import Color as ElmColor
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Events exposing (..)
 import Element.Font as Font
+import Element.Input exposing (button)
 import FontAwesome as Icon exposing (Icon)
 import FontAwesome.Styles
-import Model.Msg exposing (Msg)
+import Model exposing (Model, State(..))
+import Model.Msg exposing (Msg(..))
 import Model.Social as Social
 import View.Color as Color
 import View.Element exposing (..)
+import View.Font exposing (monoFont)
 import View.SayMyName as Logo
 
 
-pageDefault : Element Msg
-pageDefault =
+pageDefault : Model -> Element Msg
+pageDefault model =
     column
         [ centerX, centerY, spacing 40 ]
         [ html FontAwesome.Styles.css
@@ -23,11 +28,12 @@ pageDefault =
         , title 24
         , linksRow
             [ gitHub, youTube, x, twitch, blueSky, linkedIn, email ]
+        , menu model
         ]
 
 
-pagePhone : Element Msg
-pagePhone =
+pagePhone : Model -> Element Msg
+pagePhone _ =
     column
         [ centerX, centerY, spacing 20 ]
         [ html FontAwesome.Styles.css
@@ -125,3 +131,44 @@ social s =
 icon : Icon hasId -> Element msg
 icon i =
     el [] (html <| Icon.view i)
+
+
+menu : Model -> Element Msg
+menu model =
+    column [ centerX, spacing 10 ]
+        [ menuButton model (Just AboutClicked) "About"
+
+        -- , menuButton Nothing "Experience"
+        -- , menuButton Nothing "Projects"
+        -- , menuButton Nothing "Blog"
+        ]
+
+
+menuButton : Model -> Maybe Msg -> String -> Element Msg
+menuButton model onPress label =
+    let
+        bgColor =
+            fromRgb <|
+                ElmColor.toRgba <|
+                    Animator.color model.timeline <|
+                        \state ->
+                            if state == Default then
+                                ElmColor.black
+
+                            else
+                                ElmColor.white
+    in
+    button
+        [ centerX
+        , width fill
+        , Font.size 20
+        , padding 10
+        , Border.rounded 16
+        , Background.color bgColor
+        , Font.color Color.gainsboro
+        , mouseOver [ Background.color Color.yellow, Font.color Color.elevatedGrey ]
+        , onLoseFocus Drop
+        ]
+        { onPress = onPress
+        , label = el [ Font.family monoFont, centerX ] (text label)
+        }

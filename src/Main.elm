@@ -1,9 +1,10 @@
 module Main exposing (..)
 
+import Animator
 import Browser
 import Browser.Events as Events
 import Element exposing (classifyDevice)
-import Model exposing (Model)
+import Model exposing (Model, State(..))
 import Model.Dimensions exposing (Dimensions)
 import Model.Msg exposing (Msg(..))
 import View exposing (view)
@@ -32,10 +33,11 @@ init dimensions =
     let
         device =
             classifyDevice dimensions
-    in
-    let
+
         model =
-            { device = device }
+            { device = device
+            , timeline = Animator.init Default
+            }
     in
     ( model
     , Cmd.none
@@ -47,18 +49,36 @@ init dimensions =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg _ =
+update msg model =
     case msg of
+        AnimationTick newTime ->
+            ( Animator.update newTime animator model
+            , Cmd.none
+            )
+
+        Drop ->
+            ( { model
+                | timeline = Animator.go Animator.quickly Default model.timeline
+              }
+            , Cmd.none
+            )
+
+        AboutClicked ->
+            ( { model
+                | timeline = Animator.go Animator.quickly About model.timeline
+              }
+            , Cmd.none
+            )
+
         SetScreenSize dimensions ->
             let
                 device =
                     classifyDevice dimensions
+
+                newModel =
+                    { model | device = device }
             in
-            let
-                model =
-                    { device = device }
-            in
-            ( model, Cmd.none )
+            ( newModel, Cmd.none )
 
 
 
@@ -66,5 +86,23 @@ update msg _ =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Sub.batch [ Events.onResize (\w h -> SetScreenSize { width = w, height = h }) ]
+subscriptions model =
+    Sub.batch
+        [ Events.onResize (\w h -> SetScreenSize { width = w, height = h })
+        , Animator.toSubscription AnimationTick model animator
+        ]
+
+
+
+-- ANIMATOR
+
+
+animator : Animator.Animator Model
+animator =
+    Animator.animator
+        |> Animator.watchingWith
+            .timeline
+            (\newTimeline model ->
+                { model | timeline = newTimeline }
+            )
+            (\state -> state /= Default)
