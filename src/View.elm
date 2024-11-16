@@ -42,19 +42,31 @@ view model =
 
 phoneLayout : Element Msg
 phoneLayout =
-    page 8
+    page
+        { logoFontSize = 8
+        , titleFontSize = 12
+        }
 
 
 tabletLayout : Element Msg
 tabletLayout =
-    page 20
+    page
+        { logoFontSize = 20
+        , titleFontSize = 24
+        }
 
 
 desktopLayout : Element Msg
 desktopLayout =
-    page 20
+    page
+        { logoFontSize = 20
+        , titleFontSize = 24
+        }
 
 
 bigDesktopLayout : Element Msg
 bigDesktopLayout =
-    page 20
+    page
+        { logoFontSize = 20
+        , titleFontSize = 24
+        }

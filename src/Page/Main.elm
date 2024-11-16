@@ -14,12 +14,18 @@ import View.Element exposing (..)
 import View.SayMyName as Logo
 
 
-page : Int -> Element Msg
-page logoFontSize =
+type alias ResponsiveConfig =
+    { logoFontSize : Int
+    , titleFontSize : Int
+    }
+
+
+page : ResponsiveConfig -> Element Msg
+page cfg =
     column [ centerX, centerY, spacing 40 ]
         [ html FontAwesome.Styles.css
-        , logo logoFontSize
-        , title
+        , logo cfg.logoFontSize
+        , title cfg.titleFontSize
         , links
         ]
 
@@ -35,18 +41,16 @@ edges =
 
 logo : Int -> Element Msg
 logo logoFontSize =
-    let
-        toLogoLine =
-            t [ Font.size logoFontSize ]
-    in
-    column [] (List.map toLogoLine Logo.youGoddamnRight)
+    column
+        [ centerX, Font.size logoFontSize ]
+        (List.map t_ Logo.youGoddamnRight)
 
 
-title : Element Msg
-title =
+title : Int -> Element Msg
+title titleFontSize =
     column
         [ centerX
-        , Font.size 24
+        , Font.size titleFontSize
         , padding 10
         , Background.color Color.elevatedGrey
         ]
