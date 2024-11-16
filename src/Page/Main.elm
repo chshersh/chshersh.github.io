@@ -14,19 +14,29 @@ import View.Element exposing (..)
 import View.SayMyName as Logo
 
 
-type alias ResponsiveConfig =
-    { logoFontSize : Int
-    , titleFontSize : Int
-    }
-
-
-page : ResponsiveConfig -> Element Msg
-page cfg =
-    column [ centerX, centerY, spacing 40 ]
+pageDefault : Element Msg
+pageDefault =
+    column
+        [ centerX, centerY, spacing 40 ]
         [ html FontAwesome.Styles.css
-        , logo cfg.logoFontSize
-        , title cfg.titleFontSize
-        , links
+        , logo 20
+        , title 24
+        , linksRow
+            [ gitHub, youTube, x, twitch, blueSky, linkedIn, email ]
+        ]
+
+
+pagePhone : Element Msg
+pagePhone =
+    column
+        [ centerX, centerY, spacing 20 ]
+        [ html FontAwesome.Styles.css
+        , logo 8
+        , title 12
+        , column [ centerX, spacing 10 ]
+            [ linksRow [ gitHub, youTube, x, twitch ]
+            , linksRow [ blueSky, linkedIn, email ]
+            ]
         ]
 
 
@@ -59,14 +69,44 @@ title titleFontSize =
         ]
 
 
-links : Element Msg
-links =
-    row
-        [ centerX
-        , Font.size 24
-        , spacing 10
-        ]
-        (List.map social Social.all)
+linksRow : List (Element Msg) -> Element Msg
+linksRow =
+    row [ centerX, Font.size 24, spacing 10 ]
+
+
+gitHub : Element Msg
+gitHub =
+    social Social.gitHub
+
+
+youTube : Element Msg
+youTube =
+    social Social.youTube
+
+
+x : Element Msg
+x =
+    social Social.x
+
+
+twitch : Element Msg
+twitch =
+    social Social.twitch
+
+
+blueSky : Element Msg
+blueSky =
+    social Social.blueSky
+
+
+linkedIn : Element Msg
+linkedIn =
+    social Social.linkedIn
+
+
+email : Element Msg
+email =
+    social Social.email
 
 
 social : Social.T -> Element Msg

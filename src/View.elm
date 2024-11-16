@@ -5,7 +5,7 @@ import Element.Background as Background
 import Html exposing (Html)
 import Model exposing (Model)
 import Model.Msg exposing (Msg)
-import Page.Main exposing (page)
+import Page.Main exposing (pageDefault, pagePhone)
 import View.Color as Color
 
 
@@ -42,31 +42,19 @@ view model =
 
 phoneLayout : Element Msg
 phoneLayout =
-    page
-        { logoFontSize = 8
-        , titleFontSize = 12
-        }
+    pagePhone
 
 
 tabletLayout : Element Msg
 tabletLayout =
-    page
-        { logoFontSize = 20
-        , titleFontSize = 24
-        }
+    pageDefault
 
 
 desktopLayout : Element Msg
 desktopLayout =
-    page
-        { logoFontSize = 20
-        , titleFontSize = 24
-        }
+    pageDefault
 
 
 bigDesktopLayout : Element Msg
 bigDesktopLayout =
-    page
-        { logoFontSize = 20
-        , titleFontSize = 24
-        }
+    pageDefault
