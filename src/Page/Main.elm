@@ -25,7 +25,7 @@ pageDefault model =
     column
         [ centerX, width fill, height fill, spacing 50 ]
         [ html FontAwesome.Styles.css
-        , column [ height (fillPortion 3), centerX, width fill, spacing 30 ]
+        , column [ height (fillPortion 4), centerX, width fill, spacing 30 ]
             [ logo 20
             , title 24
             , linksRow
@@ -141,7 +141,7 @@ icon i =
 
 menu : Model -> Element Msg
 menu model =
-    row [ width fill, height (fillPortion 2), spacing 10 ]
+    row [ width fill, height (fillPortion 3), spacing 10 ]
         [ column
             [ centerX
             , paddingEach { edges | left = 20 }
@@ -162,7 +162,7 @@ menuButton _ info =
         [ centerX
         , width fill
         , Font.size 20
-        , padding 10
+        , paddingEach { top = 5, bottom = 5, left = 15, right = 15 }
         , Border.rounded 16
         , Background.color Color.elevatedGrey
         , Font.color Color.gainsboro
@@ -179,19 +179,28 @@ viewInfo info =
         About ->
             about
 
-        _ ->
-            t [ width fill, height fill, Background.color Color.elevatedGrey, padding 10 ] (showInfo info)
+        Blog ->
+            t [ width fill, height fill, Background.color Color.elevatedGrey, padding 10 ]
+                "Magic dwarfs are working really hard on this section!"
 
 
 about : Element msg
 about =
+    column [ width fill, height fill, Background.color Color.elevatedGrey, spacing 10 ]
+        [ aboutText
+        , row [ paddingEach { edges | left = 15 } ] [ downloadCV ]
+        ]
+
+
+aboutText : Element msg
+aboutText =
     let
         bold =
             t [ Font.bold ]
     in
     code <|
         [ paragraph []
-            [ t_ "Hi, I'm Dmitrii (he/him). This entire website is written in "
+            [ t_ "Hi, I'm Dmitrii (he/him), based in London, UK. This entire website is written in "
             , bold "Elm"
             , t_ ", and this is how you know I'm a nerd."
             ]
@@ -234,3 +243,24 @@ about =
             ++ [ t_ ""
                , t_ "All opinions are my own."
                ]
+
+
+downloadCV : Element msg
+downloadCV =
+    download
+        [ Font.size 20
+        , paddingEach { top = 5, bottom = 5, left = 15, right = 15 }
+        , Border.rounded 4
+        , Border.color Color.gainsboro
+        , Border.width 2
+        , Background.color Color.elevatedGrey
+        , Font.color Color.gainsboro
+        , mouseOver
+            [ Background.color Color.yellow
+            , Border.color Color.yellow
+            , Font.color Color.elevatedGrey
+            ]
+        ]
+        { url = "/files/CV_Dmitrii_Kovanikov.pdf"
+        , label = el [ Font.family monoFont, centerX ] (text "🗎 Download CV")
+        }

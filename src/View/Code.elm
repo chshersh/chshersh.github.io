@@ -17,7 +17,6 @@ code items =
     in
     column
         [ width fill
-        , height fill
         , Background.color Color.elevatedGrey
         , padding 10
         , spacing 5
