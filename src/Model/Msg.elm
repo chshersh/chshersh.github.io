@@ -1,11 +1,9 @@
 module Model.Msg exposing (..)
 
 import Model.Dimensions exposing (Dimensions)
-import Time
+import Model.Info exposing (Info)
 
 
 type Msg
     = SetScreenSize Dimensions
-    | AnimationTick Time.Posix
-    | Drop
-    | AboutClicked
+    | Selected Info
