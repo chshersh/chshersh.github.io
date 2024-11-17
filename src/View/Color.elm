@@ -18,6 +18,11 @@ elevatedGrey =
     grey 30
 
 
+suvaGrey : Color
+suvaGrey =
+    grey 145
+
+
 gainsboro : Color
 gainsboro =
     grey 226

@@ -5,6 +5,7 @@ import Browser.Events as Events
 import Element exposing (classifyDevice)
 import Model exposing (Model)
 import Model.Dimensions exposing (Dimensions)
+import Model.Info exposing (Info(..))
 import Model.Msg exposing (Msg(..))
 import View exposing (view)
 
@@ -32,10 +33,11 @@ init dimensions =
     let
         device =
             classifyDevice dimensions
-    in
-    let
+
         model =
-            { device = device }
+            { device = device
+            , info = About
+            }
     in
     ( model
     , Cmd.none
@@ -47,18 +49,22 @@ init dimensions =
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg _ =
+update msg model =
     case msg of
+        Selected info ->
+            ( { model | info = info }
+            , Cmd.none
+            )
+
         SetScreenSize dimensions ->
             let
                 device =
                     classifyDevice dimensions
+
+                newModel =
+                    { model | device = device }
             in
-            let
-                model =
-                    { device = device }
-            in
-            ( model, Cmd.none )
+            ( newModel, Cmd.none )
 
 
 
@@ -67,4 +73,6 @@ update msg _ =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    Sub.batch [ Events.onResize (\w h -> SetScreenSize { width = w, height = h }) ]
+    Sub.batch
+        [ Events.onResize (\w h -> SetScreenSize { width = w, height = h })
+        ]

@@ -9,13 +9,19 @@ import View.Color exposing (..)
 import View.Font exposing (monoFont)
 
 
+mono : List (Element.Attribute msg) -> String -> Element msg
+mono attrs s =
+    el (Font.family monoFont :: attrs) (Element.text s)
+
+
 t : List (Element.Attribute msg) -> String -> Element msg
-t attrs s =
-    let
-        customAttrs =
-            [ Font.family monoFont, Font.color gainsboro ]
-    in
-    el (customAttrs ++ attrs) (Element.text s)
+t attrs =
+    mono (Font.color gainsboro :: attrs)
+
+
+tSecondary : List (Element.Attribute msg) -> String -> Element msg
+tSecondary attrs =
+    mono (Font.color suvaGrey :: attrs)
 
 
 t_ : String -> Element msg

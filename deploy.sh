@@ -20,16 +20,21 @@ git clone \
   https://github.com/chshersh/chshersh.github.io.git \
   "$clone_dir"
 
+# Clean up repo before copy
+rm -r $clone_dir/*
+
 # Copy all relevant files to the cloned repo
-cp index.html "$clone_dir/index.html"
 cp CNAME "$clone_dir/CNAME"
-cp build/main.js "$clone_dir/build/main.js"
+cp index.html "$clone_dir/index.html"
+mkdir -p "$clone_dir/build" && cp build/main.js "$clone_dir/build/main.js"
+mkdir -p "$clone_dir/build" && cp files/CV_Dmitrii_Kovanikov.pdf "$clone_dir/files/CV_Dmitrii_Kovanikov.pdf"
 
 # Step into cloned dir and add all new files
 cd "$clone_dir"
+git add CNAME
 git add index.html
 git add build/main.js
-git add CNAME
+git add files/CV_Dmitrii_Kovanikov.pdf
 
 # Prepare repo and push
 git config user.name "github-actions[bot]"
