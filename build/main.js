@@ -12385,7 +12385,13 @@ var $author$project$Page$Main$aboutText = function () {
 						bold('Kotlin.')
 					])),
 				$author$project$View$Element$t_(''),
-				$author$project$View$Element$t_('A brief summary of my experience:'),
+				A2(
+				$mdgriffith$elm_ui$Element$paragraph,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$author$project$View$Element$t_('A brief summary of my experience:')
+					])),
 				$author$project$View$Element$t_('')
 			]),
 		_Utils_ap(
@@ -13062,13 +13068,15 @@ var $author$project$Page$Layout$phone = function (_v0) {
 		$mdgriffith$elm_ui$Element$column,
 		_List_fromArray(
 			[
+				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+				$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
 				$mdgriffith$elm_ui$Element$centerX,
 				$mdgriffith$elm_ui$Element$centerY,
 				$mdgriffith$elm_ui$Element$spacing(20),
 				$mdgriffith$elm_ui$Element$paddingEach(
 				_Utils_update(
 					$author$project$Page$Main$edges,
-					{be: 20, bw: 20})),
+					{be: 30, bw: 30})),
 				$mdgriffith$elm_ui$Element$scrollbarY
 			]),
 		_List_fromArray(
@@ -13108,13 +13116,15 @@ var $author$project$Page$Layout$phone = function (_v0) {
 				$mdgriffith$elm_ui$Element$column,
 				_List_fromArray(
 					[
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
 						$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
+						$mdgriffith$elm_ui$Element$centerX,
 						$mdgriffith$elm_ui$Element$Background$color($author$project$View$Color$elevatedGrey),
 						$mdgriffith$elm_ui$Element$spacing(20),
 						$mdgriffith$elm_ui$Element$paddingEach(
 						_Utils_update(
 							$author$project$Page$Main$edges,
-							{aZ: 20, be: 20, bw: 20, ds: 20}))
+							{aZ: 20, be: 10, bw: 10, ds: 20}))
 					]),
 				$author$project$Page$Main$aboutText),
 				A2(
