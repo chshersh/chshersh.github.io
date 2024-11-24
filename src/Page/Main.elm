@@ -61,7 +61,11 @@ edges =
 logo : Int -> Element Msg
 logo logoFontSize =
     column
-        [ centerX, Font.size logoFontSize, alignBottom ]
+        [ centerX
+        , Font.size logoFontSize
+        , paddingEach { edges | top = 20 }
+        , alignBottom
+        ]
         (List.map t_ Logo.youGoddamnRight)
 
 
@@ -186,7 +190,13 @@ viewInfo info =
 
 about : Element msg
 about =
-    column [ width fill, height fill, Background.color Color.elevatedGrey, spacing 10 ]
+    column
+        [ width fill
+        , height fill
+        , Background.color Color.elevatedGrey
+        , spacing 10
+        , paddingEach { edges | top = 5, bottom = 5 }
+        ]
         [ aboutText
         , row [ paddingEach { edges | left = 15 } ] [ downloadCV ]
         ]
