@@ -51,7 +51,6 @@ phone _ =
         , spacing 20
         , paddingEach { edges | left = 30, right = 30 }
         , scrollbarY
-        , explain Debug.todo
         ]
         [ html FontAwesome.Styles.css
         , logo [ Font.size 8 ]
