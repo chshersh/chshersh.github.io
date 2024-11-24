@@ -28,36 +28,32 @@ edges =
     }
 
 
-logo : Int -> Element Msg
-logo logoFontSize =
+logo : List (Attribute msg) -> Element msg
+logo attrs =
     column
-        [ centerX
-        , Font.size logoFontSize
-        , paddingEach { edges | top = 20 }
-        , alignBottom
-        ]
+        ([ centerX, paddingEach { edges | top = 20 } ] ++ attrs)
         (List.map t_ Logo.youGoddamnRight)
 
 
-title : Int -> Element Msg
-title titleFontSize =
+title : List (Attribute msg) -> Element msg
+title attrs =
     column
-        [ centerX
-        , Font.size titleFontSize
-        , padding 10
-        , spacing 3
-        , Background.color Color.elevatedGrey
-        , alignBottom
-        ]
+        ([ centerX
+         , padding 10
+         , spacing 3
+         , Background.color Color.elevatedGrey
+         ]
+            ++ attrs
+        )
         [ t [ centerX ] "Dmitrii Kovanikov"
         , t [ centerX ] "Senior Software Engineer @ Bloomberg"
         , t [ centerX, Font.color Color.suvaGrey ] "Functional Programming Adept"
         ]
 
 
-linksRow : List (Element Msg) -> Element Msg
-linksRow =
-    row [ centerX, Font.size 24, spacing 10, alignBottom ]
+linksRow : List (Attribute msg) -> List (Element msg) -> Element msg
+linksRow attrs =
+    row ([ centerX, Font.size 24, spacing 10 ] ++ attrs)
 
 
 gitHub : Element Msg

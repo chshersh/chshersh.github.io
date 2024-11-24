@@ -59,4 +59,4 @@ desktopLayout =
 
 bigDesktopLayout : Model -> Element Msg
 bigDesktopLayout =
-    Layout.desktop
+    Layout.bigDesktop
