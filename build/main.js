@@ -12677,6 +12677,8 @@ var $author$project$Page$Main$menu = function (model) {
 					]))
 			]));
 };
+var $mdgriffith$elm_ui$Internal$Flag$overflow = $mdgriffith$elm_ui$Internal$Flag$flag(20);
+var $mdgriffith$elm_ui$Element$scrollbarY = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$overflow, $mdgriffith$elm_ui$Internal$Style$classes.c$);
 var $author$project$Page$Main$title = function (titleFontSize) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
@@ -12746,7 +12748,8 @@ var $author$project$Page$Main$pageDefault = function (model) {
 				$mdgriffith$elm_ui$Element$centerX,
 				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
 				$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
-				$mdgriffith$elm_ui$Element$spacing(50)
+				$mdgriffith$elm_ui$Element$spacing(50),
+				$mdgriffith$elm_ui$Element$scrollbarY
 			]),
 		_List_fromArray(
 			[
