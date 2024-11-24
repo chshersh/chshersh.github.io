@@ -211,7 +211,7 @@ aboutText =
         , bold "Kotlin."
         ]
     , t_ ""
-    , t_ "A brief summary of my experience:"
+    , paragraph [] [t_ "A brief summary of my experience:" ]
     , t_ ""
     ]
         ++ unorderedList

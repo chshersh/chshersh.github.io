@@ -44,11 +44,14 @@ desktop model =
 phone : Model -> Element Msg
 phone _ =
     column
-        [ centerX
+        [ width fill
+        , height fill
+        , centerX
         , centerY
         , spacing 20
-        , paddingEach { edges | left = 20, right = 20 }
+        , paddingEach { edges | left = 30, right = 30 }
         , scrollbarY
+        , explain Debug.todo
         ]
         [ html FontAwesome.Styles.css
         , logo [ Font.size 8 ]
@@ -58,10 +61,12 @@ phone _ =
             , linksRow [] [ blueSky, linkedIn, email ]
             ]
         , column
-            [ height fill
+            [ width fill
+            , height fill
+            , centerX
             , Background.color Color.elevatedGrey
             , spacing 20
-            , paddingEach { edges | top = 20, bottom = 20, left = 20, right = 20 }
+            , paddingEach { edges | top = 20, bottom = 20, left = 10, right = 10 }
             ]
             aboutText
         , row [ centerX, paddingEach { edges | bottom = 20 } ] [ downloadCV ]
