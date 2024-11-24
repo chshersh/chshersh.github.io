@@ -23,7 +23,7 @@ import View.SayMyName as Logo
 pageDefault : Model -> Element Msg
 pageDefault model =
     column
-        [ centerX, width fill, height fill, spacing 50 ]
+        [ centerX, width fill, height fill, spacing 50, scrollbarY ]
         [ html FontAwesome.Styles.css
         , column [ height (fillPortion 4), centerX, width fill, spacing 30 ]
             [ logo 20
