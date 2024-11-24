@@ -7,7 +7,6 @@ import Element.Events exposing (..)
 import Element.Font as Font
 import Element.Input exposing (button)
 import FontAwesome as Icon exposing (Icon)
-import FontAwesome.Styles
 import Model exposing (Model)
 import Model.Info exposing (Info(..), showInfo)
 import Model.Msg exposing (Msg(..))
@@ -18,35 +17,6 @@ import View.Element exposing (..)
 import View.Font exposing (monoFont)
 import View.List exposing (unorderedList)
 import View.SayMyName as Logo
-
-
-pageDefault : Model -> Element Msg
-pageDefault model =
-    column
-        [ centerX, width fill, height fill, spacing 50, scrollbarY ]
-        [ html FontAwesome.Styles.css
-        , column [ height (fillPortion 4), centerX, width fill, spacing 30 ]
-            [ logo 20
-            , title 24
-            , linksRow
-                [ gitHub, youTube, x, twitch, blueSky, linkedIn, email ]
-            ]
-        , menu model
-        ]
-
-
-pagePhone : Model -> Element Msg
-pagePhone _ =
-    column
-        [ centerX, centerY, spacing 20 ]
-        [ html FontAwesome.Styles.css
-        , logo 8
-        , title 12
-        , column [ centerX, spacing 10 ]
-            [ linksRow [ gitHub, youTube, x, twitch ]
-            , linksRow [ blueSky, linkedIn, email ]
-            ]
-        ]
 
 
 edges : { top : Int, right : Int, bottom : Int, left : Int }

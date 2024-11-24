@@ -5,7 +5,7 @@ import Element.Background as Background
 import Html exposing (Html)
 import Model exposing (Model)
 import Model.Msg exposing (Msg)
-import Page.Main exposing (pageDefault, pagePhone)
+import Page.Layout as Layout
 import View.Color as Color
 
 
@@ -44,19 +44,19 @@ view model =
 
 phoneLayout : Model -> Element Msg
 phoneLayout =
-    pagePhone
+    Layout.phone
 
 
 tabletLayout : Model -> Element Msg
 tabletLayout =
-    pageDefault
+    Layout.desktop
 
 
 desktopLayout : Model -> Element Msg
 desktopLayout =
-    pageDefault
+    Layout.desktop
 
 
 bigDesktopLayout : Model -> Element Msg
 bigDesktopLayout =
-    pageDefault
+    Layout.desktop
