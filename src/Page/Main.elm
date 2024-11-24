@@ -163,62 +163,66 @@ about =
         , spacing 10
         , paddingEach { edges | top = 5, bottom = 5 }
         ]
-        [ aboutText
+        [ aboutCode
         , row [ paddingEach { edges | left = 15 } ] [ downloadCV ]
         ]
 
 
-aboutText : Element msg
+aboutCode : Element msg
+aboutCode =
+    code aboutText
+
+
+aboutText : List (Element msg)
 aboutText =
     let
         bold =
             t [ Font.bold ]
     in
-    code <|
-        [ paragraph []
-            [ t_ "Hi, I'm Dmitrii (he/him), based in London, UK. This entire website is written in "
-            , bold "Elm"
-            , t_ ", and this is how you know I'm a nerd."
-            ]
-        , paragraph []
-            [ t_ "I'm a Senior Software Engineer at Bloomberg. At my job, I primarily use "
-            , bold "OCaml"
-            , t_ " alongside "
-            , bold "Python"
-            , t_ ", "
-            , bold "TypeScript"
-            , t_ " and "
-            , bold "C++."
-            ]
-        , paragraph []
-            [ t_ "I'm passionate about Functional Programming, and I have professional experience with "
-            , bold "OCaml"
-            , t_ ", "
-            , bold "Haskell"
-            , t_ ", "
-            , bold "Elm"
-            , t_ ", "
-            , bold "PureScript"
-            , t_ ", "
-            , bold "Nix"
-            , t_ ", "
-            , bold "Rust"
-            , t_ " and "
-            , bold "Kotlin."
-            ]
-        , t_ ""
-        , t_ "A brief summary of my experience:"
-        , t_ ""
+    [ paragraph []
+        [ t_ "Hi, I'm Dmitrii (he/him), based in London, UK. This entire website is written in "
+        , bold "Elm"
+        , t_ ", and this is how you know I'm a nerd."
         ]
-            ++ unorderedList
-                [ paragraph [] [ bold "10+", t_ " years of professional experience" ]
-                , paragraph [] [ bold "10+", t_ " talks on multiple conferences and meetups (YOW! Lambda Jam, Haskell Love et al.)" ]
-                , paragraph [] [ bold "7", t_ " Functional Programming courses created" ]
-                , paragraph [] [ bold "50+", t_ " open-source projects authored" ]
-                ]
-            ++ [ t_ ""
-               , t_ "All opinions are my own."
-               ]
+    , paragraph []
+        [ t_ "I'm a Senior Software Engineer at Bloomberg. At my job, I primarily use "
+        , bold "OCaml"
+        , t_ " alongside "
+        , bold "Python"
+        , t_ ", "
+        , bold "TypeScript"
+        , t_ " and "
+        , bold "C++."
+        ]
+    , paragraph []
+        [ t_ "I'm passionate about Functional Programming, and I have professional experience with "
+        , bold "OCaml"
+        , t_ ", "
+        , bold "Haskell"
+        , t_ ", "
+        , bold "Elm"
+        , t_ ", "
+        , bold "PureScript"
+        , t_ ", "
+        , bold "Nix"
+        , t_ ", "
+        , bold "Rust"
+        , t_ " and "
+        , bold "Kotlin."
+        ]
+    , t_ ""
+    , t_ "A brief summary of my experience:"
+    , t_ ""
+    ]
+        ++ unorderedList
+            [ paragraph [] [ bold "10+", t_ " years of professional experience" ]
+            , paragraph [] [ bold "10+", t_ " talks on multiple conferences and meetups (YOW! Lambda Jam, Haskell Love et al.)" ]
+            , paragraph [] [ bold "7", t_ " Functional Programming courses created" ]
+            , paragraph [] [ bold "50+", t_ " open-source projects authored" ]
+            ]
+        ++ [ t_ ""
+           , t_ "All opinions are my own."
+           ]
 
 
 downloadCV : Element msg

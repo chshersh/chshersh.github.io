@@ -1,11 +1,13 @@
 module Page.Layout exposing (..)
 
 import Element exposing (..)
+import Element.Background as Background
 import Element.Font as Font
 import FontAwesome.Styles
 import Model exposing (Model)
 import Model.Msg exposing (Msg)
 import Page.Main exposing (..)
+import View.Color as Color
 
 
 bigDesktop : Model -> Element Msg
@@ -42,7 +44,12 @@ desktop model =
 phone : Model -> Element Msg
 phone _ =
     column
-        [ centerX, centerY, spacing 20 ]
+        [ centerX
+        , centerY
+        , spacing 20
+        , paddingEach { edges | left = 20, right = 20 }
+        , scrollbarY
+        ]
         [ html FontAwesome.Styles.css
         , logo [ Font.size 8 ]
         , title [ Font.size 12 ]
@@ -50,4 +57,12 @@ phone _ =
             [ linksRow [] [ gitHub, youTube, x, twitch ]
             , linksRow [] [ blueSky, linkedIn, email ]
             ]
+        , column
+            [ height fill
+            , Background.color Color.elevatedGrey
+            , spacing 20
+            , paddingEach { edges | top = 20, bottom = 20, left = 20, right = 20 }
+            ]
+            aboutText
+        , row [ centerX, paddingEach { edges | bottom = 20 } ] [ downloadCV ]
         ]
