@@ -5669,6 +5669,11 @@ var $author$project$Main$update = F2(
 			return _Utils_Tuple2(newModel, $elm$core$Platform$Cmd$none);
 		}
 	});
+var $mdgriffith$elm_ui$Internal$Model$AlignY = function (a) {
+	return {$: 5, a: a};
+};
+var $mdgriffith$elm_ui$Internal$Model$Bottom = 2;
+var $mdgriffith$elm_ui$Element$alignBottom = $mdgriffith$elm_ui$Internal$Model$AlignY(2);
 var $lattyware$elm_fontawesome$FontAwesome$IconDef = F4(
 	function (prefix, name, size, paths) {
 		return {H: name, cT: paths, cU: prefix, c3: size};
@@ -11593,9 +11598,6 @@ var $mdgriffith$elm_ui$Internal$Flag$hover = $mdgriffith$elm_ui$Internal$Flag$fl
 var $mdgriffith$elm_ui$Internal$Model$AlignX = function (a) {
 	return {$: 6, a: a};
 };
-var $mdgriffith$elm_ui$Internal$Model$AlignY = function (a) {
-	return {$: 5, a: a};
-};
 var $mdgriffith$elm_ui$Internal$Model$Attr = function (a) {
 	return {$: 1, a: a};
 };
@@ -11899,8 +11901,6 @@ var $lattyware$elm_fontawesome$FontAwesome$Brands$Definitions$linkedin = A4(
 var $lattyware$elm_fontawesome$FontAwesome$Brands$linkedin = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Brands$Definitions$linkedin);
 var $author$project$Model$Social$linkedIn = {F: $lattyware$elm_fontawesome$FontAwesome$Brands$linkedin, H: 'LinkedIn', L: 'https://www.linkedin.com/in/chshersh/'};
 var $author$project$Page$Main$linkedIn = $author$project$Page$Main$social($author$project$Model$Social$linkedIn);
-var $mdgriffith$elm_ui$Internal$Model$Bottom = 2;
-var $mdgriffith$elm_ui$Element$alignBottom = $mdgriffith$elm_ui$Internal$Model$AlignY(2);
 var $mdgriffith$elm_ui$Internal$Model$AsRow = 0;
 var $mdgriffith$elm_ui$Internal$Model$asRow = 0;
 var $mdgriffith$elm_ui$Element$row = F2(
@@ -11950,14 +11950,17 @@ var $mdgriffith$elm_ui$Element$spacing = function (x) {
 			x,
 			x));
 };
-var $author$project$Page$Main$linksRow = $mdgriffith$elm_ui$Element$row(
-	_List_fromArray(
-		[
-			$mdgriffith$elm_ui$Element$centerX,
-			$mdgriffith$elm_ui$Element$Font$size(24),
-			$mdgriffith$elm_ui$Element$spacing(10),
-			$mdgriffith$elm_ui$Element$alignBottom
-		]));
+var $author$project$Page$Main$linksRow = function (attrs) {
+	return $mdgriffith$elm_ui$Element$row(
+		_Utils_ap(
+			_List_fromArray(
+				[
+					$mdgriffith$elm_ui$Element$centerX,
+					$mdgriffith$elm_ui$Element$Font$size(24),
+					$mdgriffith$elm_ui$Element$spacing(10)
+				]),
+			attrs));
+};
 var $author$project$Page$Main$edges = {ad: 0, af: 0, ax: 0, aj: 0};
 var $mdgriffith$elm_ui$Internal$Model$paddingName = F4(
 	function (top, right, bottom, left) {
@@ -12086,19 +12089,19 @@ var $author$project$View$Element$t = function (attrs) {
 var $author$project$View$Element$t_ = $author$project$View$Element$t(_List_Nil);
 var $author$project$View$SayMyName$youGoddamnRight = _List_fromArray(
 	['███████╗██╗   ██╗███████╗██╗   ██╗███████╗██████╗ ███████╗██╗   ██╗', '██╔════╝██║   ██║██╔════╝██║   ██║██╔════╝██╔══██╗██╔════╝██║   ██║', '██║     ████████║███████╗████████║███████╗██████╔╝███████╗████████║', '██║     ██╔═══██║╚════██║██╔═══██║██╔════╝██╔══██╗╚════██║██╔═══██║', '███████╗██║   ██║███████║██║   ██║███████╗██║  ██║███████║██║   ██║', '╚══════╝╚═╝   ╚═╝╚══════╝╚═╝   ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚═╝   ╚═╝']);
-var $author$project$Page$Main$logo = function (logoFontSize) {
+var $author$project$Page$Main$logo = function (attrs) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
-		_List_fromArray(
-			[
-				$mdgriffith$elm_ui$Element$centerX,
-				$mdgriffith$elm_ui$Element$Font$size(logoFontSize),
-				$mdgriffith$elm_ui$Element$paddingEach(
-				_Utils_update(
-					$author$project$Page$Main$edges,
-					{aj: 20})),
-				$mdgriffith$elm_ui$Element$alignBottom
-			]),
+		_Utils_ap(
+			_List_fromArray(
+				[
+					$mdgriffith$elm_ui$Element$centerX,
+					$mdgriffith$elm_ui$Element$paddingEach(
+					_Utils_update(
+						$author$project$Page$Main$edges,
+						{aj: 20}))
+				]),
+			attrs),
 		A2($elm$core$List$map, $author$project$View$Element$t_, $author$project$View$SayMyName$youGoddamnRight));
 };
 var $author$project$Model$Info$Blog = 1;
@@ -12687,18 +12690,18 @@ var $author$project$Page$Main$menu = function (model) {
 };
 var $mdgriffith$elm_ui$Internal$Flag$overflow = $mdgriffith$elm_ui$Internal$Flag$flag(20);
 var $mdgriffith$elm_ui$Element$scrollbarY = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$overflow, $mdgriffith$elm_ui$Internal$Style$classes.c$);
-var $author$project$Page$Main$title = function (titleFontSize) {
+var $author$project$Page$Main$title = function (attrs) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
-		_List_fromArray(
-			[
-				$mdgriffith$elm_ui$Element$centerX,
-				$mdgriffith$elm_ui$Element$Font$size(titleFontSize),
-				$mdgriffith$elm_ui$Element$padding(10),
-				$mdgriffith$elm_ui$Element$spacing(3),
-				$mdgriffith$elm_ui$Element$Background$color($author$project$View$Color$elevatedGrey),
-				$mdgriffith$elm_ui$Element$alignBottom
-			]),
+		_Utils_ap(
+			_List_fromArray(
+				[
+					$mdgriffith$elm_ui$Element$centerX,
+					$mdgriffith$elm_ui$Element$padding(10),
+					$mdgriffith$elm_ui$Element$spacing(3),
+					$mdgriffith$elm_ui$Element$Background$color($author$project$View$Color$elevatedGrey)
+				]),
+			attrs),
 		_List_fromArray(
 			[
 				A2(
@@ -12748,7 +12751,7 @@ var $lattyware$elm_fontawesome$FontAwesome$Brands$Definitions$youtube = A4(
 var $lattyware$elm_fontawesome$FontAwesome$Brands$youtube = $lattyware$elm_fontawesome$FontAwesome$present($lattyware$elm_fontawesome$FontAwesome$Brands$Definitions$youtube);
 var $author$project$Model$Social$youTube = {F: $lattyware$elm_fontawesome$FontAwesome$Brands$youtube, H: 'YouTube', L: 'https://youtube.com/c/chshersh'};
 var $author$project$Page$Main$youTube = $author$project$Page$Main$social($author$project$Model$Social$youTube);
-var $author$project$Page$Main$pageDefault = function (model) {
+var $author$project$Page$Layout$bigDesktop = function (model) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
 		_List_fromArray(
@@ -12774,18 +12777,76 @@ var $author$project$Page$Main$pageDefault = function (model) {
 					]),
 				_List_fromArray(
 					[
-						$author$project$Page$Main$logo(20),
-						$author$project$Page$Main$title(24),
-						$author$project$Page$Main$linksRow(
+						$author$project$Page$Main$logo(
+						_List_fromArray(
+							[
+								$mdgriffith$elm_ui$Element$Font$size(20),
+								$mdgriffith$elm_ui$Element$alignBottom
+							])),
+						$author$project$Page$Main$title(
+						_List_fromArray(
+							[
+								$mdgriffith$elm_ui$Element$Font$size(24),
+								$mdgriffith$elm_ui$Element$alignBottom
+							])),
+						A2(
+						$author$project$Page$Main$linksRow,
+						_List_fromArray(
+							[$mdgriffith$elm_ui$Element$alignBottom]),
 						_List_fromArray(
 							[$author$project$Page$Main$gitHub, $author$project$Page$Main$youTube, $author$project$Page$Main$x, $author$project$Page$Main$twitch, $author$project$Page$Main$blueSky, $author$project$Page$Main$linkedIn, $author$project$Page$Main$email]))
 					])),
 				$author$project$Page$Main$menu(model)
 			]));
 };
-var $author$project$View$bigDesktopLayout = $author$project$Page$Main$pageDefault;
+var $author$project$View$bigDesktopLayout = $author$project$Page$Layout$bigDesktop;
 var $author$project$View$Color$darkGrey = $author$project$View$Color$grey(18);
-var $author$project$View$desktopLayout = $author$project$Page$Main$pageDefault;
+var $author$project$Page$Layout$desktop = function (model) {
+	return A2(
+		$mdgriffith$elm_ui$Element$column,
+		_List_fromArray(
+			[
+				$mdgriffith$elm_ui$Element$centerX,
+				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+				$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
+				$mdgriffith$elm_ui$Element$spacing(50),
+				$mdgriffith$elm_ui$Element$scrollbarY
+			]),
+		_List_fromArray(
+			[
+				$mdgriffith$elm_ui$Element$html($lattyware$elm_fontawesome$FontAwesome$Styles$css),
+				A2(
+				$mdgriffith$elm_ui$Element$column,
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$height(
+						$mdgriffith$elm_ui$Element$fillPortion(4)),
+						$mdgriffith$elm_ui$Element$centerX,
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+						$mdgriffith$elm_ui$Element$spacing(30)
+					]),
+				_List_fromArray(
+					[
+						$author$project$Page$Main$logo(
+						_List_fromArray(
+							[
+								$mdgriffith$elm_ui$Element$Font$size(20)
+							])),
+						$author$project$Page$Main$title(
+						_List_fromArray(
+							[
+								$mdgriffith$elm_ui$Element$Font$size(24)
+							])),
+						A2(
+						$author$project$Page$Main$linksRow,
+						_List_Nil,
+						_List_fromArray(
+							[$author$project$Page$Main$gitHub, $author$project$Page$Main$youTube, $author$project$Page$Main$x, $author$project$Page$Main$twitch, $author$project$Page$Main$blueSky, $author$project$Page$Main$linkedIn, $author$project$Page$Main$email]))
+					])),
+				$author$project$Page$Main$menu(model)
+			]));
+};
+var $author$project$View$desktopLayout = $author$project$Page$Layout$desktop;
 var $mdgriffith$elm_ui$Internal$Model$OnlyDynamic = F2(
 	function (a, b) {
 		return {$: 2, a: a, b: b};
@@ -12996,7 +13057,7 @@ var $mdgriffith$elm_ui$Element$layout = $mdgriffith$elm_ui$Element$layoutWith(
 	{bm: _List_Nil});
 var $mdgriffith$elm_ui$Internal$Model$CenterY = 1;
 var $mdgriffith$elm_ui$Element$centerY = $mdgriffith$elm_ui$Internal$Model$AlignY(1);
-var $author$project$Page$Main$pagePhone = function (_v0) {
+var $author$project$Page$Layout$phone = function (_v0) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
 		_List_fromArray(
@@ -13008,8 +13069,16 @@ var $author$project$Page$Main$pagePhone = function (_v0) {
 		_List_fromArray(
 			[
 				$mdgriffith$elm_ui$Element$html($lattyware$elm_fontawesome$FontAwesome$Styles$css),
-				$author$project$Page$Main$logo(8),
-				$author$project$Page$Main$title(12),
+				$author$project$Page$Main$logo(
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$Font$size(8)
+					])),
+				$author$project$Page$Main$title(
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$Font$size(12)
+					])),
 				A2(
 				$mdgriffith$elm_ui$Element$column,
 				_List_fromArray(
@@ -13019,17 +13088,21 @@ var $author$project$Page$Main$pagePhone = function (_v0) {
 					]),
 				_List_fromArray(
 					[
-						$author$project$Page$Main$linksRow(
+						A2(
+						$author$project$Page$Main$linksRow,
+						_List_Nil,
 						_List_fromArray(
 							[$author$project$Page$Main$gitHub, $author$project$Page$Main$youTube, $author$project$Page$Main$x, $author$project$Page$Main$twitch])),
-						$author$project$Page$Main$linksRow(
+						A2(
+						$author$project$Page$Main$linksRow,
+						_List_Nil,
 						_List_fromArray(
 							[$author$project$Page$Main$blueSky, $author$project$Page$Main$linkedIn, $author$project$Page$Main$email]))
 					]))
 			]));
 };
-var $author$project$View$phoneLayout = $author$project$Page$Main$pagePhone;
-var $author$project$View$tabletLayout = $author$project$Page$Main$pageDefault;
+var $author$project$View$phoneLayout = $author$project$Page$Layout$phone;
+var $author$project$View$tabletLayout = $author$project$Page$Layout$desktop;
 var $author$project$View$view = function (model) {
 	var device = model.a4;
 	var responsiveLayout = function () {
