@@ -13,7 +13,7 @@ import View.Color as Color
 bigDesktop : Model -> Element Msg
 bigDesktop model =
     column
-        [ centerX, width fill, height fill, spacing 50, scrollbarY ]
+        [ centerX, width fill, height fill, spacing 50 ]
         [ html FontAwesome.Styles.css
         , column [ height (fillPortion 4), centerX, width fill, spacing 30 ]
             [ logo [ Font.size 20, alignBottom ]
@@ -29,7 +29,7 @@ bigDesktop model =
 desktop : Model -> Element Msg
 desktop model =
     column
-        [ centerX, width fill, height fill, spacing 50, scrollbarY ]
+        [ centerX, width fill, height fill, spacing 50 ]
         [ html FontAwesome.Styles.css
         , column [ centerX, width fill, spacing 30 ]
             [ logo [ Font.size 20, alignTop ]
@@ -37,7 +37,7 @@ desktop model =
             , linksRow []
                 [ gitHub, youTube, x, twitch, blueSky, linkedIn, email ]
             ]
-        , menu [ alignTop, height fill ] model
+        , menu [ alignTop, height fill, clipY ] model
         ]
 
 

@@ -120,7 +120,12 @@ menu attrs model =
             [ menuButton model About
             , menuButton model Blog
             ]
-        , column [ width fill, height fill, paddingEach { edges | right = 20, bottom = 20 } ]
+        , column
+            [ width fill
+            , height (fill |> maximum 300)
+            , paddingEach { edges | right = 20, bottom = 20 }
+            , scrollbarY
+            ]
             [ viewInfo model.info
             ]
         ]
