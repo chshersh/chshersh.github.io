@@ -12649,51 +12649,52 @@ var $author$project$Page$Main$viewInfo = function (info) {
 			'Magic dwarfs are working really hard on this section!');
 	}
 };
-var $author$project$Page$Main$menu = function (model) {
-	return A2(
-		$mdgriffith$elm_ui$Element$row,
-		_List_fromArray(
-			[
-				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-				$mdgriffith$elm_ui$Element$height(
-				$mdgriffith$elm_ui$Element$fillPortion(3)),
-				$mdgriffith$elm_ui$Element$spacing(10)
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$mdgriffith$elm_ui$Element$column,
-				_List_fromArray(
-					[
-						$mdgriffith$elm_ui$Element$centerX,
-						$mdgriffith$elm_ui$Element$paddingEach(
-						_Utils_update(
-							$author$project$Page$Main$edges,
-							{be: 20})),
-						$mdgriffith$elm_ui$Element$spacing(10)
-					]),
-				_List_fromArray(
-					[
-						A2($author$project$Page$Main$menuButton, model, 0),
-						A2($author$project$Page$Main$menuButton, model, 1)
-					])),
-				A2(
-				$mdgriffith$elm_ui$Element$column,
+var $author$project$Page$Main$menu = F2(
+	function (attrs, model) {
+		return A2(
+			$mdgriffith$elm_ui$Element$row,
+			_Utils_ap(
 				_List_fromArray(
 					[
 						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-						$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
-						$mdgriffith$elm_ui$Element$paddingEach(
-						_Utils_update(
-							$author$project$Page$Main$edges,
-							{aZ: 20, bw: 20}))
+						$mdgriffith$elm_ui$Element$spacing(10)
 					]),
-				_List_fromArray(
-					[
-						$author$project$Page$Main$viewInfo(model.bb)
-					]))
-			]));
-};
+				attrs),
+			_List_fromArray(
+				[
+					A2(
+					$mdgriffith$elm_ui$Element$column,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$centerX,
+							$mdgriffith$elm_ui$Element$paddingEach(
+							_Utils_update(
+								$author$project$Page$Main$edges,
+								{be: 20})),
+							$mdgriffith$elm_ui$Element$spacing(10)
+						]),
+					_List_fromArray(
+						[
+							A2($author$project$Page$Main$menuButton, model, 0),
+							A2($author$project$Page$Main$menuButton, model, 1)
+						])),
+					A2(
+					$mdgriffith$elm_ui$Element$column,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+							$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
+							$mdgriffith$elm_ui$Element$paddingEach(
+							_Utils_update(
+								$author$project$Page$Main$edges,
+								{aZ: 20, bw: 20}))
+						]),
+					_List_fromArray(
+						[
+							$author$project$Page$Main$viewInfo(model.bb)
+						]))
+				]));
+	});
 var $mdgriffith$elm_ui$Internal$Flag$overflow = $mdgriffith$elm_ui$Internal$Flag$flag(20);
 var $mdgriffith$elm_ui$Element$scrollbarY = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$overflow, $mdgriffith$elm_ui$Internal$Style$classes.c_);
 var $author$project$Page$Main$title = function (attrs) {
@@ -12802,11 +12803,20 @@ var $author$project$Page$Layout$bigDesktop = function (model) {
 						_List_fromArray(
 							[$author$project$Page$Main$gitHub, $author$project$Page$Main$youTube, $author$project$Page$Main$x, $author$project$Page$Main$twitch, $author$project$Page$Main$blueSky, $author$project$Page$Main$linkedIn, $author$project$Page$Main$email]))
 					])),
-				$author$project$Page$Main$menu(model)
+				A2(
+				$author$project$Page$Main$menu,
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$height(
+						$mdgriffith$elm_ui$Element$fillPortion(3))
+					]),
+				model)
 			]));
 };
 var $author$project$View$bigDesktopLayout = $author$project$Page$Layout$bigDesktop;
 var $author$project$View$Color$darkGrey = $author$project$View$Color$grey(18);
+var $mdgriffith$elm_ui$Internal$Model$Top = 0;
+var $mdgriffith$elm_ui$Element$alignTop = $mdgriffith$elm_ui$Internal$Model$AlignY(0);
 var $author$project$Page$Layout$desktop = function (model) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
@@ -12825,8 +12835,6 @@ var $author$project$Page$Layout$desktop = function (model) {
 				$mdgriffith$elm_ui$Element$column,
 				_List_fromArray(
 					[
-						$mdgriffith$elm_ui$Element$height(
-						$mdgriffith$elm_ui$Element$fillPortion(4)),
 						$mdgriffith$elm_ui$Element$centerX,
 						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
 						$mdgriffith$elm_ui$Element$spacing(30)
@@ -12836,12 +12844,14 @@ var $author$project$Page$Layout$desktop = function (model) {
 						$author$project$Page$Main$logo(
 						_List_fromArray(
 							[
-								$mdgriffith$elm_ui$Element$Font$size(20)
+								$mdgriffith$elm_ui$Element$Font$size(20),
+								$mdgriffith$elm_ui$Element$alignTop
 							])),
 						$author$project$Page$Main$title(
 						_List_fromArray(
 							[
-								$mdgriffith$elm_ui$Element$Font$size(24)
+								$mdgriffith$elm_ui$Element$Font$size(24),
+								$mdgriffith$elm_ui$Element$alignTop
 							])),
 						A2(
 						$author$project$Page$Main$linksRow,
@@ -12849,7 +12859,14 @@ var $author$project$Page$Layout$desktop = function (model) {
 						_List_fromArray(
 							[$author$project$Page$Main$gitHub, $author$project$Page$Main$youTube, $author$project$Page$Main$x, $author$project$Page$Main$twitch, $author$project$Page$Main$blueSky, $author$project$Page$Main$linkedIn, $author$project$Page$Main$email]))
 					])),
-				$author$project$Page$Main$menu(model)
+				A2(
+				$author$project$Page$Main$menu,
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$alignTop,
+						$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill)
+					]),
+				model)
 			]));
 };
 var $author$project$View$desktopLayout = $author$project$Page$Layout$desktop;
