@@ -109,9 +109,9 @@ icon i =
     el [] (html <| Icon.view i)
 
 
-menu : Model -> Element Msg
-menu model =
-    row [ width fill, height (fillPortion 3), spacing 10 ]
+menu : List (Attribute Msg) -> Model -> Element Msg
+menu attrs model =
+    row ([ width fill, spacing 10 ] ++ attrs)
         [ column
             [ centerX
             , paddingEach { edges | left = 20 }
@@ -211,7 +211,7 @@ aboutText =
         , bold "Kotlin."
         ]
     , t_ ""
-    , paragraph [] [t_ "A brief summary of my experience:" ]
+    , paragraph [] [ t_ "A brief summary of my experience:" ]
     , t_ ""
     ]
         ++ unorderedList

@@ -22,7 +22,7 @@ bigDesktop model =
                 [ alignBottom ]
                 [ gitHub, youTube, x, twitch, blueSky, linkedIn, email ]
             ]
-        , menu model
+        , menu [ height (fillPortion 3) ] model
         ]
 
 
@@ -31,13 +31,13 @@ desktop model =
     column
         [ centerX, width fill, height fill, spacing 50, scrollbarY ]
         [ html FontAwesome.Styles.css
-        , column [ height (fillPortion 4), centerX, width fill, spacing 30 ]
-            [ logo [ Font.size 20 ]
-            , title [ Font.size 24 ]
+        , column [ centerX, width fill, spacing 30 ]
+            [ logo [ Font.size 20, alignTop ]
+            , title [ Font.size 24, alignTop ]
             , linksRow []
                 [ gitHub, youTube, x, twitch, blueSky, linkedIn, email ]
             ]
-        , menu model
+        , menu [ alignTop, height fill ] model
         ]
 
 
