@@ -12105,6 +12105,14 @@ var $author$project$Page$Main$logo = function (attrs) {
 		A2($elm$core$List$map, $author$project$View$Element$t_, $author$project$View$SayMyName$youGoddamnRight));
 };
 var $author$project$Model$Info$Blog = 1;
+var $mdgriffith$elm_ui$Internal$Model$Max = F2(
+	function (a, b) {
+		return {$: 4, a: a, b: b};
+	});
+var $mdgriffith$elm_ui$Element$maximum = F2(
+	function (i, l) {
+		return A2($mdgriffith$elm_ui$Internal$Model$Max, i, l);
+	});
 var $author$project$Model$Msg$Selected = function (a) {
 	return {$: 1, a: a};
 };
@@ -12292,6 +12300,8 @@ var $author$project$Page$Main$menuButton = F2(
 					$author$project$Model$Msg$Selected(info))
 			});
 	});
+var $mdgriffith$elm_ui$Internal$Flag$overflow = $mdgriffith$elm_ui$Internal$Flag$flag(20);
+var $mdgriffith$elm_ui$Element$scrollbarY = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$overflow, $mdgriffith$elm_ui$Internal$Style$classes.c_);
 var $mdgriffith$elm_ui$Internal$Flag$fontWeight = $mdgriffith$elm_ui$Internal$Flag$flag(13);
 var $mdgriffith$elm_ui$Element$Font$bold = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$fontWeight, $mdgriffith$elm_ui$Internal$Style$classes.b1);
 var $mdgriffith$elm_ui$Internal$Model$Paragraph = {$: 9};
@@ -12683,11 +12693,13 @@ var $author$project$Page$Main$menu = F2(
 					_List_fromArray(
 						[
 							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-							$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
+							$mdgriffith$elm_ui$Element$height(
+							A2($mdgriffith$elm_ui$Element$maximum, 300, $mdgriffith$elm_ui$Element$fill)),
 							$mdgriffith$elm_ui$Element$paddingEach(
 							_Utils_update(
 								$author$project$Page$Main$edges,
-								{aZ: 20, bw: 20}))
+								{aZ: 20, bw: 20})),
+							$mdgriffith$elm_ui$Element$scrollbarY
 						]),
 					_List_fromArray(
 						[
@@ -12695,8 +12707,6 @@ var $author$project$Page$Main$menu = F2(
 						]))
 				]));
 	});
-var $mdgriffith$elm_ui$Internal$Flag$overflow = $mdgriffith$elm_ui$Internal$Flag$flag(20);
-var $mdgriffith$elm_ui$Element$scrollbarY = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$overflow, $mdgriffith$elm_ui$Internal$Style$classes.c_);
 var $author$project$Page$Main$title = function (attrs) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
@@ -12766,8 +12776,7 @@ var $author$project$Page$Layout$bigDesktop = function (model) {
 				$mdgriffith$elm_ui$Element$centerX,
 				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
 				$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
-				$mdgriffith$elm_ui$Element$spacing(50),
-				$mdgriffith$elm_ui$Element$scrollbarY
+				$mdgriffith$elm_ui$Element$spacing(50)
 			]),
 		_List_fromArray(
 			[
@@ -12817,6 +12826,7 @@ var $author$project$View$bigDesktopLayout = $author$project$Page$Layout$bigDeskt
 var $author$project$View$Color$darkGrey = $author$project$View$Color$grey(18);
 var $mdgriffith$elm_ui$Internal$Model$Top = 0;
 var $mdgriffith$elm_ui$Element$alignTop = $mdgriffith$elm_ui$Internal$Model$AlignY(0);
+var $mdgriffith$elm_ui$Element$clipY = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$overflow, $mdgriffith$elm_ui$Internal$Style$classes.cd);
 var $author$project$Page$Layout$desktop = function (model) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
@@ -12825,8 +12835,7 @@ var $author$project$Page$Layout$desktop = function (model) {
 				$mdgriffith$elm_ui$Element$centerX,
 				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
 				$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
-				$mdgriffith$elm_ui$Element$spacing(50),
-				$mdgriffith$elm_ui$Element$scrollbarY
+				$mdgriffith$elm_ui$Element$spacing(50)
 			]),
 		_List_fromArray(
 			[
@@ -12864,7 +12873,8 @@ var $author$project$Page$Layout$desktop = function (model) {
 				_List_fromArray(
 					[
 						$mdgriffith$elm_ui$Element$alignTop,
-						$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill)
+						$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
+						$mdgriffith$elm_ui$Element$clipY
 					]),
 				model)
 			]));
