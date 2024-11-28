@@ -27,6 +27,7 @@ rm -r $clone_dir/*
 cp CNAME "$clone_dir/CNAME"
 cp index.html "$clone_dir/index.html"
 mkdir -p "$clone_dir/build" && cp build/main.js "$clone_dir/build/main.js"
+mkdir -p "$clone_dir/css" && cp css/styles.css "$clone_dir/css/styles.css"
 mkdir -p "$clone_dir/files" && cp files/CV_Dmitrii_Kovanikov.pdf "$clone_dir/files/CV_Dmitrii_Kovanikov.pdf"
 
 # Step into cloned dir and add all new files
@@ -34,6 +35,7 @@ cd "$clone_dir"
 git add CNAME
 git add index.html
 git add build/main.js
+git add css/styles.css
 git add files/CV_Dmitrii_Kovanikov.pdf
 
 # Prepare repo and push

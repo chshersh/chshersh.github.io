@@ -7,6 +7,7 @@ import Element.Events exposing (..)
 import Element.Font as Font
 import Element.Input exposing (button)
 import FontAwesome as Icon exposing (Icon)
+import Html.Attributes exposing (class)
 import Model exposing (Model)
 import Model.Info exposing (Info(..), showInfo)
 import Model.Msg exposing (Msg(..))
@@ -125,6 +126,7 @@ menu attrs model =
             , height (fill |> maximum 300)
             , paddingEach { edges | right = 20, bottom = 20 }
             , scrollbarY
+            , htmlAttribute (class "custom-scrollbar")
             ]
             [ viewInfo model.info
             ]
