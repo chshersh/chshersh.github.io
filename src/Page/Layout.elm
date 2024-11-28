@@ -37,7 +37,7 @@ desktop model =
             , linksRow []
                 [ gitHub, youTube, x, twitch, blueSky, linkedIn, email ]
             ]
-        , menu [ alignTop, height fill, clipY ] model
+        , menu [ alignTop, height fill ] model
         ]
 
 

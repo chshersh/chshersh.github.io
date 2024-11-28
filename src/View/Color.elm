@@ -31,3 +31,8 @@ gainsboro =
 yellow : Color
 yellow =
     rgb255 255 193 7
+
+
+blue : Color
+blue =
+    rgb255 86 156 214

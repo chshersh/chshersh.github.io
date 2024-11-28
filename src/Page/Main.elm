@@ -9,6 +9,7 @@ import Element.Input exposing (button)
 import FontAwesome as Icon exposing (Icon)
 import Html.Attributes exposing (class)
 import Model exposing (Model)
+import Model.Blog as Blog
 import Model.Info exposing (Info(..), showInfo)
 import Model.Msg exposing (Msg(..))
 import Model.Social as Social
@@ -157,8 +158,7 @@ viewInfo info =
             about
 
         Blog ->
-            t [ width fill, height fill, Background.color Color.elevatedGrey, padding 10 ]
-                "Magic dwarfs are working really hard on this section!"
+            blog
 
 
 about : Element msg
@@ -250,4 +250,38 @@ downloadCV =
         ]
         { url = "/files/CV_Dmitrii_Kovanikov.pdf"
         , label = el [ Font.family monoFont, centerX ] (text "🗎 Download CV")
+        }
+
+
+blog : Element msg
+blog =
+    column
+        [ width fill
+        , height fill
+        , Background.color Color.elevatedGrey
+        , spacing 20
+        , paddingEach { edges | top = 5, bottom = 5, left = 10 }
+        ]
+        (List.map viewArticle Blog.articles)
+
+
+viewArticle : Blog.T -> Element msg
+viewArticle article =
+    newTabLink
+        [ padding 10
+        , width fill
+        , Font.color Color.gainsboro
+        , mouseOver [ Font.color Color.yellow ]
+        ]
+        { url = Blog.mkUrl article
+        , label =
+            column [ spacing 10 ]
+                [ paragraph []
+                    [ el [ Font.family monoFont, Font.color Color.blue ] (text "{")
+                    , el [ Font.family monoFont ] (text article.title)
+                    , el [ Font.family monoFont, Font.color Color.blue ] (text "}")
+                    ]
+                , paragraph []
+                    [ el [ Font.family monoFont, Font.color Color.suvaGrey ] (text article.date) ]
+                ]
         }
