@@ -12105,6 +12105,7 @@ var $author$project$Page$Main$logo = function (attrs) {
 		A2($elm$core$List$map, $author$project$View$Element$t_, $author$project$View$SayMyName$youGoddamnRight));
 };
 var $author$project$Model$Info$Blog = 1;
+var $mdgriffith$elm_ui$Element$htmlAttribute = $mdgriffith$elm_ui$Internal$Model$Attr;
 var $mdgriffith$elm_ui$Internal$Model$Max = F2(
 	function (a, b) {
 		return {$: 4, a: a, b: b};
@@ -12699,7 +12700,9 @@ var $author$project$Page$Main$menu = F2(
 							_Utils_update(
 								$author$project$Page$Main$edges,
 								{aZ: 20, bw: 20})),
-							$mdgriffith$elm_ui$Element$scrollbarY
+							$mdgriffith$elm_ui$Element$scrollbarY,
+							$mdgriffith$elm_ui$Element$htmlAttribute(
+							$elm$html$Html$Attributes$class('custom-scrollbar'))
 						]),
 					_List_fromArray(
 						[
