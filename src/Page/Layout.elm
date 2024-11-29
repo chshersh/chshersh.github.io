@@ -8,6 +8,7 @@ import Model exposing (Model)
 import Model.Msg exposing (Msg)
 import Page.Main exposing (..)
 import View.Color as Color
+import View.Element exposing (..)
 
 
 bigDesktop : Model -> Element Msg
@@ -59,6 +60,7 @@ phone _ =
             [ linksRow [] [ gitHub, youTube, x, twitch ]
             , linksRow [] [ blueSky, linkedIn, email ]
             ]
+        , row [ centerX ] [ t [ Font.size 32 ] "About" ]
         , column
             [ width fill
             , height fill
@@ -68,5 +70,7 @@ phone _ =
             , paddingEach { edges | top = 20, bottom = 20, left = 10, right = 10 }
             ]
             aboutText
-        , row [ centerX, paddingEach { edges | bottom = 20 } ] [ downloadCV ]
+        , row [ centerX ] [ downloadCV ]
+        , row [ centerX ] [ t [ Font.size 32 ] "Blog" ]
+        , row [ centerX, paddingEach { edges | bottom = 20 } ] [ blog ]
         ]

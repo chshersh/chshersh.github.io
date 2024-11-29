@@ -289,6 +289,6 @@ viewArticle article =
                     , el [ Font.family monoFont, Font.color Color.blue ] (text "}")
                     ]
                 , paragraph []
-                    [ el [ Font.family monoFont, Font.color Color.suvaGrey ] (text article.date) ]
+                    [ tSecondary [] article.date ]
                 ]
         }
