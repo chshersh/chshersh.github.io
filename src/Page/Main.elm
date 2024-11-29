@@ -187,12 +187,16 @@ aboutText =
             t [ Font.bold ]
     in
     [ paragraph []
-        [ t_ "Hi, I'm Dmitrii (he/him), based in London, UK. This entire website is written in "
+        [ t_ "Hi, I'm Dmitrii (he/him), based in London, UK." ]
+    , paragraph []
+        [ t_ "This entire website is written in "
         , bold "Elm"
         , t_ ", and this is how you know I'm a nerd."
         ]
     , paragraph []
-        [ t_ "I'm a Senior Software Engineer at Bloomberg. At my job, I primarily use "
+        [ t_ "I'm a Senior Software Engineer at Bloomberg." ]
+    , paragraph []
+        [ t_ "At my job, I primarily use "
         , bold "OCaml"
         , t_ " alongside "
         , bold "Python"
@@ -202,7 +206,9 @@ aboutText =
         , bold "C++."
         ]
     , paragraph []
-        [ t_ "I'm passionate about Functional Programming, and I have professional experience with "
+        [ t_ "I'm passionate about Functional Programming," ]
+    , paragraph []
+        [ t_ "  and I have professional experience with "
         , bold "OCaml"
         , t_ ", "
         , bold "Haskell"
@@ -218,12 +224,12 @@ aboutText =
         , bold "Kotlin."
         ]
     , t_ ""
-    , paragraph [] [ t_ "A brief summary of my experience:" ]
+    , paragraph [] [ t_ "A brief summary of my work:" ]
     , t_ ""
     ]
         ++ unorderedList
             [ paragraph [] [ bold "10+", t_ " years of professional experience" ]
-            , paragraph [] [ bold "10+", t_ " talks on multiple conferences and meetups (YOW! Lambda Jam, Haskell Love et al.)" ]
+            , paragraph [] [ bold "10+", t_ " talks on multiple conferences and meetups" ]
             , paragraph [] [ bold "7", t_ " Functional Programming courses created" ]
             , paragraph [] [ bold "50+", t_ " open-source projects authored" ]
             ]
