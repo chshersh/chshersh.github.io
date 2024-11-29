@@ -8,6 +8,7 @@ import Model exposing (Model)
 import Model.Dimensions exposing (Dimensions)
 import Model.Info exposing (Info(..))
 import Model.Msg exposing (Msg(..))
+import Model.Route exposing (Route(..), toRoute)
 import Url
 import View exposing (view)
 
@@ -42,7 +43,7 @@ init dimensions url key =
             { device = device
             , info = About
             , key = key
-            , url = url
+            , route = toRoute url
             }
     in
     ( model
@@ -71,7 +72,7 @@ update msg model =
                     ( model, Nav.load href )
 
         UrlChanged url ->
-            ( { model | url = url }
+            ( { model | route = toRoute url }
             , Cmd.none
             )
 
