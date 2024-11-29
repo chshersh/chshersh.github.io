@@ -126,7 +126,7 @@ menu attrs model =
         , column
             [ width fill
             , height (fill |> maximum 300)
-            , paddingEach { edges | right = 20, bottom = 20 }
+            , paddingEach { edges | right = 10 }
             , scrollbarY
             , htmlAttribute (class "custom-scrollbar")
             ]
