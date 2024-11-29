@@ -12803,7 +12803,7 @@ var $author$project$Page$Main$menu = F2(
 							$mdgriffith$elm_ui$Element$paddingEach(
 							_Utils_update(
 								$author$project$Page$Main$edges,
-								{a0: 20, by: 20})),
+								{by: 10})),
 							$mdgriffith$elm_ui$Element$scrollbarY,
 							$mdgriffith$elm_ui$Element$htmlAttribute(
 							$elm$html$Html$Attributes$class('custom-scrollbar'))
