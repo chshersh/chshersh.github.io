@@ -12105,6 +12105,8 @@ var $author$project$Page$Main$logo = function (attrs) {
 		A2($elm$core$List$map, $author$project$View$Element$t_, $author$project$View$SayMyName$youGoddamnRight));
 };
 var $author$project$Model$Info$Blog = 1;
+var $mdgriffith$elm_ui$Internal$Model$Top = 0;
+var $mdgriffith$elm_ui$Element$alignTop = $mdgriffith$elm_ui$Internal$Model$AlignY(0);
 var $mdgriffith$elm_ui$Element$htmlAttribute = $mdgriffith$elm_ui$Internal$Model$Attr;
 var $mdgriffith$elm_ui$Internal$Model$Max = F2(
 	function (a, b) {
@@ -12357,7 +12359,14 @@ var $author$project$Page$Main$aboutText = function () {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$author$project$View$Element$t_('Hi, I\'m Dmitrii (he/him), based in London, UK. This entire website is written in '),
+						$author$project$View$Element$t_('Hi, I\'m Dmitrii (he/him), based in London, UK.')
+					])),
+				A2(
+				$mdgriffith$elm_ui$Element$paragraph,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$author$project$View$Element$t_('This entire website is written in '),
 						bold('Elm'),
 						$author$project$View$Element$t_(', and this is how you know I\'m a nerd.')
 					])),
@@ -12366,7 +12375,14 @@ var $author$project$Page$Main$aboutText = function () {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$author$project$View$Element$t_('I\'m a Senior Software Engineer at Bloomberg. At my job, I primarily use '),
+						$author$project$View$Element$t_('I\'m a Senior Software Engineer at Bloomberg.')
+					])),
+				A2(
+				$mdgriffith$elm_ui$Element$paragraph,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$author$project$View$Element$t_('At my job, I primarily use '),
 						bold('OCaml'),
 						$author$project$View$Element$t_(' alongside '),
 						bold('Python'),
@@ -12380,7 +12396,14 @@ var $author$project$Page$Main$aboutText = function () {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$author$project$View$Element$t_('I\'m passionate about Functional Programming, and I have professional experience with '),
+						$author$project$View$Element$t_('I\'m passionate about Functional Programming,')
+					])),
+				A2(
+				$mdgriffith$elm_ui$Element$paragraph,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$author$project$View$Element$t_('  and I have professional experience with '),
 						bold('OCaml'),
 						$author$project$View$Element$t_(', '),
 						bold('Haskell'),
@@ -12401,7 +12424,7 @@ var $author$project$Page$Main$aboutText = function () {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$author$project$View$Element$t_('A brief summary of my experience:')
+						$author$project$View$Element$t_('A brief summary of my work:')
 					])),
 				$author$project$View$Element$t_('')
 			]),
@@ -12423,7 +12446,7 @@ var $author$project$Page$Main$aboutText = function () {
 						_List_fromArray(
 							[
 								bold('10+'),
-								$author$project$View$Element$t_(' talks on multiple conferences and meetups (YOW! Lambda Jam, Haskell Love et al.)')
+								$author$project$View$Element$t_(' talks on multiple conferences and meetups')
 							])),
 						A2(
 						$mdgriffith$elm_ui$Element$paragraph,
@@ -12713,14 +12736,7 @@ var $author$project$Page$Main$viewArticle = function (article) {
 						_List_Nil,
 						_List_fromArray(
 							[
-								A2(
-								$mdgriffith$elm_ui$Element$el,
-								_List_fromArray(
-									[
-										$mdgriffith$elm_ui$Element$Font$family($author$project$View$Font$monoFont),
-										$mdgriffith$elm_ui$Element$Font$color($author$project$View$Color$suvaGrey)
-									]),
-								$mdgriffith$elm_ui$Element$text(article.Z))
+								A2($author$project$View$Element$tSecondary, _List_Nil, article.Z)
 							]))
 					])),
 			L: $author$project$Model$Blog$mkUrl(article)
@@ -12769,7 +12785,8 @@ var $author$project$Page$Main$menu = F2(
 							_Utils_update(
 								$author$project$Page$Main$edges,
 								{bh: 20})),
-							$mdgriffith$elm_ui$Element$spacing(10)
+							$mdgriffith$elm_ui$Element$spacing(10),
+							$mdgriffith$elm_ui$Element$alignTop
 						]),
 					_List_fromArray(
 						[
@@ -12914,8 +12931,6 @@ var $author$project$Page$Layout$bigDesktop = function (model) {
 };
 var $author$project$View$bigDesktopLayout = $author$project$Page$Layout$bigDesktop;
 var $author$project$View$Color$darkGrey = $author$project$View$Color$grey(18);
-var $mdgriffith$elm_ui$Internal$Model$Top = 0;
-var $mdgriffith$elm_ui$Element$alignTop = $mdgriffith$elm_ui$Internal$Model$AlignY(0);
 var $author$project$Page$Layout$desktop = function (model) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
@@ -13228,6 +13243,20 @@ var $author$project$Page$Layout$phone = function (_v0) {
 							[$author$project$Page$Main$blueSky, $author$project$Page$Main$linkedIn, $author$project$Page$Main$email]))
 					])),
 				A2(
+				$mdgriffith$elm_ui$Element$row,
+				_List_fromArray(
+					[$mdgriffith$elm_ui$Element$centerX]),
+				_List_fromArray(
+					[
+						A2(
+						$author$project$View$Element$t,
+						_List_fromArray(
+							[
+								$mdgriffith$elm_ui$Element$Font$size(32)
+							]),
+						'About')
+					])),
+				A2(
 				$mdgriffith$elm_ui$Element$column,
 				_List_fromArray(
 					[
@@ -13245,6 +13274,26 @@ var $author$project$Page$Layout$phone = function (_v0) {
 				A2(
 				$mdgriffith$elm_ui$Element$row,
 				_List_fromArray(
+					[$mdgriffith$elm_ui$Element$centerX]),
+				_List_fromArray(
+					[$author$project$Page$Main$downloadCV])),
+				A2(
+				$mdgriffith$elm_ui$Element$row,
+				_List_fromArray(
+					[$mdgriffith$elm_ui$Element$centerX]),
+				_List_fromArray(
+					[
+						A2(
+						$author$project$View$Element$t,
+						_List_fromArray(
+							[
+								$mdgriffith$elm_ui$Element$Font$size(32)
+							]),
+						'Blog')
+					])),
+				A2(
+				$mdgriffith$elm_ui$Element$row,
+				_List_fromArray(
 					[
 						$mdgriffith$elm_ui$Element$centerX,
 						$mdgriffith$elm_ui$Element$paddingEach(
@@ -13253,7 +13302,7 @@ var $author$project$Page$Layout$phone = function (_v0) {
 							{a0: 20}))
 					]),
 				_List_fromArray(
-					[$author$project$Page$Main$downloadCV]))
+					[$author$project$Page$Main$blog]))
 			]));
 };
 var $author$project$View$phoneLayout = $author$project$Page$Layout$phone;
