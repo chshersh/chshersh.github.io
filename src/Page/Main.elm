@@ -116,7 +116,7 @@ menu attrs model =
     row ([ width fill, spacing 10 ] ++ attrs)
         [ column
             [ centerX
-            , paddingEach { edges | left = 20 }
+            , paddingEach { edges | left = 10, right = 10 }
             , spacing 10
             , alignTop
             ]
@@ -125,7 +125,7 @@ menu attrs model =
             ]
         , column
             [ width fill
-            , height (fill |> maximum 300)
+            , height (fill |> maximum 350)
             , paddingEach { edges | right = 10 }
             , scrollbarY
             , htmlAttribute (class "custom-scrollbar")
@@ -143,9 +143,13 @@ menuButton _ info =
         , Font.size 20
         , paddingEach { top = 5, bottom = 5, left = 15, right = 15 }
         , Border.rounded 16
+        , Border.solid
+        , Border.width 2
+        , Border.color Color.darkGrey
         , Background.color Color.elevatedGrey
         , Font.color Color.gainsboro
         , mouseOver [ Background.color Color.yellow, Font.color Color.elevatedGrey ]
+        , focused [ Border.color Color.blue ]
         ]
         { onPress = Just (Selected info)
         , label = el [ Font.family monoFont, centerX ] (text <| showInfo info)
