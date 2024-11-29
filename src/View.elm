@@ -1,21 +1,20 @@
 module View exposing (..)
 
+import Browser
 import Element exposing (..)
 import Element.Background as Background
-import Html exposing (Html)
 import Model exposing (Model)
 import Model.Msg exposing (Msg)
 import Page.Layout as Layout
 import View.Color as Color
 
 
-view : Model -> Html Msg
+view : Model -> Browser.Document Msg
 view model =
     let
         device =
             model.device
-    in
-    let
+
         responsiveLayout =
             case ( device.class, device.orientation ) of
                 ( Phone, _ ) ->
@@ -33,9 +32,13 @@ view model =
                 ( BigDesktop, _ ) ->
                     bigDesktopLayout
     in
-    layout
-        [ Background.color Color.darkGrey, height fill, width fill ]
-        (responsiveLayout model)
+    { title = "Dmitrii Kovanikov @ chshersh"
+    , body =
+        [ layout
+            [ Background.color Color.darkGrey, height fill, width fill ]
+            (responsiveLayout model)
+        ]
+    }
 
 
 
