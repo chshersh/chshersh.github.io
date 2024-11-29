@@ -12119,6 +12119,7 @@ var $mdgriffith$elm_ui$Element$maximum = F2(
 var $author$project$Model$Msg$Selected = function (a) {
 	return {$: 1, a: a};
 };
+var $author$project$View$Color$blue = A3($mdgriffith$elm_ui$Element$rgb255, 86, 156, 214);
 var $mdgriffith$elm_ui$Internal$Model$Button = {$: 8};
 var $elm$json$Json$Encode$bool = _Json_wrap;
 var $elm$html$Html$Attributes$boolProperty = F2(
@@ -12261,12 +12262,53 @@ var $mdgriffith$elm_ui$Element$Input$button = F2(
 				_List_fromArray(
 					[label])));
 	});
+var $mdgriffith$elm_ui$Internal$Flag$borderColor = $mdgriffith$elm_ui$Internal$Flag$flag(28);
+var $mdgriffith$elm_ui$Element$Border$color = function (clr) {
+	return A2(
+		$mdgriffith$elm_ui$Internal$Model$StyleClass,
+		$mdgriffith$elm_ui$Internal$Flag$borderColor,
+		A3(
+			$mdgriffith$elm_ui$Internal$Model$Colored,
+			'bc-' + $mdgriffith$elm_ui$Internal$Model$formatColorClass(clr),
+			'border-color',
+			clr));
+};
+var $author$project$View$Color$darkGrey = $author$project$View$Color$grey(18);
+var $mdgriffith$elm_ui$Internal$Model$Focus = 0;
+var $mdgriffith$elm_ui$Internal$Flag$focus = $mdgriffith$elm_ui$Internal$Flag$flag(31);
+var $mdgriffith$elm_ui$Element$focused = function (decs) {
+	return A2(
+		$mdgriffith$elm_ui$Internal$Model$StyleClass,
+		$mdgriffith$elm_ui$Internal$Flag$focus,
+		A2(
+			$mdgriffith$elm_ui$Internal$Model$PseudoSelector,
+			0,
+			$mdgriffith$elm_ui$Internal$Model$unwrapDecorations(decs)));
+};
 var $author$project$Model$Info$showInfo = function (info) {
 	if (!info) {
 		return 'About';
 	} else {
 		return 'Blog';
 	}
+};
+var $mdgriffith$elm_ui$Internal$Flag$borderStyle = $mdgriffith$elm_ui$Internal$Flag$flag(11);
+var $mdgriffith$elm_ui$Element$Border$solid = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$borderStyle, $mdgriffith$elm_ui$Internal$Style$classes.b7);
+var $mdgriffith$elm_ui$Internal$Model$BorderWidth = F5(
+	function (a, b, c, d, e) {
+		return {$: 6, a: a, b: b, c: c, d: d, e: e};
+	});
+var $mdgriffith$elm_ui$Element$Border$width = function (v) {
+	return A2(
+		$mdgriffith$elm_ui$Internal$Model$StyleClass,
+		$mdgriffith$elm_ui$Internal$Flag$borderWidth,
+		A5(
+			$mdgriffith$elm_ui$Internal$Model$BorderWidth,
+			'b-' + $elm$core$String$fromInt(v),
+			v,
+			v,
+			v,
+			v));
 };
 var $author$project$Page$Main$menuButton = F2(
 	function (_v0, info) {
@@ -12280,6 +12322,9 @@ var $author$project$Page$Main$menuButton = F2(
 					$mdgriffith$elm_ui$Element$paddingEach(
 					{a0: 5, bh: 15, by: 15, dt: 5}),
 					$mdgriffith$elm_ui$Element$Border$rounded(16),
+					$mdgriffith$elm_ui$Element$Border$solid,
+					$mdgriffith$elm_ui$Element$Border$width(2),
+					$mdgriffith$elm_ui$Element$Border$color($author$project$View$Color$darkGrey),
 					$mdgriffith$elm_ui$Element$Background$color($author$project$View$Color$elevatedGrey),
 					$mdgriffith$elm_ui$Element$Font$color($author$project$View$Color$gainsboro),
 					$mdgriffith$elm_ui$Element$mouseOver(
@@ -12287,6 +12332,11 @@ var $author$project$Page$Main$menuButton = F2(
 						[
 							$mdgriffith$elm_ui$Element$Background$color($author$project$View$Color$yellow),
 							$mdgriffith$elm_ui$Element$Font$color($author$project$View$Color$elevatedGrey)
+						])),
+					$mdgriffith$elm_ui$Element$focused(
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$Border$color($author$project$View$Color$blue)
 						]))
 				]),
 			{
@@ -12545,17 +12595,6 @@ var $author$project$View$Code$code = function (items) {
 			items));
 };
 var $author$project$Page$Main$aboutCode = $author$project$View$Code$code($author$project$Page$Main$aboutText);
-var $mdgriffith$elm_ui$Internal$Flag$borderColor = $mdgriffith$elm_ui$Internal$Flag$flag(28);
-var $mdgriffith$elm_ui$Element$Border$color = function (clr) {
-	return A2(
-		$mdgriffith$elm_ui$Internal$Model$StyleClass,
-		$mdgriffith$elm_ui$Internal$Flag$borderColor,
-		A3(
-			$mdgriffith$elm_ui$Internal$Model$Colored,
-			'bc-' + $mdgriffith$elm_ui$Internal$Model$formatColorClass(clr),
-			'border-color',
-			clr));
-};
 var $elm$html$Html$Attributes$download = function (fileName) {
 	return A2($elm$html$Html$Attributes$stringProperty, 'download', fileName);
 };
@@ -12592,22 +12631,6 @@ var $mdgriffith$elm_ui$Element$download = F2(
 				_List_fromArray(
 					[label])));
 	});
-var $mdgriffith$elm_ui$Internal$Model$BorderWidth = F5(
-	function (a, b, c, d, e) {
-		return {$: 6, a: a, b: b, c: c, d: d, e: e};
-	});
-var $mdgriffith$elm_ui$Element$Border$width = function (v) {
-	return A2(
-		$mdgriffith$elm_ui$Internal$Model$StyleClass,
-		$mdgriffith$elm_ui$Internal$Flag$borderWidth,
-		A5(
-			$mdgriffith$elm_ui$Internal$Model$BorderWidth,
-			'b-' + $elm$core$String$fromInt(v),
-			v,
-			v,
-			v,
-			v));
-};
 var $author$project$Page$Main$downloadCV = A2(
 	$mdgriffith$elm_ui$Element$download,
 	_List_fromArray(
@@ -12675,7 +12698,6 @@ var $author$project$Model$Blog$articles = _List_fromArray(
 		{Z: 'May 20th, 2024', T: '2024-05-20-7-ocaml-gotchas', ac: '7 OCaml Gotchas'},
 		{Z: 'February 5th, 2024', T: '2024-02-05-learn-lambda-calculus-in-10-minutes-with-ocaml', ac: 'Learn Lambda Calculus in 10 minutes with OCaml'}
 	]);
-var $author$project$View$Color$blue = A3($mdgriffith$elm_ui$Element$rgb255, 86, 156, 214);
 var $author$project$Model$Blog$mkUrl = function (article) {
 	return 'https://github.com/chshersh/chshersh.github.io/blob/develop/posts/' + (article.T + '.md');
 };
@@ -12784,7 +12806,7 @@ var $author$project$Page$Main$menu = F2(
 							$mdgriffith$elm_ui$Element$paddingEach(
 							_Utils_update(
 								$author$project$Page$Main$edges,
-								{bh: 20})),
+								{bh: 10, by: 10})),
 							$mdgriffith$elm_ui$Element$spacing(10),
 							$mdgriffith$elm_ui$Element$alignTop
 						]),
@@ -12799,7 +12821,7 @@ var $author$project$Page$Main$menu = F2(
 						[
 							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
 							$mdgriffith$elm_ui$Element$height(
-							A2($mdgriffith$elm_ui$Element$maximum, 300, $mdgriffith$elm_ui$Element$fill)),
+							A2($mdgriffith$elm_ui$Element$maximum, 350, $mdgriffith$elm_ui$Element$fill)),
 							$mdgriffith$elm_ui$Element$paddingEach(
 							_Utils_update(
 								$author$project$Page$Main$edges,
@@ -12930,7 +12952,6 @@ var $author$project$Page$Layout$bigDesktop = function (model) {
 			]));
 };
 var $author$project$View$bigDesktopLayout = $author$project$Page$Layout$bigDesktop;
-var $author$project$View$Color$darkGrey = $author$project$View$Color$grey(18);
 var $author$project$Page$Layout$desktop = function (model) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
