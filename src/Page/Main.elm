@@ -118,6 +118,7 @@ menu attrs model =
             [ centerX
             , paddingEach { edges | left = 20 }
             , spacing 10
+            , alignTop
             ]
             [ menuButton model About
             , menuButton model Blog
