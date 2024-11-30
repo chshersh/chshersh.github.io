@@ -32,6 +32,7 @@ I hope you're hyped (I know I am). Let's start.
 > All code examples are provided in OCaml for illustration purposes. This is not an OCaml tutorial but basic familiarity with the language should be enough. Refer to the [OCaml::Learn](https://ocaml.org/docs) section to learn more about OCaml.
 >
 > All code snippets can be found on GitHub:
+>
 > - [chshersh/pragmatic-category-theory](https://github.com/chshersh/pragmatic-category-theory)
 
 ## What is Semigroup?
@@ -207,13 +208,13 @@ String concatenation happens to resemble number addition and boolean logical ope
 
 The string append example is different in one other significant way. All previous operations (`+`, `*`, `&&` and `||`) satisfy a different property — **commutativity**. In other words, for them, the order of arguments for `append` doesn't matter, and the following holds:
 
-```
+```ocaml
 append a b = append b a
 ```
 
 String concatenation, in turn, is not commutative. The order of appending strings matters. But the operation is still associative, as can be seen in the following example:
 
-```
+```ocaml
 (1)
 append "Hello, " (append "OCaml " "World!")
 = append "Hello, " "OCaml World!"
@@ -231,7 +232,7 @@ At this point, you may start thinking that everything is a semigroup! However, l
 
 We don't need to come up with an esoteric example. A simple number subtraction is not a semigroup because the associativity property doesn't work for it, as can be seen on the following example:
 
-```
+```ocaml
 (1)
 1 - (2 - 3)
 = 1 - (-1)
@@ -266,12 +267,12 @@ That's it for now! I wanted to keep the introduction light. But you're going to 
 
 ## Acknowledgement
 
-Many thanks to people who proofread the early draft of this article and shared their invaluable feedback: [@_____C](https://x.com/_____C) [@adworse](https://x.com/adworse) [@DazzlingHazlitt](https://x.com/DazzlingHazlitt) [@egmaleta](https://x.com/egmaleta) [@int_index](https://x.com/int_index) [@janiczek](https://x.com/janiczek) [@jwdunne_dev](https://x.com/jwdunne_dev)
+Many thanks to people who proofread the early draft of this article and shared their invaluable feedback: [_____C](https://x.com/_____C) [adworse](https://x.com/adworse) [DazzlingHazlitt](https://x.com/DazzlingHazlitt) [egmaleta](https://x.com/egmaleta) [int_index](https://x.com/int_index) [janiczek](https://x.com/janiczek) [jwdunne_dev](https://x.com/jwdunne_dev)
 
 <hr>
 
 > If you liked this blog post, consider following me on YouTube, X (formerly known as Twitter) or sponsoring my work on GitHub
 >
-> - [YouTube: @chshersh](https://youtube.com/c/chshersh)
-> - [𝕏: @chshersh](https://twitter.com/ChShersh)
-> - [GitHub Sponsors: Support @chshersh!](https://github.com/sponsors/chshersh)
+> - [YouTube: chshersh](https://youtube.com/c/chshersh)
+> - [𝕏: chshersh](https://twitter.com/ChShersh)
+> - [GitHub Sponsors: Support chshersh!](https://github.com/sponsors/chshersh)

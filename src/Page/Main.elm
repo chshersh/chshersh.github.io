@@ -7,6 +7,7 @@ import Element.Events exposing (..)
 import Element.Font as Font
 import Element.Input exposing (button)
 import FontAwesome as Icon exposing (Icon)
+import Html exposing (article)
 import Html.Attributes exposing (class)
 import Model exposing (Model)
 import Model.Blog as Blog
@@ -278,13 +279,13 @@ blog =
 
 viewArticle : Blog.T -> Element msg
 viewArticle article =
-    newTabLink
+    link
         [ padding 10
         , width fill
         , Font.color Color.gainsboro
         , mouseOver [ Font.color Color.yellow ]
         ]
-        { url = Blog.mkUrl article
+        { url = Blog.mkPath article
         , label =
             column [ spacing 10 ]
                 [ paragraph []
@@ -293,6 +294,6 @@ viewArticle article =
                     , el [ Font.family monoFont, Font.color Color.blue ] (text "}")
                     ]
                 , paragraph []
-                    [ tSecondary [] article.date ]
+                    [ tSecondary [] article.createdAt ]
                 ]
         }

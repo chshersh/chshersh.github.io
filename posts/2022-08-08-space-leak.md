@@ -71,7 +71,7 @@ main = print $ add [1 .. 1000000]
 We can compile this Haskell program and ask GHC **R**un**T**ime
 **S**ystem (RTS) to print its memory usage stats:
 
-```shell
+```bash
 $ ghc Main.hs
 [1 of 1] Compiling Main             ( Main.hs, Main.o )
 Linking Main ...
@@ -89,7 +89,7 @@ Actual program memory usage can be checked with the `time` tool by
 passing the `-v` flag and looking at the _Maximum resident set size_
 metric:
 
-```shell
+```bash
 $ /usr/bin/time -v ./Main
 500000500000
 	Command being timed: "./Main"
@@ -115,7 +115,6 @@ $ /usr/bin/time -v ./Main
 	Signals delivered: 0
 	Page size (bytes): 4096
 	Exit status: 0
-
 ```
 
 We see the value of 70692 KB (or ~70 MB). So, our Haskell program
@@ -185,7 +184,7 @@ If we run our program with this new implementation, we won't see any
 memory usage improvements. In fact, our performance becomes even
 worse!
 
-```shell
+```bash
 $ ./Main +RTS -t
 500000500000
 <<ghc: 153344184 bytes, 36 GCs, 17277505/46026632 avg/max bytes residency (5 samples), 93M in use, 0.001 INIT (0.001 elapsed), 0.046 MUT (0.046 elapsed), 0.193 GC (0.193 elapsed) :ghc>>
@@ -241,7 +240,7 @@ add = go 0
 Now, if we run our program, we'll see that it uses a more reasonable 5
 MB now!
 
-```shell
+```bash
 $ ./Main +RTS -t
 500000500000
 <<ghc: 120051896 bytes, 29 GCs, 36312/44328 avg/max bytes residency (2 samples), 5M in use, 0.000 INIT (0.000 elapsed), 0.044 MUT (0.044 elapsed), 0.001 GC (0.001 elapsed) :ghc>>

@@ -22,6 +22,10 @@ jobs:
       - name: Build the Elm application
         run: elm make --optimize src/Main.elm --output=build/main.js
 
+      - name: Install Pandoc
+        if: github.ref_name == 'develop'
+        run: sudo apt-get install -y pandoc
+
       - name: Deploy
         if: github.ref_name == 'develop'
         run: ./deploy.sh

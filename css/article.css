@@ -1,0 +1,138 @@
+body {
+    background-color: #121212;
+    color: #e2e2e2;
+    font-family: 'Noto Sans Mono', monospace;
+    margin: 0;
+    padding: 0 1em; /* Add some padding for readability */
+}
+
+header {
+    margin-bottom: 1.5em;
+    text-align: center;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #e2e2e2; /* Ensure headings are also white */
+}
+
+a {
+    color: #569cd6; /* Light blue for links */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1em;
+}
+
+ul {
+    list-style: none; /* Remove default bullets */
+    padding-left: 1.5em; /* Indent list items */
+}
+
+ul li::before {
+    content: '▪'; /* Custom bullet character */
+    color: #ffc107; /* Yellow bullet color */
+    display: inline-block;
+    width: 1em; /* Align bullets with text */
+}
+
+blockquote {
+    border-left: 4px solid #ffc107; /* Yellow vertical bar */
+    padding-left: 1em; /* Add padding to push text away from the bar */
+    margin: 1em 0; /* Add vertical spacing around blockquotes */
+}
+
+code {
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 1rem;
+    background-color: #1e1e1e; /* Optional: Background color to match dark theme */
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+}
+
+/* Style for code blocks */
+.sourceCode {
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 1rem;
+    line-height: 1.5; /* Improve readability */
+    padding: 0; /* Remove unwanted padding */
+    margin: 0; /* Remove any margin */
+}
+
+.sourceCode pre {
+    margin: 0; /* Remove margin */
+    padding: 0; /* Remove padding */
+    overflow-x: auto; /* Enable horizontal scrolling if content overflows */
+    max-width: 100%; /* Ensure the pre block doesn't overflow the container */
+    white-space: pre; /* Allow wrapping of long lines */
+    word-wrap: break-word; /* Break long words if necessary */
+}
+
+.sourceCode code {
+    display: block;
+    overflow-x: auto; /* Allow horizontal scroll for long lines */
+    padding: 0.5em; /* Optional: Add padding inside code block */
+    background-color: #1e1e1e; /* Optional: Background color to match dark theme */
+    /* color: #ffffff; /* Optional: White text color */
+    font-size: 1rem; /* Ensure proper font size for code */
+}
+
+/* Mobile-specific font size */
+@media (max-width: 768px) {  /* Targets devices with width 768px or less */
+    .sourceCode {
+        font-size: 0.7rem; /* Adjust the font size for mobile devices */
+    }
+}
+
+/* Style for images */
+img {
+    display: block; /* Ensures the image is treated as a block element */
+    max-width: 100%; /* Makes the image responsive, ensuring it never exceeds the width of its container */
+    height: auto; /* Keeps the image's aspect ratio intact */
+    margin: 1em auto; /* Centers the image horizontally */
+}
+
+/* Style for figcaption */
+figcaption {
+    text-align: center;
+    font-size: 0.9em; /* Optional: Adjust font size for the caption */
+    color: #919191; /* Optional: Set a lighter color for the caption */
+    margin-top: 0.5em; /* Adds space between the image and the caption */
+    margin-bottom: 1.5em; /* Adds space after the caption */
+}
+
+/* Style for keyword spans */
+.kw {
+    font-weight: bold;
+    color: #ffc107;
+}
+
+/* Style for code comments */
+.co {
+    color: #919191;
+}
+
+
+/* Style for the table */
+table {
+    border-collapse: collapse; /* Ensures borders are merged together */
+}
+
+/* Style for all table cells (td, th) */
+th, td {
+    border: 2px solid #1e1e1e; /* Adds grey border to each cell */
+    padding: 8px; /* Adds space inside the cells */
+    text-align: left; /* Aligns the text to the left inside cells */
+}
+
+/* Styling for the header row */
+thead th {
+    font-weight: bold; /* Makes header text bold */
+    text-align: center;
+}

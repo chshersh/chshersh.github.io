@@ -5,7 +5,7 @@ shortName: "ocaml-gotchas"
 updated: "July 29th, 2024"
 ---
 
-I've been writing OCaml for about 1 year (check my previous post [8 months of OCaml after 8 years of Haskell](https://dev.to/chshersh/8-months-of-ocaml-after-8-years-of-haskell-in-production-h96)).
+I've been writing OCaml for about 1 year (check my previous post [8 months of OCaml after 8 years of Haskell](/blog/2023-12-16-8-months-of-ocaml-after-8-years-of-haskell.html)).
 
 I enjoy OCaml. But as any other programming language, OCaml has its quirks. That's fine, you can enjoy imperfect things too. But it could be useful to learn about potential surprising behaviours.
 
@@ -197,7 +197,8 @@ Unfortunately, it doesn't compile!
 File "lib/example.ml", line 21, characters 12-20:
 21 | let range ?(step = 1) ~from ~until =
                  ^^^^^^^^
-Error (warning 16 [unerasable-optional-argument]): this optional argument cannot be erased.
+Error (warning 16 [unerasable-optional-argument]):
+this optional argument cannot be erased.
 ```
 
 The explanation is that you can specify both labelled and optional arguments in any order (you can mix and match):
@@ -451,6 +452,6 @@ Human brains are really good at focusing on bad things. However, I wrote this bl
 
 > If you liked this blog post, consider following me on YouTube, X (formerly known as Twitter) or sponsoring my work on GitHub
 >
-> - [YouTube: @chshersh](https://youtube.com/c/chshersh)
-> - [𝕏: @chshersh](https://twitter.com/ChShersh)
-> - [GitHub Sponsors: Support @chshersh!](https://github.com/sponsors/chshersh)
+> - [YouTube: chshersh](https://youtube.com/c/chshersh)
+> - [𝕏: chshersh](https://twitter.com/ChShersh)
+> - [GitHub Sponsors: Support chshersh!](https://github.com/sponsors/chshersh)

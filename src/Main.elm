@@ -2,11 +2,14 @@ module Main exposing (..)
 
 import Browser
 import Browser.Events as Events
+import Browser.Navigation as Nav
 import Element exposing (classifyDevice)
 import Model exposing (Model)
 import Model.Dimensions exposing (Dimensions)
 import Model.Info exposing (Info(..))
 import Model.Msg exposing (Msg(..))
+import Model.Route exposing (Route(..), toRoute)
+import Url
 import View exposing (view)
 
 
@@ -16,11 +19,13 @@ import View exposing (view)
 
 main : Program Dimensions Model Msg
 main =
-    Browser.element
+    Browser.application
         { init = init
+        , view = view
         , update = update
         , subscriptions = subscriptions
-        , view = view
+        , onUrlChange = UrlChanged
+        , onUrlRequest = LinkClicked
         }
 
 
@@ -28,8 +33,8 @@ main =
 -- MODEL
 
 
-init : Dimensions -> ( Model, Cmd Msg )
-init dimensions =
+init : Dimensions -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init dimensions url key =
     let
         device =
             classifyDevice dimensions
@@ -37,6 +42,8 @@ init dimensions =
         model =
             { device = device
             , info = About
+            , key = key
+            , route = toRoute url
             }
     in
     ( model
@@ -53,6 +60,19 @@ update msg model =
     case msg of
         Selected info ->
             ( { model | info = info }
+            , Cmd.none
+            )
+
+        LinkClicked urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( model, Nav.load (Url.toString url) )
+
+                Browser.External href ->
+                    ( model, Nav.load href )
+
+        UrlChanged url ->
+            ( { model | route = toRoute url }
             , Cmd.none
             )
 
