@@ -43,6 +43,7 @@ copy_file "css/article.css"
 mkdir -p "$clone_dir/files"
 copy_file "files/CV_Dmitrii_Kovanikov.pdf"
 
+mkdir -p "blog"
 mkdir -p "$clone_dir/blog"
 for file in posts/*; do
     file_name=$(basename "$file")
