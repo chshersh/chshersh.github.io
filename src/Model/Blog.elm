@@ -17,7 +17,7 @@ articles : List T
 articles =
     [ { title = "8 months of OCaml after 8 years of Haskell in production"
       , date = "December 16th, 2023"
-      , path = "2023-12-16-8-months-of-ocaml-after-8-years-of-haskell"
+      , path = "/blog/8-months.html"
       }
     , { title = "Pragmatic Category Theory | Part 1: Semigroup Intro"
       , date = "July 30th, 2024"

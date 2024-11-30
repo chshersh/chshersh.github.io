@@ -19,6 +19,7 @@ import View.Element exposing (..)
 import View.Font exposing (monoFont)
 import View.List exposing (unorderedList)
 import View.SayMyName as Logo
+import Html exposing (article)
 
 
 edges : { top : Int, right : Int, bottom : Int, left : Int }
@@ -278,13 +279,16 @@ blog =
 
 viewArticle : Blog.T -> Element msg
 viewArticle article =
-    newTabLink
+    let
+     url = if String.startsWith "/blog" article.path then article.path else Blog.mkUrl article
+    in
+    link
         [ padding 10
         , width fill
         , Font.color Color.gainsboro
         , mouseOver [ Font.color Color.yellow ]
         ]
-        { url = Blog.mkUrl article
+        { url = url
         , label =
             column [ spacing 10 ]
                 [ paragraph []

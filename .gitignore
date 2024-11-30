@@ -6,6 +6,9 @@ repl-temp-*
 ## elm-watch output
 build
 
+## Locally built HTMLs
+blog/
+
 # IDE/support
 ## Vim
 [._]*.s[a-v][a-z]

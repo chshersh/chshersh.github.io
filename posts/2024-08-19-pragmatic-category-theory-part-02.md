@@ -20,6 +20,7 @@ To develop an even further understanding of the Semigroup concept, we will explo
 > ⚠️ **CONTENT WARNING** ⚠️ This section may contain some advanced OCaml code. I'll do my best to explain the concepts in a beginner-friendly way though.
 
 > All code snippets can be found on GitHub:
+>
 > - [chshersh/pragmatic-category-theory](https://github.com/chshersh/pragmatic-category-theory)
 
 ## Minimum and Maximum
@@ -334,7 +335,7 @@ utop # MinMax.append (3, 3) (MinMax.append (7, 7) (5, 5)) ;;
 
 This may look intimidating, so let's debug this code using the famous FP technique called **equational reasoning**. We will just apply functions step-by-step to arrive at our result.
 
-```
+```ocaml
 MinMax.append (3, 3) (MinMax.append (7, 7) (5, 5))
 = MinMax.append (3, 3) (5, 7)
 = (3, 7)
@@ -408,12 +409,12 @@ In the next section, we'll finally learn why associativity matters. And there'll
 
 ## Acknowledgement
 
-Many thanks to people who proofread the early draft of this article and shared their invaluable feedback: [@_____C](https://x.com/_____C) [@sverien](https://x.com/sverien)
+Many thanks to people who proofread the early draft of this article and shared their invaluable feedback: [_____C](https://x.com/_____C) [sverien](https://x.com/sverien)
 
 <hr>
 
 > If you liked this blog post, consider following me on YouTube, X (formerly known as Twitter) or sponsoring my work on GitHub
 >
-> - [YouTube: @chshersh](https://youtube.com/c/chshersh)
-> - [𝕏: @chshersh](https://twitter.com/ChShersh)
-> - [GitHub Sponsors: Support @chshersh!](https://github.com/sponsors/chshersh)
+> - [YouTube: chshersh](https://youtube.com/c/chshersh)
+> - [𝕏: chshersh](https://twitter.com/ChShersh)
+> - [GitHub Sponsors: Support chshersh!](https://github.com/sponsors/chshersh)

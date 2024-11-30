@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -Eeuxo pipefail
+set -euxo
 
 ################################################
 # This script deploys an already built website #
@@ -21,26 +21,48 @@ git clone \
   "$clone_dir"
 
 # Clean up repo before copy
-rm -r $clone_dir/*
+rm -r "${clone_dir:?}"/*
+
+# Copy file inside the cloned directory
+copy_file() {
+  local path="$1"
+  cp "$path" "$clone_dir/$path"
+}
 
 # Copy all relevant files to the cloned repo
-cp CNAME "$clone_dir/CNAME"
-cp index.html "$clone_dir/index.html"
-mkdir -p "$clone_dir/build" && cp build/main.js "$clone_dir/build/main.js"
-mkdir -p "$clone_dir/css" && cp css/styles.css "$clone_dir/css/styles.css"
-mkdir -p "$clone_dir/files" && cp files/CV_Dmitrii_Kovanikov.pdf "$clone_dir/files/CV_Dmitrii_Kovanikov.pdf"
+copy_file "CNAME"
+copy_file "index.html"
+
+mkdir -p "$clone_dir/build"
+copy_file "build/main.js"
+
+mkdir -p "$clone_dir/css"
+copy_file "css/styles.css"
+copy_file "css/article.css"
+
+mkdir -p "$clone_dir/files"
+copy_file "files/CV_Dmitrii_Kovanikov.pdf"
+
+mkdir -p "$clone_dir/blog"
+for file in posts/*; do
+    file_name=$(basename "$file")
+    article_name="${file_name%.*}"
+
+    # Convert Markdown to HTML
+    pandoc "posts/$file" \
+      --template=template-article.html \
+      --output "blog/${article_name}.html"
+
+    copy_file "blog/${article_name}.html"
+done
 
 # Step into cloned dir and add all new files
 cd "$clone_dir"
-git add CNAME
-git add index.html
-git add build/main.js
-git add css/styles.css
-git add files/CV_Dmitrii_Kovanikov.pdf
+git add .
 
 # Prepare repo and push
 git config user.name "github-actions[bot]"
 git config user.email "github-actions[bot]@users.noreply.github.com"
 git commit -m "$commit_message" || echo "No changes to commit"
-git remote set-url --push origin https://chshersh:$GITHUB_TOKEN@github.com/chshersh/chshersh.github.io
+git remote set-url --push origin "https://chshersh:$GITHUB_TOKEN@github.com/chshersh/chshersh.github.io"
 git push origin main --force
