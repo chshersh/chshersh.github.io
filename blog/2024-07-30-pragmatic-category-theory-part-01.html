@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pragmatic Category Theory | Part 1: Semigroup Intro</title>
+    <meta name="author" content="Dmitrii Kovanikov">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Noto+Sans+Mono&display=swap">
+    <link rel="stylesheet" href="/css/article.css">
+</head>
+<body>
+    <header>
+      <h1>Pragmatic Category Theory | Part 1: Semigroup Intro</h1>
+    </header>
+
+    <main>
+<h2 id="motivation">Motivation</h2>
+<p>Functional Programming abstractions have a bad rap for not being accessible.</p>
+<p>Or for being a tool to gatekeep.</p>
+<p>Or for just sounding like plain, psychedelic nonsense (<em>bong rip</em> <a href="https://hackage.haskell.org/package/profunctors-5.6.2/docs/Data-Profunctor-Strong.html#t:Cotambara">Cotambara cofreely constructs costrength</a>).</p>
+<p><strong>I WANT TO FIX THIS</strong></p>
+<p>I’ve been using pure FP in production for <strong>10 years</strong>. I programmed in Haskell, OCaml, Elm and PureScript. I’ve solved real-world problems in diverse industries, such as healthcare, dating, fintech and blockchain.</p>
+<p>In my short (but eventful) career, I benefited a lot from foundational abstractions that took root in abstract algebra and category theory. I experienced first-hand the value of these concepts. This is good stuff, folks!</p>
+<p>I want to demystify these concepts.</p>
+<p>I want to show they’re not scary.</p>
+<p>I want to show they’re actually useful for building real-world stuff.</p>
+<p>I hope you’re hyped (I know I am). Let’s start.</p>
+<blockquote>
+<p>This is a series of blog posts and videos. I’m going to focus more on use cases rather than on deep theory but the underlying theory is important too.</p>
+<p>All code examples are provided in OCaml for illustration purposes. This is not an OCaml tutorial but basic familiarity with the language should be enough. Refer to the <a href="https://ocaml.org/docs">OCaml::Learn</a> section to learn more about OCaml.</p>
+<p>All code snippets can be found on GitHub:</p>
+<ul>
+<li><a href="https://github.com/chshersh/pragmatic-category-theory">chshersh/pragmatic-category-theory</a></li>
+</ul>
+</blockquote>
+<h2 id="what-is-semigroup">What is Semigroup?</h2>
+<p>We start with one of the simplest yet powerful concepts — <strong>semigroup</strong>.</p>
+<h3 id="why-semigroup">Why Semigroup?</h3>
+<p>This abstraction supports quite a large number of diverse use cases:</p>
+<ol type="1">
+<li>MapReduce</li>
+<li>CS Data Structures such as Segment Tree, Treap and Rope</li>
+<li>Optimal multiplication and string concatenation algorithms</li>
+<li>Blazing fast string builder</li>
+<li>Composable lexicographic comparison API</li>
+<li>Set and dictionary union</li>
+<li>Combining config files, CLI and environment arguments</li>
+<li>Composable validation</li>
+<li>Composable logging</li>
+<li>The Builder pattern from OOP</li>
+<li>Sane JSON merging for structured logging</li>
+</ol>
+<p>And we’re going to look into <strong>ALL OF THEM</strong> in future parts.</p>
+<p>You can see that such mathematical abstractions are expressive enough to implement common OOP patterns. However, they have the added benefit of being rooted in math and backed by thousands of years of research. This means you get so much for free!</p>
+<p>So let’s not waste any more time.</p>
+<h3 id="so-what-is-it-actually">So what is it actually?</h3>
+<p>A <strong>semigroup</strong> describes an operation of appending two values of some type to get a value of the same type.</p>
+<blockquote>
+<p>👩‍🔬 For the sake of simplicity, here we’re using the definition of semigroup from <em>abstract algebra</em>. For completeness, a Category Theory definition: a <em>semigroup</em> is a hom-set in a semicategory with a single object. But let’s stick with appending two values for now.</p>
+</blockquote>
+<p>Here’s a graphical explanation:</p>
+<figure>
+<img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/539w2fuxx1er75bte8mn.png" alt="" /><figcaption>Smooshing two things</figcaption>
+</figure>
+<p>You may immediately say that this looks too generic! It’s just appending two things, what’s the big deal?!</p>
+<p>And indeed, you can call this operation <em>append</em>, <em>add</em>, <em>multiply</em>, <em>combine</em>, <em>compose</em>, <em>merge</em>, <em>melt</em>, <em>fuse</em>, <em>apply</em>, <em>squash</em>, etc. It doesn’t really matter, we don’t gatekeep here on irrelevant details (my favourite one is <strong>smoosh</strong>). For consistency, I’ll be using <strong>append</strong> everywhere.</p>
+<p>But just to be more concrete, this concept can also be easily expressed in OCaml using <a href="https://courses.cs.cornell.edu/cs3110/2021sp/textbook/modules/signatures.html"><em>module signatures</em></a>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">module</span> <span class="kw">type</span> SEMIGROUP = <span class="kw">sig</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="kw">type</span> t</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>  <span class="kw">val</span> append : t -&gt; t -&gt; t</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>In this module signature, we have a type <code>t</code> and a binary function <code>append</code> that takes two values of type <code>t</code> and returns another value of type <code>t</code>. When implementing a module with this signature, a developer needs to specify a concrete type <code>t</code> and implement the <code>append</code> function.</p>
+<p>However, there’s one extra restriction. Not every <code>append</code> creates a Semigroup. This <code>append</code> operation must satisfy one requirement — <strong>associativity</strong>.</p>
+<p>In other words, the following must be true:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>append a (append b c) = append (append a b) c</span></code></pre></div>
+<p>And that’s all! It’s that simple! Although, for now, this may not look too interesting. Don’t worry. Lots of real-world examples are waiting in future parts!</p>
+<blockquote>
+<p>👩‍🔬 More formally, a <strong>semigroup</strong> is a pair of type <code>t</code> and a binary associative operation where the operands and the result all have the same type <code>t</code>.</p>
+</blockquote>
+<h2 id="examples">Examples</h2>
+<p>We’ll see plenty of Semigroup examples as well as some counterexamples where this associativity requirement doesn’t hold.</p>
+<h3 id="numbers">Numbers</h3>
+<p>Let’s start with trivial examples. Integer numbers form a semigroup. How can we append two numbers? Simple, just add them!</p>
+<p>Here’s how it looks in OCaml:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">module</span> IntAdd = <span class="kw">struct</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  <span class="kw">type</span> t = <span class="dt">int</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>  <span class="kw">let</span> append = ( + )</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>It’s pretty straightforward to show that associativity holds. We all know from school math that <code>a + (b + c) = (a + b) + c</code>. Not all examples will be that trivial though!</p>
+<p>We can easily verify that this implementation does what we want using <a href="https://github.com/ocaml-community/utop">utop</a> (an OCaml REPL):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>utop # IntAdd.append <span class="dv">2</span> <span class="dv">3</span> ;;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>- : <span class="dt">int</span> = <span class="dv">5</span></span></code></pre></div>
+<blockquote>
+<p>I already sense doubt in your eyes. A question is rising inside you:</p>
+<p>— <em>“Who the hell is going to <code>IntAdd.append</code> two numbers??? I can just use <code>+</code>!”</em></p>
+<p>And you will be absolutely right. If you want to add numbers, you’re just going to use the <code>+</code> operator. However, trivial examples help with onboarding complex concepts. And we’ll see in future articles that even this simple example is quite useful.</p>
+</blockquote>
+<p>Is this the only way to append two numbers? Surprisingly, not. We can also multiply them! And it’ll be a valid Semigroup as well. The implementation is almost identical to <code>IntAdd</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">module</span> IntMul = <span class="kw">struct</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>  <span class="kw">type</span> t = <span class="dt">int</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>  <span class="kw">let</span> append = ( * )</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>Let’s verify that everything works:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>utop # IntMul.append <span class="dv">2</span> <span class="dv">3</span> ;;</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>- : <span class="dt">int</span> = <span class="dv">6</span></span></code></pre></div>
+<p>You can see that a single type (in our example, <code>int</code>) can have multiple ways to append its values. OCaml module system can handle this perfectly. The important takeaway here is that Semigroup is not defined just by a type, but also by the specific implementation of <code>append</code>.</p>
+<blockquote>
+<p>🧑‍🔬 It’s tempting to implement such modules for other number types, like <code>float</code>. Unfortunately, arithmetic operations for <code>float</code> are <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">not associative</a> under IEEE 754. In such cases, it’s better to avoid providing modules entirely. We’ll see why associativity matters later.</p>
+</blockquote>
+<h3 id="boolean">Boolean</h3>
+<p>Another trivial example. Booleans also can form a Semigroup! The standard operations of <em>logical or</em> and <em>logical and</em> are one of the simplest examples.</p>
+<p>Implementation in OCaml is quite similar to the previous ones:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">module</span> BoolAnd = <span class="kw">struct</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>  <span class="kw">type</span> t = <span class="dt">bool</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>  <span class="kw">let</span> append = ( &amp;&amp; )</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="kw">end</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a><span class="kw">module</span> BoolOr = <span class="kw">struct</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>  <span class="kw">type</span> t = <span class="dt">bool</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>  <span class="kw">let</span> append = ( || )</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>As always, we can leverage <code>utop</code> to see that everything works:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>utop # BoolAnd.append <span class="kw">true</span> <span class="kw">false</span> ;;</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>- : <span class="dt">bool</span> = <span class="kw">false</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>utop # BoolOr.append <span class="kw">true</span> <span class="kw">false</span> ;;</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>- : <span class="dt">bool</span> = <span class="kw">true</span></span></code></pre></div>
+<blockquote>
+<p>Proving that these operations satisfy <em>associativity</em> is left as an exercise for the dedicated reader.</p>
+</blockquote>
+<h3 id="strings">Strings</h3>
+<p>Let’s finally look at the first slightly less trivial and the first pragmatic real-world example!</p>
+<p>It turns out that string concatenation is also a Semigroup!</p>
+<p>The OCaml implementation is straightforward again:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="kw">module</span> <span class="dt">String</span> = <span class="kw">struct</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>  <span class="kw">type</span> t = <span class="dt">string</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>  <span class="kw">let</span> append = ( ^ )</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>Verifying that it works:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>utop # <span class="dt">String</span>.append <span class="st">&quot;I know &quot;</span> <span class="st">&quot;Semigroup!&quot;</span> ;;</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>- : <span class="dt">string</span> = <span class="st">&quot;I know Semigroup!&quot;</span></span></code></pre></div>
+<p>As a developer, you append strings all the time. You don’t think about this simple operation in terms of semigroups. But the structure is there. Once you open this Pandora Box, you start noticing semigroups everywhere.</p>
+<p>String concatenation happens to resemble number addition and boolean logical operations. JavaScript devs might actually be onto something.</p>
+<p>The string append example is different in one other significant way. All previous operations (<code>+</code>, <code>*</code>, <code>&amp;&amp;</code> and <code>||</code>) satisfy a different property — <strong>commutativity</strong>. In other words, for them, the order of arguments for <code>append</code> doesn’t matter, and the following holds:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>append a b = append b a</span></code></pre></div>
+<p>String concatenation, in turn, is not commutative. The order of appending strings matters. But the operation is still associative, as can be seen in the following example:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>(<span class="dv">1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>append <span class="st">&quot;Hello, &quot;</span> (append <span class="st">&quot;OCaml &quot;</span> <span class="st">&quot;World!&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>= append <span class="st">&quot;Hello, &quot;</span> <span class="st">&quot;OCaml World!&quot;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>= <span class="st">&quot;Hello, OCaml World!&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a>(<span class="dv">2</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>append (append <span class="st">&quot;Hello, &quot;</span> <span class="st">&quot;OCaml &quot;</span>) <span class="st">&quot;World!&quot;</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a>= append <span class="st">&quot;Hello, OCaml &quot;</span> <span class="st">&quot;World!&quot;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a>= <span class="st">&quot;Hello, OCaml World!&quot;</span></span></code></pre></div>
+<h2 id="counterexample">Counterexample</h2>
+<p>At this point, you may start thinking that everything is a semigroup! However, life is cruel. Not everything is a semigroup.</p>
+<p>We don’t need to come up with an esoteric example. A simple number subtraction is not a semigroup because the associativity property doesn’t work for it, as can be seen on the following example:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>(<span class="dv">1</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="dv">1</span> - (<span class="dv">2</span> - <span class="dv">3</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>= <span class="dv">1</span> - (<span class="dv">-1</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a>= <span class="dv">2</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>(<span class="dv">2</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a>(<span class="dv">1</span> - <span class="dv">2</span>) - <span class="dv">3</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a>= (<span class="dv">-1</span>) - <span class="dv">3</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a>= <span class="dv">-4</span></span></code></pre></div>
+<p>Still, nothing prevents you from writing the following OCaml code:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="kw">module</span> IntSub = <span class="kw">struct</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>  <span class="kw">type</span> t = <span class="dt">int</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>  <span class="kw">let</span> append = ( - )</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<blockquote>
+<p>👩‍🔬 This associativity requirement is a <em>semantic law</em>. You can choose not to follow it at your own risk and write code that satisfies the API but not the extra contract, as demonstrated above.</p>
+<p>If you decide not to follow the law, you can’t reap the benefits it provides. Moreover, if you lose the semantics, then you can’t take advantage of the nice properties that they will have. And we’ll see in future parts what are those nice properties.</p>
+</blockquote>
+<p>Fortunately, you can use tests to verify that modules satisfy the associativity law (either unit or property-based tests).</p>
+<blockquote>
+<p><strong>Exercise:</strong> Can you come up with at least one more counterexample of semigroup?</p>
+</blockquote>
+<h2 id="conclusion">Conclusion</h2>
+<p>That’s it for now! I wanted to keep the introduction light. But you’re going to be mind-blown pretty soon. I promise (however, I don’t give any refunds).</p>
+<h2 id="acknowledgement">Acknowledgement</h2>
+<p>Many thanks to people who proofread the early draft of this article and shared their invaluable feedback: <a href="https://x.com/_____C">_____C</a> <a href="https://x.com/adworse">adworse</a> <a href="https://x.com/DazzlingHazlitt">DazzlingHazlitt</a> <a href="https://x.com/egmaleta">egmaleta</a> <a href="https://x.com/int_index">int_index</a> <a href="https://x.com/janiczek">janiczek</a> <a href="https://x.com/jwdunne_dev">jwdunne_dev</a></p>
+<hr>
+<blockquote>
+<p>If you liked this blog post, consider following me on YouTube, X (formerly known as Twitter) or sponsoring my work on GitHub</p>
+<ul>
+<li><a href="https://youtube.com/c/chshersh">YouTube: chshersh</a></li>
+<li><a href="https://twitter.com/ChShersh">𝕏: chshersh</a></li>
+<li><a href="https://github.com/sponsors/chshersh">GitHub Sponsors: Support chshersh!</a></li>
+</ul>
+</blockquote>
+    </main>
+</body>
+</html>

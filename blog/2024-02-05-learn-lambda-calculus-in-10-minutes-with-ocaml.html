@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Learn Lambda Calculus in 10 minutes with OCaml</title>
+    <meta name="author" content="Dmitrii Kovanikov">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Noto+Sans+Mono&display=swap">
+    <link rel="stylesheet" href="/css/article.css">
+</head>
+<body>
+    <header>
+      <h1>Learn Lambda Calculus in 10 minutes with OCaml</h1>
+    </header>
+
+    <main>
+<p>I’m going to teach you the basics of Lambda Calculus really quickly.</p>
+<p>Lambda Calculus is deep. But I’m covering only the fundamentals here.</p>
+<h2 id="what-is-lambda-calculus">What is Lambda Calculus?</h2>
+<p><a href="https://en.wikipedia.org/wiki/Lambda_calculus">Lambda Calculus</a> (LC) is a model to describe computations.</p>
+<p>LC describes the syntax and semantics.</p>
+<h2 id="syntax">Syntax</h2>
+<p>A <strong>lambda expression</strong> (also known as <strong>lambda term</strong>) can be one of the following three things:</p>
+<ol type="1">
+<li>Variable</li>
+<li>Application</li>
+<li>Abstraction</li>
+</ol>
+<h3 id="variable">Variable</h3>
+<p>A <strong>variable</strong> is just a <strong>string</strong>. For example:</p>
+<ul>
+<li><strong>Traditional:</strong> <code>x</code></li>
+<li><strong>Programmer-friendly</strong> <code>company_id</code></li>
+</ul>
+<h3 id="application">Application</h3>
+<p><strong>Application</strong> (aka <em>function application</em>) is applying one term to another.</p>
+<p>To introduce an application, simply separate two terms by a space (and use parentheses appropriately).</p>
+<p>An application can be simple:</p>
+<ul>
+<li><strong>Traditional:</strong> <code>f x</code></li>
+<li><strong>Programmer-friendly</strong> <code>employees_of company_id</code></li>
+</ul>
+<p>Or more involved</p>
+<ul>
+<li><strong>Traditional:</strong> <code>f (g x) (h x)</code></li>
+<li><strong>Programmer-friendly</strong> <code>find_by_id (get map (entry key)) (hash id)</code></li>
+</ul>
+<blockquote>
+<p>:warning: Parentheses matter! <code>f (g x)</code> is not the same as <code>(f g) x</code>!</p>
+</blockquote>
+<h3 id="abstraction">Abstraction</h3>
+<p><strong>Abstraction</strong> (aka anonymous function) is a way to introduce functions in Lambda Calculus.</p>
+<p>To introduce an abstraction, write the Greek letter <code>λ</code> followed by the variable name, a dot <code>.</code> and a body of a function.</p>
+<blockquote>
+<p>The variable after λ is known to be <strong>bound</strong>.</p>
+</blockquote>
+<ul>
+<li><strong>Traditional:</strong> <code>λx.f x</code></li>
+<li><strong>Programmer-friendly</strong> <code>λcompany_id.employees_of company_id</code></li>
+</ul>
+<p>Abstractions can be nested:</p>
+<ul>
+<li><strong>Traditional:</strong> <code>λx.λy.f x y</code></li>
+<li><strong>Programmer-friendly</strong> <code>λcompany_id.λcount.has_at_least (employees_of company_id) count</code></li>
+</ul>
+<h2 id="semantics">Semantics</h2>
+<p>LC is not just about a fancy way to write functions and their arguments. It also attaches semantics to terms. Specifically:</p>
+<ol type="1">
+<li>Rename a bound variable (known as <strong>α-conversion</strong>)</li>
+<li>Apply a function to its arguments (known as <strong>β-reduction</strong>)</li>
+</ol>
+<h3 id="renaming-α-conversion">Renaming (α-conversion)</h3>
+<p>The idea is simple. If you rename a local variable of a function, the behaviour of this function doesn’t change.</p>
+<p>Terms on both sides of <code>=</code> are equal in the following examples:</p>
+<ul>
+<li><strong>Traditional:</strong> <code>λx.f (g x) (h x) = λy.f (g y) (h y)</code></li>
+<li><strong>Programmer-friendly</strong> <code>λcompany_id.size company_id = λcompanyId.size companyId</code></li>
+</ul>
+<h3 id="applying-β-reduction">Applying (β-reduction)</h3>
+<p>Function application takes an <em>abstraction</em> and applies it to its argument by replacing a bound variable with the argument.</p>
+<p>It’s implemented as a simple string search-and-replace. Evaluating a function has never been simpler!</p>
+<p>I’m using the <code>=&gt;</code> operator here with the meaning <em>reduces to</em>.</p>
+<ul>
+<li><strong>Traditional:</strong> <code>(λx.f x) y =&gt; f y</code></li>
+<li><strong>Programmer-friendly</strong> <code>(λcompany_id.size company_id) bloomberg =&gt; size bloomberg</code></li>
+</ul>
+<blockquote>
+<p>⚠️ You can see that parentheses matter here as well! <code>λx.f x y</code> is not the same as <code>(λx.f x) y</code>!</p>
+</blockquote>
+<blockquote>
+<p>💎 Bonus! One lambda term is especially popular, it even has its own name <strong>Ω-combinator</strong></p>
+<pre><code>(λx.x x) (λx.x x)</code></pre>
+<p>It represents infinite recursion because beta-reducing this term returns the term itself.</p>
+</blockquote>
+<hr/>
+<p>As you can see, the basics of Lambda Calculus are pretty simple but turns out, they’re powerful enough to describe <strong>any possible computation</strong>. Although, it might not provide the most efficient way to compute things.</p>
+<h2 id="practice">Practice</h2>
+<p>Now that we learned the theory, it’s time to do some practice!</p>
+<blockquote>
+<p>The following sections provide exercises for you to implement a simple program to work with LC. Solutions in OCaml are provided as well.</p>
+</blockquote>
+<blockquote>
+<p>⚠️ Implementing the following exercises may take longer than 10 minutes, so don’t worry!</p>
+</blockquote>
+<h3 id="modeling-lambda-calculus">Modeling Lambda Calculus</h3>
+<p>First of all, let’s define a type to model a term in Lambda Calculus. Remember, it can be either a variable name, an application of two terms or a lambda-abstraction.</p>
+<p><strong>Exercise 1.</strong> Create a data type to describe a term in Lambda Calculus.</p>
+<p>{% spoiler Solution in OCaml %} This is nicely modelled with sum types:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">type</span> expr =</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>  | Var <span class="kw">of</span> <span class="dt">string</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>  | App <span class="kw">of</span> expr * expr</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>  | Lam <span class="kw">of</span> <span class="dt">string</span> * expr</span></code></pre></div>
+<p>Example of terms in both LC and OCaml:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Lambda Calculus</th>
+<th>OCaml</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>x</td>
+<td><code>Var "x"</code></td>
+</tr>
+<tr class="even">
+<td>f x</td>
+<td><code>App (Var "f", Var "x")</code></td>
+</tr>
+<tr class="odd">
+<td>λx.f x</td>
+<td><code>Lam ("x", App (Var "f", Var "x"))</code></td>
+</tr>
+</tbody>
+</table>
+<p>{% endspoiler %}</p>
+<h3 id="pretty-printing">Pretty-printing</h3>
+<p>Now that we have a type, let’s implement a function to display a value of our type nicely.</p>
+<p><strong>Exercise 2.</strong> Implement a pretty-printing function for Lambda Calculus.</p>
+<p>{% spoiler Solution in OCaml %} A simple solution in OCaml (that may produce some redundant parentheses) uses just pattern matching, <code>printf</code> and recursion.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">let</span> <span class="kw">rec</span> pretty = <span class="kw">function</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  | Var x -&gt; x</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>  | App (l, r) -&gt; <span class="dt">Printf</span>.sprintf <span class="st">&quot;(%s) (%s)&quot;</span> (pretty l) (pretty r)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>  | Lam (x, body) -&gt; <span class="dt">Printf</span>.sprintf <span class="st">&quot;λ%s.(%s)&quot;</span> x (pretty body)</span></code></pre></div>
+<p>{% endspoiler %}</p>
+<h3 id="parsing">Parsing</h3>
+<p>And the most difficult part (that made me ignore FP for 3 (!) years when I first tried to implement it).</p>
+<p>Can we go backwards? Can we parse a string to a value of our type?</p>
+<p><strong>Exercise 3.</strong> Implement a parser for Lambda Calculus.</p>
+<p>{% spoiler Solution in OCaml %} Here I’m using the Parser Combinators approach provided by the wonderful <a href="https://github.com/inhabitedtype/angstrom">angstrom</a> OCaml library.</p>
+<p>Parser Combinators deserve a separate blog post, so here I’m just presenting the full code without comments.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">open</span> Angstrom</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="kw">let</span> parens_p p = <span class="dt">char</span> <span class="ch">&#39;(&#39;</span> *&gt; p &lt;* <span class="dt">char</span> <span class="ch">&#39;)&#39;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="kw">let</span> name_p =</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>  take_while1 (<span class="kw">function</span> <span class="ch">&#39;a&#39;</span> .. <span class="ch">&#39;z&#39;</span> -&gt; <span class="kw">true</span> | _ -&gt; <span class="kw">false</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="kw">let</span> var_p = name_p &gt;&gt;| (<span class="kw">fun</span> name -&gt; Var name)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="kw">let</span> app_p expr_p =</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>  <span class="kw">let</span> ( <span class="kw">let</span>* ) = (&gt;&gt;=) <span class="kw">in</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>  <span class="kw">let</span>* l = parens_p expr_p <span class="kw">in</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>  <span class="kw">let</span>* _ = <span class="dt">char</span> <span class="ch">&#39; &#39;</span> <span class="kw">in</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a>  <span class="kw">let</span>* r = parens_p expr_p <span class="kw">in</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>  return (App (l, r))</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a><span class="kw">let</span> lam_p expr_p =</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a>  <span class="kw">let</span> ( <span class="kw">let</span>* ) = (&gt;&gt;=) <span class="kw">in</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true"></a>  <span class="kw">let</span>* _ = <span class="dt">string</span> <span class="st">&quot;λ&quot;</span> <span class="kw">in</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true"></a>  <span class="kw">let</span>* var = name_p <span class="kw">in</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true"></a>  <span class="kw">let</span>* _ = <span class="dt">char</span> <span class="ch">&#39;.&#39;</span> <span class="kw">in</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true"></a>  <span class="kw">let</span>* body = parens_p expr_p <span class="kw">in</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true"></a>  return (Lam (var, body))</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true"></a><span class="kw">let</span> expr_p: expr t =</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true"></a>  fix (<span class="kw">fun</span> expr_p -&gt;</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true"></a>    var_p &lt;|&gt; app_p expr_p &lt;|&gt; lam_p expr_p &lt;|&gt; parens_p expr_p</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true"></a>  )</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true"></a><span class="kw">let</span> parse str =</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true"></a>  <span class="kw">match</span> parse_string ~consume:All expr_p str <span class="kw">with</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true"></a>  | Ok expr   -&gt; <span class="dt">Printf</span>.printf <span class="st">&quot;Success: %s</span><span class="ch">\n</span><span class="st">%!&quot;</span> (pretty expr)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true"></a>  | Error msg -&gt; <span class="dt">failwith</span> msg</span></code></pre></div>
+<p>{% endspoiler %}</p>
+<hr>
+<p>The full working OCaml code can be found here:</p>
+<ul>
+<li><a href="https://gist.github.com/chshersh/6d354c0a3a9a4120a30226f26853653f"><code>lam.ml</code>: Lambda Calculus in OCaml</a></li>
+</ul>
+<h2 id="whats-next">What’s next?</h2>
+<p>I hope this blog post helped you to learn the basics of Lambda Calculus!</p>
+<p>At least now, when you hear these words, you’ll know their meaning.</p>
+<p>If you feel like you want to take on some challenge, you can try to implement α-conversion and β-reduction for your simple Lambda Calculus language!</p>
+<p>And most importantly, have fun!</p>
+<blockquote>
+<p>If you liked this blog post, consider following me on YouTube, X (formerly known as Twitter) or sponsoring my work on GitHub</p>
+<ul>
+<li><a href="https://youtube.com/c/chshersh">YouTube: chshersh</a></li>
+<li><a href="https://twitter.com/ChShersh">𝕏: chshersh</a></li>
+<li><a href="https://github.com/sponsors/chshersh">GitHub Sponsors: Support chshersh!</a></li>
+</ul>
+</blockquote>
+    </main>
+</body>
+</html>

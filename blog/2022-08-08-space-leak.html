@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Avoiding space leaks at all costs</title>
+    <meta name="author" content="Dmitrii Kovanikov">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Noto+Sans+Mono&display=swap">
+    <link rel="stylesheet" href="/css/article.css">
+</head>
+<body>
+    <header>
+      <h1>Avoiding space leaks at all costs</h1>
+    </header>
+
+    <main>
+<p>Haskell is a purely functional <strong>lazy</strong> programming language. The world doesn’t have a lot of lazy-by-default PLs. In fact, all mainstream languages have <strong>eager</strong> evaluation models.</p>
+<p>You may argue it’s because eager evaluation is better (because this is how the world works, obviously, only good things are popular). I tend to think this happened because implementing the lazy evaluation model is more difficult and nobody wanted to bother.</p>
+<p>In any case, both <em>lazy</em> and <em>eager</em> evaluations have their own advantages and drawbacks. But this post is not about <a href="https://www.tweag.io/blog/2022-05-12-strict-vs-lazy/">comparing different evaluation semantics</a> and their trade-offs. I’d like to talk about living with the consequences of our choices.</p>
+<p>Haskell programs are infamous for having lots of space leaks. This is the result of Haskell choosing the lazy evaluation model and not designing the language around preventing such type of memory usage errors.</p>
+<p>Investigating and fixing space leaks brought tons of frustration to Haskell developers. Believe it or not, I’m not a fan of space leaks either. However, instead of fighting the fire later, you can use several techniques to prevent the catastrophe in the first place.</p>
+<p>In this blog post, I’m going to describe several safeguards you can put in your codebase to avoid seeing any space leaks in your Haskell programs.</p>
+<p>Space leaks can happen in any programming language but here I’m focusing on Haskell-specific ways to avoid space leaks. These guidelines will be helpful to all Haskell developers who want to improve the performance and memory usage of their Haskell programs while saving their precious time by avoiding the need to debug annoying memory troubles.</p>
+<h2 id="what-is-a-space-leak">What is a Space Leak?</h2>
+<p>A <strong>space leak</strong> occurs when a computer program uses more memory than necessary.</p>
+<p>In this form, the definition is too broad. Who am I to tell the computer how much memory it needs??? The machine knows better than mere mortals 😤 But usually, space leak occurs when a program uses more memory “accidentally” or “unintentionally”.</p>
+<p>To understand the problem, let’s look at a simple implementation of a function that adds all elements in a list. And we’re also going to apply our function to the list of all integers from 1 to 1 million:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="ot">add ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>add []       <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>add (x <span class="op">:</span> xs) <span class="ot">=</span> x <span class="op">+</span> add xs</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>main <span class="ot">=</span> <span class="fu">print</span> <span class="op">$</span> add [<span class="dv">1</span> <span class="op">..</span> <span class="dv">1000000</span>]</span></code></pre></div>
+<p>We can compile this Haskell program and ask GHC <strong>R</strong>un<strong>T</strong>ime <strong>S</strong>ystem (RTS) to print its memory usage stats:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ <span class="ex">ghc</span> Main.hs</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>[<span class="ex">1</span> of 1] Compiling Main             ( Main.hs, Main.o )</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="ex">Linking</span> Main ...</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>$ <span class="ex">./Main</span> +RTS -t</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="ex">500000500000</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="op">&lt;&lt;ghc:</span> <span class="ex">145311416</span> bytes, 28 GCs, 13277046/31810960 avg/max bytes residency (4 samples), <span class="ex">66M</span> in use, 0.000 INIT (0.000 elapsed), <span class="ex">0.061</span> MUT (0.062 elapsed), <span class="ex">0.106</span> GC (0.106 elapsed) :<span class="ex">ghc</span><span class="op">&gt;&gt;</span></span></code></pre></div>
+<p>The relevant metric here is <em>max bytes residency</em> which is 31810960 bytes (~31 MB). This is how much actual data we keep in memory at the program’s peak memory usage.</p>
+<p>Actual program memory usage can be checked with the <code>time</code> tool by passing the <code>-v</code> flag and looking at the <em>Maximum resident set size</em> metric:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>$ <span class="ex">/usr/bin/time</span> -v ./Main</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="ex">500000500000</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="ex">Command</span> being timed: <span class="st">&quot;./Main&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="ex">User</span> time (seconds)<span class="bu">:</span> 0.13</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    <span class="ex">System</span> time (seconds)<span class="bu">:</span> 0.02</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>    <span class="ex">Percent</span> of CPU this job got: 98%</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    <span class="ex">Elapsed</span> (wall clock) <span class="bu">time</span> (h:mm:ss or m:ss)<span class="bu">:</span> 0:00.16</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>    <span class="ex">Average</span> shared text size (kbytes)<span class="bu">:</span> 0</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>    <span class="ex">Average</span> unshared data size (kbytes)<span class="bu">:</span> 0</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>    <span class="ex">Average</span> stack size (kbytes)<span class="bu">:</span> 0</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>    <span class="ex">Average</span> total size (kbytes)<span class="bu">:</span> 0</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>    <span class="ex">Maximum</span> resident set size (kbytes)<span class="bu">:</span> 70692</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>    <span class="ex">Average</span> resident set size (kbytes)<span class="bu">:</span> 0</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a>    <span class="ex">Major</span> (requiring I/O) <span class="ex">page</span> faults: 0</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a>    <span class="ex">Minor</span> (reclaiming a frame) <span class="ex">page</span> faults: 16963</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a>    <span class="ex">Voluntary</span> context switches: 1</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a>    <span class="ex">Involuntary</span> context switches: 18</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a>    <span class="ex">Swaps</span>: 0</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a>    <span class="ex">File</span> system inputs: 0</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a>    <span class="ex">File</span> system outputs: 0</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a>    <span class="ex">Socket</span> messages sent: 0</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true"></a>    <span class="ex">Socket</span> messages received: 0</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true"></a>    <span class="ex">Signals</span> delivered: 0</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true"></a>    <span class="ex">Page</span> size (bytes)<span class="bu">:</span> 4096</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true"></a>    <span class="ex">Exit</span> status: 0</span></code></pre></div>
+<p>We see the value of 70692 KB (or ~70 MB). So, our Haskell program actually uses twice as much memory as our actual data observed by GHC.</p>
+<blockquote>
+<p>👩‍🔬 This is explained by the implementation of Garbage Collector (GC) in GHC. The GC needs twice as much memory to copy all live data from one half to another “empty” half during the copying phase. So any Haskell program will actually require at least twice as much memory as you actually use.</p>
+</blockquote>
+<blockquote>
+<p>ℹ️ We can notice that GHC reports “66M in use” and it’s quite close to our 70 MB reported by <code>time</code>. So we can use this number from RTS for now to check the actual memory usage.</p>
+</blockquote>
+<p>Our Haskell program consumes so much memory because our implementation of <code>add</code> is highly inefficient. For now, this has nothing to do with lazy evaluation. Such implementation will be slow in every language. It happens because <code>add</code> doesn’t use tail-call recursion.</p>
+<p>To understand the problem better, let’s look at finding a sum of 5 numbers using the <a href="https://gilmi.me/blog/post/2020/10/01/substitution-and-equational-reasoning">Equational Reasoning</a> debugging technique:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">sum</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="fu">sum</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> <span class="fu">sum</span> [<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>])</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">+</span> <span class="fu">sum</span> [<span class="dv">4</span>, <span class="dv">5</span>]))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">+</span> (<span class="dv">4</span> <span class="op">+</span> <span class="fu">sum</span> [<span class="dv">5</span>])))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">+</span> (<span class="dv">4</span> <span class="op">+</span> (<span class="dv">5</span> <span class="op">+</span> <span class="fu">sum</span> []))))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">+</span> (<span class="dv">4</span> <span class="op">+</span> (<span class="dv">5</span> <span class="op">+</span> <span class="dv">0</span>))))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">+</span> (<span class="dv">4</span> <span class="op">+</span> <span class="dv">5</span>)))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">+</span> <span class="dv">9</span>))</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> (<span class="dv">2</span> <span class="op">+</span> <span class="dv">12</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">14</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">15</span></span></code></pre></div>
+<p>You can see that we’re storing the entire list as nested un-evaluated additions and we can’t reduce them until we go through the entire list.</p>
+<blockquote>
+<p>👩‍🔬 This is especially relevant for non-materialized lists like <code>[1 ... 1000]</code>. Such a range expression doesn’t allocate a thousand numbers immediately but rather produces them on demand. However, with our naive implementation of <code>add</code> we are actually going to store in memory all elements of the list.</p>
+</blockquote>
+<hr>
+<p>Usually, such problems are solved by rewriting the implementation to use Tail-Call Optimization (TCO). Let’s do this with <code>add</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ot">add ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>add <span class="ot">=</span> go <span class="dv">0</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="ot">    go ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    go acc [] <span class="ot">=</span> acc</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>    go acc (x <span class="op">:</span> xs) <span class="ot">=</span> go (acc <span class="op">+</span> x) xs</span></code></pre></div>
+<p>If we run our program with this new implementation, we won’t see any memory usage improvements. In fact, our performance becomes even worse!</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>$ <span class="ex">./Main</span> +RTS -t</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="ex">500000500000</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="op">&lt;&lt;ghc:</span> <span class="ex">153344184</span> bytes, 36 GCs, 17277505/46026632 avg/max bytes residency (5 samples), <span class="ex">93M</span> in use, 0.001 INIT (0.001 elapsed), <span class="ex">0.046</span> MUT (0.046 elapsed), <span class="ex">0.193</span> GC (0.193 elapsed) :<span class="ex">ghc</span><span class="op">&gt;&gt;</span></span></code></pre></div>
+<p>Now it’s 93 MB instead of the previous 66 MB. Not so much for an optimization then, heh 🥲</p>
+<p>The new implementation of <code>add</code> is properly TCO-ed but now we actually hit lazy evaluation problems. If we apply equational reasoning again, we see the root cause:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="fu">sum</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="ot">=</span> go <span class="dv">0</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="ot">=</span> go (<span class="dv">0</span> <span class="op">+</span> <span class="dv">1</span>) [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="ot">=</span> go ((<span class="dv">0</span> <span class="op">+</span> <span class="dv">1</span>) <span class="op">+</span> <span class="dv">2</span>) [<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="ot">=</span> go (((<span class="dv">0</span> <span class="op">+</span> <span class="dv">1</span>) <span class="op">+</span> <span class="dv">2</span>) <span class="op">+</span> <span class="dv">3</span>) [<span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a><span class="ot">=</span> go ((((<span class="dv">0</span> <span class="op">+</span> <span class="dv">1</span>) <span class="op">+</span> <span class="dv">2</span>) <span class="op">+</span> <span class="dv">3</span>) <span class="op">+</span> <span class="dv">4</span>) [<span class="dv">5</span>]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a><span class="ot">=</span> go (((((<span class="dv">0</span> <span class="op">+</span> <span class="dv">1</span>) <span class="op">+</span> <span class="dv">2</span>) <span class="op">+</span> <span class="dv">3</span>) <span class="op">+</span> <span class="dv">4</span>) <span class="op">+</span> <span class="dv">5</span>) []</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a><span class="ot">=</span> ((((<span class="dv">0</span> <span class="op">+</span> <span class="dv">1</span>) <span class="op">+</span> <span class="dv">2</span>) <span class="op">+</span> <span class="dv">3</span>) <span class="op">+</span> <span class="dv">4</span>) <span class="op">+</span> <span class="dv">5</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a><span class="ot">=</span> (((<span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span>) <span class="op">+</span> <span class="dv">3</span>) <span class="op">+</span> <span class="dv">4</span>) <span class="op">+</span> <span class="dv">5</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a><span class="ot">=</span> ((<span class="dv">3</span> <span class="op">+</span> <span class="dv">3</span>) <span class="op">+</span> <span class="dv">4</span>) <span class="op">+</span> <span class="dv">5</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a><span class="ot">=</span> (<span class="dv">6</span> <span class="op">+</span> <span class="dv">4</span>) <span class="op">+</span> <span class="dv">5</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">10</span> <span class="op">+</span> <span class="dv">5</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a><span class="ot">=</span> <span class="dv">15</span></span></code></pre></div>
+<p>We still retain our entire list as delayed additions. Haskell laziness explains such behaviour but it might be unexpected when observed for the first time.</p>
+<p>Lazy-by-default evaluations has their own benefits but it’s not what we’re looking for here. What we want is to add numbers to our accumulator <strong>immediately</strong>.</p>
+<p>Fortunately, this is easily possible with Haskell. You need to enable the <a href="https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#bang-patterns-and-strict-haskell">BangPatterns</a> feature and use exclamations <code>!</code> in front of patterns for variables where you want the evaluation to be performed eagerly.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="ot">{-# LANGUAGE BangPatterns #-}</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="ot">add ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>add <span class="ot">=</span> go <span class="dv">0</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a><span class="ot">    go ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a>    go <span class="op">!</span>acc [] <span class="ot">=</span> acc</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true"></a>    go <span class="op">!</span>acc (x <span class="op">:</span> xs) <span class="ot">=</span> go (acc <span class="op">+</span> x) xs</span></code></pre></div>
+<p>Now, if we run our program, we’ll see that it uses a more reasonable 5 MB now!</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>$ <span class="ex">./Main</span> +RTS -t</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a><span class="ex">500000500000</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="op">&lt;&lt;ghc:</span> <span class="ex">120051896</span> bytes, 29 GCs, 36312/44328 avg/max bytes residency (2 samples), <span class="ex">5M</span> in use, 0.000 INIT (0.000 elapsed), <span class="ex">0.044</span> MUT (0.044 elapsed), <span class="ex">0.001</span> GC (0.001 elapsed) :<span class="ex">ghc</span><span class="op">&gt;&gt;</span></span></code></pre></div>
+<p>Moreover, not only did we significantly decrease memory usage in this example but memory usage won’t grow if the data size grows. If we increase the list size from 1 million to 10 million, memory consumption in our first naive implementation will grow from 66 MB to 628 MB (a job for a true 10x Haskell developer). However, our optimized implementation will continue using 5 MB no matter how we increase the size of the data.</p>
+<hr>
+<p>In this section, we looked at the definition of space leak and how it can be fixed in a simple Haskell program. In the next section, we’re going to look at common ways for preventing space leaks.</p>
+<h2 id="lazy-guidelines">Lazy guidelines</h2>
+<p>Haskell is especially sensitive to the presence of space leaks in programs because both performance and memory usage suffer. Since Haskell has a GC, it spends more time moving around unnecessarily allocated memory.</p>
+<p><strong>The more garbage you have, the more garbage you need to clean up.</strong> 👆</p>
+<p>So I would like to share some guidelines for avoiding space leaks in Haskell programs. Following these guidelines doesn’t guarantee that you’ll never ever see a space leak but it greatly reduces the chances of getting one. Don’t know about you folks but I’d like to improve my survival chances at any cost.</p>
+<blockquote>
+<p>⚠️ Applying the below techniques blindly may backfire if you tried to be too clever with some Haskell tricks. For instance, if you use the <a href="https://www.fpcomplete.com/blog/tying-the-knot-haskell/">Tying the knot</a> technique, following the below suggestions may result in your code hanging which is much worse than having a space leak!</p>
+</blockquote>
+<h3 id="use-bangpatterns-in-strict-accumulators">Use BangPatterns in strict accumulators</h3>
+<div class="thought">
+<p><a href="https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#bang-patterns-and-strict-haskell">BangPatterns</a> is your second best friend.</p>
+</div>
+<p>The problem and the solution were demonstrated at the beginning of this article. The general suggestion is to use strict accumulators when using the <em>recursive go pattern</em> or similar to avoid the accumulation of unevaluated expressions in a single variable.</p>
+<p>You don’t need to add <code>!</code> blindly everywhere. For example, the following code evaluates the accumulator of type <code>Set</code> on every recursive call anyway, so you don’t need to use the <code>!</code>-patterns in the <code>acc</code> variable:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="ot">ordNub ::</span> <span class="kw">forall</span> a <span class="op">.</span> <span class="dt">Ord</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> [a]</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>ordNub <span class="ot">=</span> go <span class="fu">mempty</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="ot">    go ::</span> <span class="dt">Set</span> a <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>    go _ [] <span class="ot">=</span> []</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>    go acc (x <span class="op">:</span> xs)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a>        <span class="op">|</span> Set.member x acc <span class="ot">=</span> go acc xs</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a>        <span class="op">|</span> <span class="fu">otherwise</span>        <span class="ot">=</span> x <span class="op">:</span> go (Set.insert x acc) xs</span></code></pre></div>
+<p>But if you don’t force the evaluation of an accumulator on every recursive steps with various functions, the strict pattern matching <code>!</code> comes to the rescue.</p>
+<figure>
+<img src="/images/space-leak/space-leak-bang-patterns.jpeg" alt="" /><figcaption>Using BangPatterns to reduce space leaks</figcaption>
+</figure>
+<h3 id="strictdata">StrictData</h3>
+<div class="thought">
+<p>Enable the <code>StrictData</code> feature.</p>
+</div>
+<p>A simple thing you can do today to reduce the number of space leaks is to enable the <a href="https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#strict-by-default-data-types">StrictData</a> language feature. Either in each module:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="ot">{-# LANGUAGE StrictData #-}</span></span></code></pre></div>
+<p>Or, even better, in your package <code>.cabal</code> file globally:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>  default<span class="op">-</span>extensions<span class="op">:</span> <span class="dt">StrictData</span></span></code></pre></div>
+<blockquote>
+<p>ℹ️ Instead of enabling this feature, you can specify individual fields as strict using <code>!</code> in the type definition but this approach is more cumbersome and error-prone.</p>
+</blockquote>
+<blockquote>
+<p>👩‍🔬 It’s extremely rare when you need lazy fields intentionally (you can use <code>~</code> to mark fields as lazy when <code>StrictData</code> is enabled).</p>
+</blockquote>
+<p>In fact, enabling <code>StrictData</code> by default in your <code>.cabal</code> file today is the simplest thing you can do to avoid half of the space leaks! 👏</p>
+<blockquote>
+<p>ℹ️ As an additional benefit of enabling <code>StrictData</code>, GHC will now produce a compiler error instead of a warning when you <a href="https://chshersh.com/recordwildcards#strict-construction">forget to initialise some of the fields</a>.</p>
+</blockquote>
+<figure>
+<img src="/images/space-leak/space-leak-strict-data.jpg" alt="" /><figcaption>Enabling StrictData to fight space leaks</figcaption>
+</figure>
+<p>Lazy evaluation helps to avoid unnecessary evaluation when you don’t use all the arguments in the result. But the reality shows that with custom data types you almost always want all their fields eventually (serialization to Text, JSON, DB; aggregation of all fields in a single value, etc.). So laziness doesn’t actually reduce performance overhead, it only delays evaluation to the future by keeping unnecessary data in memory longer than it should be.</p>
+<p>Let’s look at an example of a space leak:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">QueryResult</span> <span class="ot">=</span> <span class="dt">MkQueryResult</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>    {<span class="ot"> queryResultUniqueIds ::</span> <span class="dt">Set</span> <span class="dt">ResponseId</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>    , <span class="op">...</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a>    }</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a><span class="ot">aggregateApi ::</span> <span class="dt">UserId</span> <span class="ot">-&gt;</span> <span class="dt">App</span> <span class="dt">QueryResult</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a>aggregateApi userId <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a>    response1 <span class="ot">&lt;-</span> queryApi1 userId</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a>    response2 <span class="ot">&lt;-</span> queryApi2 userId</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true"></a>    response3 <span class="ot">&lt;-</span> queryApi3 userId</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true"></a>    <span class="op">...</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true"></a>    <span class="fu">pure</span> <span class="dt">QueryResult</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true"></a>        { queryResultUniqueIds <span class="ot">=</span> Set.fromList <span class="op">$</span> response1 <span class="op">&lt;&gt;</span> response2 <span class="op">&lt;&gt;</span> response3</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true"></a>        , <span class="op">...</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true"></a>        }</span></code></pre></div>
+<p>In this example, the code queries data from several APIs. Each individual response can be potentially huge. However, if we don’t use <code>StrictData</code>, we will keep all the <code>response1</code>, <code>response2</code> and <code>response3</code> values in memory until we try to evaluate the <code>queryResultUniqueIds</code> field.</p>
+<p>Now, imagine several concurrent calls to the <code>aggregateApi</code> function and each of them keeps more memory around than it needs. And the problem becomes even worse. ⏲💣</p>
+<p>Enabling <code>StrictData</code> would prevent such a problem here.</p>
+<h3 id="consume-local-values-eagerly">Consume local values eagerly</h3>
+<div class="thought">
+<p>Use <code>!</code>-patterns and the <code>$!</code> strict application operator to evaluate values of local variables eagerly.</p>
+</div>
+<p>Let’s look at a simplified version of code from the previous section:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="ot">aggregateApi ::</span> <span class="dt">UserId</span> <span class="ot">-&gt;</span> <span class="dt">App</span> (<span class="dt">Set</span> <span class="dt">ResponseId</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>aggregateApi userId <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>    response1 <span class="ot">&lt;-</span> queryApi1 userId</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a>    response2 <span class="ot">&lt;-</span> queryApi2 userId</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>    response3 <span class="ot">&lt;-</span> queryApi3 userId</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a>    <span class="op">...</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a>    <span class="fu">pure</span> <span class="op">$</span> Set.fromList (response1 <span class="op">&lt;&gt;</span> response2 <span class="op">&lt;&gt;</span> response3)</span></code></pre></div>
+<p>This program still has space leaks and enabling <code>StrictData</code> won’t help because our value of type <code>Set</code> is not part of a data type.</p>
+<p>Here you can get rid of a potential space leak by evaluating the result of <code>Set.fromList</code> eagerly with the help of <code>$!</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>    <span class="op">...</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>    <span class="fu">pure</span> <span class="op">$!</span> Set.fromList (<span class="op">...</span>)</span></code></pre></div>
+<blockquote>
+<p>⚠️🧠😒 <strong>PEDANTIC NERD WARNING</strong>: Strictly speaking (pun intended), usage of <code>$!</code> eliminates the space leak because of the <code>Set</code> data structure specifics. The <code>$!</code> operator evaluates only up until Weak-Head Normal Form (WHNF). Or, in simple words, only to the first constructor. Internally <code>Set</code> is implemented with balanced AVL-tree. To figure out the root constructor, the data structure requires to insert all elements. That’s why we don’t see a space leak. But if <code>Set</code> was implemented naively using simple binary trees, it would be possible to stil have space leak even after using <code>$!</code>.</p>
+</blockquote>
+<p>The idea behind this suggestion is that local variables are not visible outside of the function scope. So the function caller has no way of controlling their lifetime. Hence, it’s the responsibility of the function implementor to think about potential space leaks.</p>
+<figure>
+<img src="/images/space-leak/space-leak-consume.jpg" alt="" /><figcaption>Eat all local values!</figcaption>
+</figure>
+<h3 id="use-strict-containers">Use strict containers</h3>
+<div class="thought">
+<p>Use <code>Map</code> type and functions from the <code>Data.Map.Strict</code> module and <code>HashMap</code> from <code>Data.HashMap.Strict</code></p>
+</div>
+<p>The <a href="@hackage">containers</a> library implements the dictionary data structure called <code>Map</code>. The library provides two versions of this data structure: <em>lazy</em> and <em>strict</em>. The data type is the same for both versions but the function implementation details are different.</p>
+<p>The only difference is that values in the strict map are evaluated strictly. That’s all.</p>
+<p>If you use strict <code>Map</code> instead of lazy, the following code doesn’t contain space leak:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="ot">aggregateApi ::</span> <span class="dt">UserId</span> <span class="ot">-&gt;</span> <span class="dt">App</span> (<span class="dt">Map</span> <span class="dt">UserId</span> (<span class="dt">Set</span> <span class="dt">ResponseId</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>aggregateApi userId <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a>    response1 <span class="ot">&lt;-</span> queryApi1 userId</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a>    response2 <span class="ot">&lt;-</span> queryApi2 userId</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a>    response3 <span class="ot">&lt;-</span> queryApi3 userId</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a>    <span class="op">...</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true"></a>    <span class="fu">pure</span> <span class="op">$</span> Map.singleton userId <span class="op">$</span> Set.fromList <span class="op">$</span> response1 <span class="op">&lt;&gt;</span> response2 <span class="op">&lt;&gt;</span> response3</span></code></pre></div>
+<blockquote>
+<p>🧩 <strong>Exercise</strong>: could you replace a single <code>$</code> with <code>$!</code> in the above code to eliminate space leak without using the strict <code>Map</code>?</p>
+</blockquote>
+<p><code>Map</code> and <code>HashMap</code> are quite common data structures. And you don’t want to have a <code>Map</code> around that still retains a pointer to some unevaluated expression. We don’t need zombie data 💀</p>
+<blockquote>
+<p>👩‍🔬 You may still benefit from lazy data structures when they are used with awareness. For example, lazy arrays enable the <a href="https://jelv.is/blog/Lazy-Dynamic-Programming/">Lazy Dynamic Programming</a> approach.</p>
+</blockquote>
+<h3 id="use-strict-text-types">Use strict text types</h3>
+<div class="thought">
+<p>Use strict <code>Text</code> or <code>ShortByteString</code> or strict <code>ByteString</code>.</p>
+</div>
+<p>It’s really cool that you can consume a multi-gigabyte file in constant memory using only the Haskell standard library: lazy IO and <code>String</code>. But most of the time you don’t need this. And even if you need, there’re more efficient ways to solve this problem.</p>
+<p>In all other cases <code>String</code> performs much worse and increases the likelihood of introducing a space leak. Are you still using Haskell’s <code>String</code> in 2022???</p>
+<blockquote>
+<p>👩‍🔬 Since <a href="https://discourse.haskell.org/t/text-2-0-with-utf8-is-finally-released/3840">the <code>text-2.0</code> release</a>, the <code>Text</code> type is now UTF-8 encoded instead of the previous UTF-16 encoding.</p>
+</blockquote>
+<blockquote>
+<p>👩‍🔬 Since the <a href="https://hasufell.github.io/posts/2022-06-29-fixing-haskell-filepaths.html">latest release of the <code>filepath</code> library</a>, you can even switch <code>FilePath</code> (which is <code>String</code> in disguise) to a better type.</p>
+</blockquote>
+<h3 id="dont-use-the-state-monad">Don’t use the State monad</h3>
+<div class="thought">
+<p>Don’t use the <code>State</code> monad from the <code>transformers</code> and <code>mtl</code> packages.</p>
+</div>
+<p>The <a href="@hackage">transformers</a> library implements the <code>State</code> monad (and <a href="@hackage">mtl</a> reexports it) in two versions: lazy and strict. The data type definitions of both monads are the same (although they are different types incompatible with each other). And there’s a subtle difference in various instances, e.g. the <code>Monad</code> one:</p>
+<p><strong>Strict</strong></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="kw">instance</span> (<span class="dt">Monad</span> m) <span class="ot">=&gt;</span> <span class="dt">Monad</span> (<span class="dt">StateT</span> s m) <span class="kw">where</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>    m <span class="op">&gt;&gt;=</span> k  <span class="ot">=</span> <span class="dt">StateT</span> <span class="op">$</span> \ s <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>        (a, s&#39;) <span class="ot">&lt;-</span> runStateT m s</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a>        runStateT (k a) s&#39;</span></code></pre></div>
+<p><strong>Lazy</strong></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="kw">instance</span> (<span class="dt">Monad</span> m) <span class="ot">=&gt;</span> <span class="dt">Monad</span> (<span class="dt">StateT</span> s m) <span class="kw">where</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>    m <span class="op">&gt;&gt;=</span> k  <span class="ot">=</span> <span class="dt">StateT</span> <span class="op">$</span> \ s <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>        <span class="op">~</span>(a, s&#39;) <span class="ot">&lt;-</span> runStateT m s</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>        runStateT (k a) s&#39;</span></code></pre></div>
+<p>Unless you know the consequences of using the lazy version, I suggest defaulting to the strict State monad to avoid other places where you can have space leaks.</p>
+<p>Unfortunately, even <a href="https://free.cofree.io/2021/12/13/space-leak/">the strict State monad can cause space leaks</a> so the general suggestion is to avoid the state monad entirely unless you know what you’re doing.</p>
+<blockquote>
+<p>👩‍🔬 Usages of the strict <code>State</code> monad still can be safe if your state data type is strict and you’re careful enough with updating state using <code>put $! newState</code> or <code>modify'</code> and underlying monad in <code>StateT</code> doesn’t do anything funky.</p>
+</blockquote>
+<figure>
+<img src="/images/space-leak/space-leak-state.jpeg" alt="" /><figcaption>Impossible choice</figcaption>
+</figure>
+<h3 id="dont-use-the-writer-monad">Don’t use the Writer monad</h3>
+<div class="thought">
+<p>Don’t use the <code>Writer</code> monad from the <code>transformers</code> and <code>mtl</code> packages.</p>
+</div>
+<p>Seriously. Just don’t. You thought having lazy and strict versions of the <code>State</code> monad that both leak memory is a problem? Well, <code>Writer</code> has three (!!!) versions. And <a href="https://journal.infinitenegativeutility.com/writer-monads-and-space-leaks">at least two of them contain space leaks</a>.</p>
+<p>Moreover, the <code>Writer</code> monad is often misused for storing logs in memory. It’s an extremely terrible practice to store logs in memory instead of outputting them immediately somewhere.</p>
+<p>So, unless you definitely know what you’re doing, a simple suggestion would be to avoid the <code>Writer</code> monad entirely.</p>
+<figure>
+<img src="/images/space-leak/space-leak-writer.jpeg" alt="" /><figcaption>Don’t use the Writer monad</figcaption>
+</figure>
+<h3 id="use-atomicmodifyioref">Use atomicModifyIORef’</h3>
+<div class="thought">
+<p>Use <code>atomicModifyIORef'</code> from <code>base</code> when modifying <code>IORef</code></p>
+</div>
+<p>When dealing with mutable values inside <code>IORef</code>, you want to mutate them (duh!). Using <code>writeIORef</code> or <code>modifyIORef</code> functions for this purpose has at least two problems:</p>
+<ol type="1">
+<li>They’re lazy and don’t evaluate the result which leads to a higher probability of introducing space leaks.</li>
+<li>They are not thread-safe. Concurrent usage of these functions may corrupt the result.</li>
+</ol>
+<p>If your program is not multithreaded, you maybe don’t need <code>atomicModifyIORef'</code> (and maybe you don’t need <code>IORef</code> at all). But things may change in the future. Are you going to chase any single usage of potentially incorrect functions? You can start following best practices immediately!</p>
+<h3 id="evaluate-before-putting-into-mutable-references">Evaluate before putting into mutable references</h3>
+<div class="thought">
+<p>Evaluate values (with <code>!</code> or <code>seq</code> or <code>$!</code>) before putting them into <code>IORef</code> / <code>STRef</code> / <code>MVar</code> / <code>TVar</code>.</p>
+</div>
+<p><code>MVar</code> is another mutable container similar to <code>IORef</code>. It’s used in concurrent applications. Unfortunately, the situation with <code>MVar</code> is slightly worse than with <code>IORef</code> because its API doesn’t even provide strict functions.</p>
+<p>Consider the example:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="ot">aggregateApi ::</span> <span class="dt">MVar</span> (<span class="dt">Set</span> <span class="dt">ResponseId</span>) <span class="ot">-&gt;</span> <span class="dt">UserId</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>aggregateApi resVar userId <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>    response1 <span class="ot">&lt;-</span> queryApi1 userId</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a>    response2 <span class="ot">&lt;-</span> queryApi2 userId</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a>    response3 <span class="ot">&lt;-</span> queryApi3 userId</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a>    <span class="op">...</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true"></a>    <span class="kw">let</span> responses <span class="ot">=</span> Set.fromList <span class="op">$</span> response1 <span class="op">&lt;&gt;</span> response2 <span class="op">&lt;&gt;</span> response3</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true"></a>    putMVar resVar responses</span></code></pre></div>
+<p>Boom 💥 You have a space leak!</p>
+<p>You don’t evaluate the <code>responses</code> value before putting it inside <code>MVar</code>. So it’ll remain unevaluated until some other thread tries to consume the value inside and evaluate it. And it may happen way in the future while your program requires extra unneccessary memory.</p>
+<p>The solution to this problem is very simple though. You need to change a single line by adding <code>!</code> in front of the variable to evaluate it before putting inside <code>MVar</code></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>    <span class="op">...</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>    <span class="kw">let</span> <span class="op">!</span>responses <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>    <span class="op">...</span></span></code></pre></div>
+<p>The same advice regarding evaluating values before putting them into the mutable reference container applies to other mutable reference types as well.</p>
+<h3 id="pay-attention-to-the-usage-of-standard-types">Pay attention to the usage of standard types</h3>
+<div class="thought">
+<p>Remember, previous methods don’t evaluate values deeply and don’t affect already defined lazy types.</p>
+</div>
+<p>So, you’ve followed all the recommendations from this blog post — enabled all the extensions, always used <code>!</code> where needed, mutated mutable references appropriately, never used lazy data structures and avoided all dangerous monads.</p>
+<p>And yet, you change a type of a single field or an accumulator from <code>Int</code> to <code>Maybe Int</code> and all your efforts are perished in vain. You’ve just introduced a new space leak! 💥</p>
+<figure>
+<img src="/images/space-leak/space-leak-maybe.jpg" alt="" /><figcaption>Unexpected Maybe destroys all your efforts</figcaption>
+</figure>
+<p>This happens because evaluation with <code>!</code>-patterns doesn’t evaluate values “deeply”. Similarly, <a href="https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/strict.html#strict-by-default-data-types">StrictData</a> is applied only to modules where it’s enabled but it’s not enabled in the standard library.</p>
+<p>You have several options to solve this problem:</p>
+<ul>
+<li>Think if you really need that <code>Maybe</code> or tuple wrapper and whether you can float it out</li>
+<li>Evaluate values before putting them inside <code>Maybe</code></li>
+<li>Use <a href="http://h2.jaguarpaw.co.uk/posts/nested-strict-data/">lightweight strict wrapper</a> from the <a href="@hackage">strict-wrapper</a> library</li>
+<li>Use strict alternatives of standard types from the <a href="@hackage">strict</a> library</li>
+</ul>
+<hr>
+<p>In general, it worth keeping your application simple (<a href="https://en.wikipedia.org/wiki/KISS_principle">KISS</a>) while simultaneously thinking about its memory usage. Lazy evaluation requires to shift gears of your brain when you think about memory usage of lazy programs.</p>
+<h2 id="investigating-space-leaks">Investigating space leaks</h2>
+<p>One of the problems with space leaks is that it’s not really straightforward to investigate them. There’s also not a lot of literature about investigating and debugging space leaks (and most of it is outdated). Often, literature doesn’t provide enough details and only briefly mentions how to discover space leaks.</p>
+<p>Some relevant information I was able to dig:</p>
+<ul>
+<li><a href="https://epicandmonicisnotiso.blogspot.com/2022/07/diagnose-memory-leaks-on-pinned-values.html">Diagnose memory leaks on PINNED values with GHC 9.2.1 and up (2022)</a></li>
+<li><a href="https://well-typed.com/blog/2020/09/nothunks/">Being lazy without getting bloated (2020)</a></li>
+<li><a href="https://mpickering.github.io/ide/posts/2020-05-27-ghcide-space-leaks.html">Fixing Space Leaks in Ghcide (2020)</a></li>
+<li><a href="https://www.youtube.com/watch?v=PL8Wjdt0cKo&amp;ab_channel=MatthewPickering">Debugging space leaks in haskell-ide-engine (2019)</a></li>
+<li><a href="http://neilmitchell.blogspot.com/2015/09/detecting-space-leaks.html">Detecting Space Leaks (2015)</a></li>
+<li><a href="http://neilmitchell.blogspot.com/2013/02/chasing-space-leak-in-shake.html">Chasing a Space Leak in Shake (2013)</a></li>
+<li><a href="http://blog.ezyang.com/2011/05/anatomy-of-a-thunk-leak/">Anatomy of a thunk leak (2011)</a></li>
+<li><a href="http://blog.ezyang.com/2011/05/space-leak-zoo/">Space leak zoo (2011)</a></li>
+</ul>
+<p>When lifebuoy doesn’t help, the only choice left is to learn how to swim.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>We’ve seen that investigating space leaks could be a frustrating experience. The bigger your application grows, the more challenging it becomes to find a particular memory offender, especially when investigation techniques don’t work on a project of your size and complexity.</p>
+<p>On the other side, it’s pretty easy to follow some simple guidelines to avoid having space leaks in the first place. The recommendations in this blog post may not give you 100% guarantee of not ever seeing a space leak but it’s safer to drive with your seat belt fastened.</p>
+    </main>
+</body>
+</html>
