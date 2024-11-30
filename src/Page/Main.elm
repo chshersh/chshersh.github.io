@@ -7,6 +7,7 @@ import Element.Events exposing (..)
 import Element.Font as Font
 import Element.Input exposing (button)
 import FontAwesome as Icon exposing (Icon)
+import FontAwesome.Regular as Icon
 import Html exposing (article)
 import Html.Attributes exposing (class)
 import Model exposing (Model)
@@ -261,7 +262,11 @@ downloadCV =
             ]
         ]
         { url = "/files/CV_Dmitrii_Kovanikov.pdf"
-        , label = el [ Font.family monoFont, centerX ] (text "🗎 Download CV")
+        , label =
+            row [ spacing 10 ]
+                [ icon Icon.filePdf
+                , el [ Font.family monoFont, centerX ] (text "Download CV")
+                ]
         }
 
 
