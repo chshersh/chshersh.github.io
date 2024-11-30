@@ -1,4 +1,3 @@
-
 body {
     background-color: #121212;
     color: #e2e2e2;
@@ -49,10 +48,18 @@ blockquote {
     margin: 1em 0; /* Add vertical spacing around blockquotes */
 }
 
+code {
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 1rem;
+    background-color: #1e1e1e; /* Optional: Background color to match dark theme */
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+}
+
 /* Style for code blocks */
 .sourceCode {
-    font-family: 'Noto Sans Mono', monospace; /* Ensure a monospaced font */
-    font-size: 1rem; /* Adjust the font size (can be changed to fit your needs) */
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 1rem;
     line-height: 1.5; /* Improve readability */
     padding: 0; /* Remove unwanted padding */
     margin: 0; /* Remove any margin */
@@ -109,4 +116,23 @@ figcaption {
 /* Style for code comments */
 .co {
     color: #919191;
+}
+
+
+/* Style for the table */
+table {
+    border-collapse: collapse; /* Ensures borders are merged together */
+}
+
+/* Style for all table cells (td, th) */
+th, td {
+    border: 2px solid #1e1e1e; /* Adds grey border to each cell */
+    padding: 8px; /* Adds space inside the cells */
+    text-align: left; /* Aligns the text to the left inside cells */
+}
+
+/* Styling for the header row */
+thead th {
+    font-weight: bold; /* Makes header text bold */
+    text-align: center;
 }

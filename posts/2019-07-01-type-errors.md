@@ -238,7 +238,7 @@ foo = error "unreachable"
 Now, if you will try to compile the module which has this `foo` function, you
 will see the following error message:
 
-```
+```haskell
 TypeErrors.hs:19:8: error:
     • First line of the foo message
       Second line of the foo message: ErrorMessage
@@ -286,7 +286,7 @@ your Haskell adventure...
 
 Imagine if the error message could look like this instead:
 
-```
+```haskell
 ghci> [1,2] + [3,4]
 
     • You've tried to perform an arithmetic operation on lists.
@@ -429,7 +429,9 @@ inc1 = (+1)
 inc2 = succ
 ```
 
-```
+<hr>
+
+```haskell
 ghci> inc1 == inc2
 
     • You've attempted to compare two functions of the type:
@@ -575,7 +577,7 @@ Here is what we do:
    Now every time the `parse` function is used, you will get an error message
    like this one:
 
-```
+```haskell
 ghci> parse "path/to/config"
 
     • Function 'parse' was deprecated in my-parser-1.2.6.0.

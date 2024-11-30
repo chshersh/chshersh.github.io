@@ -136,9 +136,9 @@ I'm using the `=>` operator here with the meaning _reduces to_.
     (λcompany_id.size company_id) bloomberg => size bloomberg
     ```
 
-> :warning: You can see that parentheses matter here as well! `λx.f x y` is not the same as `(λx.f x) y`!
+> ⚠️ You can see that parentheses matter here as well! `λx.f x y` is not the same as `(λx.f x) y`!
 
-> :gem: Bonus! One lambda term is especially popular, it even has its own name **Ω-combinator**
+> 💎 Bonus! One lambda term is especially popular, it even has its own name **Ω-combinator**
 > ```
 > (λx.x x) (λx.x x)
 > ```
@@ -154,7 +154,7 @@ Now that we learned the theory, it's time to do some practice!
 
 > The following sections provide exercises for you to implement a simple program to work with LC. Solutions in OCaml are provided as well.
 
-> :warning: Implementing the following exercises may take longer than 10 minutes, so don't worry!
+> ⚠️ Implementing the following exercises may take longer than 10 minutes, so don't worry!
 
 ### Modeling Lambda Calculus
 
@@ -268,6 +268,6 @@ And most importantly, have fun!
 
 > If you liked this blog post, consider following me on YouTube, X (formerly known as Twitter) or sponsoring my work on GitHub
 >
-> - [YouTube: @chshersh](https://youtube.com/c/chshersh)
-> - [𝕏: @chshersh](https://twitter.com/ChShersh)
-> - [GitHub Sponsors: Support @chshersh!](https://github.com/sponsors/chshersh)
+> - [YouTube: chshersh](https://youtube.com/c/chshersh)
+> - [𝕏: chshersh](https://twitter.com/ChShersh)
+> - [GitHub Sponsors: Support chshersh!](https://github.com/sponsors/chshersh)

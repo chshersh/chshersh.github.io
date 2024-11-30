@@ -49,7 +49,7 @@ for file in posts/*; do
     article_name="${file_name%.*}"
 
     # Convert Markdown to HTML
-    pandoc "posts/$file" \
+    pandoc "$file" \
       --template=template-article.html \
       --output "blog/${article_name}.html"
 

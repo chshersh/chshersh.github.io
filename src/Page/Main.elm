@@ -7,6 +7,7 @@ import Element.Events exposing (..)
 import Element.Font as Font
 import Element.Input exposing (button)
 import FontAwesome as Icon exposing (Icon)
+import Html exposing (article)
 import Html.Attributes exposing (class)
 import Model exposing (Model)
 import Model.Blog as Blog
@@ -19,7 +20,6 @@ import View.Element exposing (..)
 import View.Font exposing (monoFont)
 import View.List exposing (unorderedList)
 import View.SayMyName as Logo
-import Html exposing (article)
 
 
 edges : { top : Int, right : Int, bottom : Int, left : Int }
@@ -279,16 +279,13 @@ blog =
 
 viewArticle : Blog.T -> Element msg
 viewArticle article =
-    let
-     url = if String.startsWith "/blog" article.path then article.path else Blog.mkUrl article
-    in
     link
         [ padding 10
         , width fill
         , Font.color Color.gainsboro
         , mouseOver [ Font.color Color.yellow ]
         ]
-        { url = url
+        { url = Blog.mkPath article
         , label =
             column [ spacing 10 ]
                 [ paragraph []
@@ -297,6 +294,6 @@ viewArticle article =
                     , el [ Font.family monoFont, Font.color Color.blue ] (text "}")
                     ]
                 , paragraph []
-                    [ tSecondary [] article.date ]
+                    [ tSecondary [] article.createdAt ]
                 ]
         }
