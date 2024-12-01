@@ -12788,22 +12788,16 @@ var $mdgriffith$elm_ui$Element$Font$family = function (families) {
 			A3($elm$core$List$foldl, $mdgriffith$elm_ui$Internal$Model$renderFontClassName, 'ff-', families),
 			families));
 };
-var $mdgriffith$elm_ui$Internal$Model$ImportFont = F2(
-	function (a, b) {
-		return {$: 4, a: a, b: b};
-	});
-var $mdgriffith$elm_ui$Element$Font$external = function (_v0) {
-	var url = _v0.O;
-	var name = _v0.K;
-	return A2($mdgriffith$elm_ui$Internal$Model$ImportFont, name, url);
-};
 var $mdgriffith$elm_ui$Internal$Model$Monospace = {$: 2};
 var $mdgriffith$elm_ui$Element$Font$monospace = $mdgriffith$elm_ui$Internal$Model$Monospace;
+var $mdgriffith$elm_ui$Internal$Model$Typeface = function (a) {
+	return {$: 3, a: a};
+};
+var $mdgriffith$elm_ui$Element$Font$typeface = $mdgriffith$elm_ui$Internal$Model$Typeface;
 var $author$project$View$Font$monoFont = _List_fromArray(
 	[
 		$mdgriffith$elm_ui$Element$Font$monospace,
-		$mdgriffith$elm_ui$Element$Font$external(
-		{K: 'Noto Sans Mono', O: 'https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Noto+Sans+Mono&display=swap'})
+		$mdgriffith$elm_ui$Element$Font$typeface('Noto Sans Mono')
 	]);
 var $mdgriffith$elm_ui$Element$text = function (content) {
 	return $mdgriffith$elm_ui$Internal$Model$Text(content);
@@ -13942,9 +13936,6 @@ var $mdgriffith$elm_ui$Internal$Model$renderRoot = F3(
 						[child]))));
 	});
 var $mdgriffith$elm_ui$Internal$Model$SansSerif = {$: 1};
-var $mdgriffith$elm_ui$Internal$Model$Typeface = function (a) {
-	return {$: 3, a: a};
-};
 var $mdgriffith$elm_ui$Internal$Model$rootStyle = function () {
 	var families = _List_fromArray(
 		[
