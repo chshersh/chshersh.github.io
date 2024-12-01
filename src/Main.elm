@@ -4,11 +4,14 @@ import Browser
 import Browser.Events as Events
 import Browser.Navigation as Nav
 import Element exposing (classifyDevice)
+import Json.Decode as Decode exposing (Decoder)
 import Model exposing (Model)
 import Model.Dimensions exposing (Dimensions)
 import Model.Info exposing (Info(..))
+import Model.Key exposing (KeyState(..))
 import Model.Msg exposing (Msg(..))
 import Model.Route exposing (Route(..), toRoute)
+import Update exposing (update)
 import Url
 import View exposing (view)
 
@@ -44,47 +47,12 @@ init dimensions url key =
             , info = About
             , key = key
             , route = toRoute url
+            , keyState = Start
             }
     in
     ( model
     , Cmd.none
     )
-
-
-
--- UPDATE
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        Selected info ->
-            ( { model | info = info }
-            , Cmd.none
-            )
-
-        LinkClicked urlRequest ->
-            case urlRequest of
-                Browser.Internal url ->
-                    ( model, Nav.load (Url.toString url) )
-
-                Browser.External href ->
-                    ( model, Nav.load href )
-
-        UrlChanged url ->
-            ( { model | route = toRoute url }
-            , Cmd.none
-            )
-
-        SetScreenSize dimensions ->
-            let
-                device =
-                    classifyDevice dimensions
-
-                newModel =
-                    { model | device = device }
-            in
-            ( newModel, Cmd.none )
 
 
 
@@ -95,4 +63,10 @@ subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
         [ Events.onResize (\w h -> SetScreenSize { width = w, height = h })
+        , Events.onKeyDown (Decode.map KeyPressed keyDecoder)
         ]
+
+
+keyDecoder : Decoder String
+keyDecoder =
+    Decode.field "key" Decode.string
