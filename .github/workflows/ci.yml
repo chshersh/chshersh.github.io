@@ -26,6 +26,16 @@ jobs:
         if: github.ref_name == 'develop'
         run: sudo apt-get install -y pandoc
 
+      - name: Set up Node.js
+        if: github.ref_name == 'develop'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install terser
+        if: github.ref_name == 'develop'
+        run: npm install --global terser
+
       - name: Deploy
         if: github.ref_name == 'develop'
         run: ./deploy.sh

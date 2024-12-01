@@ -33,8 +33,10 @@ copy_file() {
 copy_file "CNAME"
 copy_file "index.html"
 
+# Minimise JavaScript before copying
 mkdir -p "$clone_dir/build"
-copy_file "build/main.js"
+terser build/main.js --output=build/main.min.js --compress --mangle
+copy_file "build/main.min.js"
 
 mkdir -p "$clone_dir/css"
 copy_file "css/styles.css"
