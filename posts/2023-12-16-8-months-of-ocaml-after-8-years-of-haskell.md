@@ -375,12 +375,6 @@ If you're not critically dependent on the presence of some specific SDK, you can
 
 However, I prefer OCaml nowadays because I feel that I can focus on actually building stuff with this language.
 
-> If you liked this blog post, consider following me on YouTube, X (formerly known as Twitter) or sponsoring my work on GitHub
->
-> - [YouTube: chshersh](https://youtube.com/c/chshersh)
-> - [𝕏: chshersh](https://twitter.com/ChShersh)
-> - [GitHub Sponsors: Support chshersh!](https://github.com/sponsors/chshersh)
-
 # Discussions
 
 Besides the comment section below, you can also find the discussions of this blog post in various places:
@@ -391,4 +385,3 @@ Besides the comment section below, you can also find the discussions of this blo
 - [Lobste.rs: ml](https://lobste.rs/s/0xsnfj/8_months_ocaml_after_8_years_haskell) (39+ ⬆️, 16+ comments)
 - [Reddit: /r/ocaml](https://www.reddit.com/r/ocaml/comments/18sq1p5/8_months_of_ocaml_after_8_years_of_haskell_in/) (22+ ⬆️, 18+ comments)
 - [Reddit: /r/haskell](https://www.reddit.com/r/haskell/comments/18sq4gp/8_months_of_ocaml_after_8_years_of_haskell_in/) (91+ ⬆️, 57+ comments)
-

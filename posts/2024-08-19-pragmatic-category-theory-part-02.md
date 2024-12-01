@@ -410,11 +410,3 @@ In the next section, we'll finally learn why associativity matters. And there'll
 ## Acknowledgement
 
 Many thanks to people who proofread the early draft of this article and shared their invaluable feedback: [_____C](https://x.com/_____C) [sverien](https://x.com/sverien)
-
-<hr>
-
-> If you liked this blog post, consider following me on YouTube, X (formerly known as Twitter) or sponsoring my work on GitHub
->
-> - [YouTube: chshersh](https://youtube.com/c/chshersh)
-> - [𝕏: chshersh](https://twitter.com/ChShersh)
-> - [GitHub Sponsors: Support chshersh!](https://github.com/sponsors/chshersh)

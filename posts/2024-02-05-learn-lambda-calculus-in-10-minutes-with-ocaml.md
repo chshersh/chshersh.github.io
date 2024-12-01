@@ -265,9 +265,3 @@ At least now, when you hear these words, you'll know their meaning.
 If you feel like you want to take on some challenge, you can try to implement α-conversion and β-reduction for your simple Lambda Calculus language!
 
 And most importantly, have fun!
-
-> If you liked this blog post, consider following me on YouTube, X (formerly known as Twitter) or sponsoring my work on GitHub
->
-> - [YouTube: chshersh](https://youtube.com/c/chshersh)
-> - [𝕏: chshersh](https://twitter.com/ChShersh)
-> - [GitHub Sponsors: Support chshersh!](https://github.com/sponsors/chshersh)

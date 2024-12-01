@@ -268,11 +268,3 @@ That's it for now! I wanted to keep the introduction light. But you're going to 
 ## Acknowledgement
 
 Many thanks to people who proofread the early draft of this article and shared their invaluable feedback: [_____C](https://x.com/_____C) [adworse](https://x.com/adworse) [DazzlingHazlitt](https://x.com/DazzlingHazlitt) [egmaleta](https://x.com/egmaleta) [int_index](https://x.com/int_index) [janiczek](https://x.com/janiczek) [jwdunne_dev](https://x.com/jwdunne_dev)
-
-<hr>
-
-> If you liked this blog post, consider following me on YouTube, X (formerly known as Twitter) or sponsoring my work on GitHub
->
-> - [YouTube: chshersh](https://youtube.com/c/chshersh)
-> - [𝕏: chshersh](https://twitter.com/ChShersh)
-> - [GitHub Sponsors: Support chshersh!](https://github.com/sponsors/chshersh)

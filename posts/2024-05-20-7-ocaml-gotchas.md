@@ -449,9 +449,3 @@ That's all! If you found anything surprising in OCaml, feel free to share!
 As I mentioned, every language has some pitfalls. If you don't see them in your favourite language, you either don't know it well enough or nobody uses this language anymore.
 
 Human brains are really good at focusing on bad things. However, I wrote this blog post not to say that OCaml is bad but rather to reduce the frustration when experiencing something surprising for the first time 😌
-
-> If you liked this blog post, consider following me on YouTube, X (formerly known as Twitter) or sponsoring my work on GitHub
->
-> - [YouTube: chshersh](https://youtube.com/c/chshersh)
-> - [𝕏: chshersh](https://twitter.com/ChShersh)
-> - [GitHub Sponsors: Support chshersh!](https://github.com/sponsors/chshersh)
