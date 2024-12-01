@@ -32,6 +32,7 @@ copy_file() {
 # Copy all relevant files to the cloned repo
 copy_file "CNAME"
 copy_file "index.html"
+copy_file "favicon.ico"
 
 # Minimise JavaScript before copying
 mkdir -p "$clone_dir/build"
