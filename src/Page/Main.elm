@@ -19,6 +19,7 @@ import View.Code exposing (code)
 import View.Color as Color
 import View.Element exposing (..)
 import View.Font exposing (monoFont)
+import View.Key as ViewKey
 import View.List exposing (unorderedList)
 import View.SayMyName as Logo
 
@@ -60,41 +61,6 @@ linksRow attrs =
     row ([ centerX, Font.size 24, spacing 10 ] ++ attrs)
 
 
-gitHub : Element Msg
-gitHub =
-    social Social.gitHub
-
-
-youTube : Element Msg
-youTube =
-    social Social.youTube
-
-
-x : Element Msg
-x =
-    social Social.x
-
-
-twitch : Element Msg
-twitch =
-    social Social.twitch
-
-
-blueSky : Element Msg
-blueSky =
-    social Social.blueSky
-
-
-linkedIn : Element Msg
-linkedIn =
-    social Social.linkedIn
-
-
-email : Element Msg
-email =
-    social Social.email
-
-
 social : Social.T -> Element Msg
 social s =
     newTabLink
@@ -106,6 +72,11 @@ social s =
         , mouseOver [ Background.color Color.yellow, Font.color Color.elevatedGrey ]
         ]
         { url = s.url, label = icon s.icon }
+
+
+ggSocial : Model -> Social.T -> Element Msg
+ggSocial model s =
+    column [ spacing 7 ] [ social s, ViewKey.viewSocial model s ]
 
 
 icon : Icon hasId -> Element msg

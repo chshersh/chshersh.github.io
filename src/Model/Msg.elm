@@ -13,5 +13,7 @@ type
       -- Browser navigation events
     | LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
+      -- Key pressed handling
+    | KeyPressed String
       -- Custom messages
     | Selected Info

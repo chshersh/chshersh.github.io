@@ -6,6 +6,7 @@ import Element.Font as Font
 import FontAwesome.Styles
 import Model exposing (Model)
 import Model.Msg exposing (Msg)
+import Model.Social as Social
 import Page.Main exposing (..)
 import View.Color as Color
 import View.Element exposing (..)
@@ -21,7 +22,14 @@ bigDesktop model =
             , title [ Font.size 24, alignBottom ]
             , linksRow
                 [ alignBottom ]
-                [ gitHub, youTube, x, twitch, blueSky, linkedIn, email ]
+                [ ggSocial model Social.gitHub
+                , ggSocial model Social.youTube
+                , ggSocial model Social.x
+                , ggSocial model Social.twitch
+                , ggSocial model Social.blueSky
+                , ggSocial model Social.linkedIn
+                , ggSocial model Social.email
+                ]
             ]
         , menu [ height (fillPortion 3) ] model
         ]
@@ -36,7 +44,14 @@ desktop model =
             [ logo [ Font.size 20, alignTop ]
             , title [ Font.size 24, alignTop ]
             , linksRow []
-                [ gitHub, youTube, x, twitch, blueSky, linkedIn, email ]
+                [ ggSocial model Social.gitHub
+                , ggSocial model Social.youTube
+                , ggSocial model Social.x
+                , ggSocial model Social.twitch
+                , ggSocial model Social.blueSky
+                , ggSocial model Social.linkedIn
+                , ggSocial model Social.email
+                ]
             ]
         , menu [ alignTop, height fill ] model
         ]
@@ -57,8 +72,17 @@ phone _ =
         , logo [ Font.size 8 ]
         , title [ Font.size 12 ]
         , column [ centerX, spacing 10 ]
-            [ linksRow [] [ gitHub, youTube, x, twitch ]
-            , linksRow [] [ blueSky, linkedIn, email ]
+            [ linksRow []
+                [ social Social.gitHub
+                , social Social.youTube
+                , social Social.x
+                , social Social.twitch
+                ]
+            , linksRow []
+                [ social Social.blueSky
+                , social Social.linkedIn
+                , social Social.email
+                ]
             ]
         , row [ centerX ] [ t [ Font.size 32 ] "About" ]
         , column
