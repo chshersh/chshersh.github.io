@@ -160,12 +160,20 @@ menuButton _ info =
 
 viewInfo : Info -> Element msg
 viewInfo info =
-    case info of
-        About ->
-            about
+    let
+        content =
+            case info of
+                About ->
+                    about
 
-        Blog ->
-            blog
+                Blog ->
+                    blog
+    in
+    column
+        [ width fill
+        , htmlAttribute (class "reset-scrollbar")
+        ]
+        [ content ]
 
 
 about : Element msg

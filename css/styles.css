@@ -9,7 +9,15 @@
 /* General scrollbar style */
 .custom-scrollbar {
     scrollbar-width: thin; /* For Firefox */
+    direction: rtl; /* Flip content direction */
     scrollbar-color: #1e1e1e #121212; /* Scrollbar thumb and track colors */
+    overflow: auto;
+    overflow-y: scroll; /* Always show scrollbar */
+    scrollbar-gutter: stable; /* Makes the scrollbar space consistent */
+}
+
+.reset-scrollbar {
+    direction: ltr; /* Reset content direction */
 }
 
 /* Scrollbar for WebKit browsers */
