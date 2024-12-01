@@ -1,3 +1,11 @@
+/* Custom font */
+@font-face {
+    font-family: 'Noto Sans Mono';
+    src: url('/fonts/NotoSansMono-Regular.woff2') format('woff2');
+    font-weight: 400; /* Regular */
+    font-style: normal;
+}
+
 /* General scrollbar style */
 .custom-scrollbar {
     scrollbar-width: thin; /* For Firefox */
