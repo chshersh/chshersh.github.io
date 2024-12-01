@@ -1,5 +1,6 @@
 ---
 title: 8 months of OCaml after 8 years of Haskell in production
+description: Comparing my experience in OCaml with Haskell
 tags: ocaml, haskell, functional programming
 shortName: "8"
 updated: "August 21st, 2024"

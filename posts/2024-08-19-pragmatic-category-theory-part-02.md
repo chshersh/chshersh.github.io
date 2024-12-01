@@ -1,5 +1,6 @@
 ---
 title: "Pragmatic Category Theory | Part 2: Composing Semigroups"
+description: Learning how to compose primitive Semigroups
 tags: ocaml, functional programming, category theory, math
 shortName: "pragmatic-category-theory-part-2"
 updated: "August 20th, 2024"

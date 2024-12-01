@@ -1,5 +1,6 @@
 ---
 title: "Pragmatic Category Theory | Part 1: Semigroup Intro"
+description: Introducing the Semigroup abstraction
 tags: ocaml, functional programming, category theory, math
 shortName: "pragmatic-category-theory-part-1"
 updated: "August 9th, 2024"

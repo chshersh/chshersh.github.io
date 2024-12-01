@@ -1,5 +1,6 @@
 ---
 title: 7 OCaml Gotchas
+description: Surprising OCaml behaviours
 tags: ocaml, functional programming
 shortName: "ocaml-gotchas"
 updated: "July 29th, 2024"

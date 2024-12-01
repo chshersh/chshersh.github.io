@@ -1,5 +1,6 @@
 ---
 title: Learn Lambda Calculus in 10 minutes with OCaml
+description: Brief intro to Lambda Calculus
 tags: ocaml, functional programming, lambda calculus
 shortName: "learn-lambda"
 updated: "July 29th, 2024"
