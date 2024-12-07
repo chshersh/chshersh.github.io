@@ -195,11 +195,11 @@ The Haskell tooling evokes the most controversial feelings. It's like an emotion
 - 🤩 Global content-addressable storage for all dependencies is such an amazing idea!!!
 - 😨 What do you mean I need to recompile my IDE because I changed my package???
 - 🤩 I can automatically test all the code snippets in my package docs!!!
-- 😨 Wait, why the standard library doesn't have docs at all for this version I use???
+- 😨 Wait, why doesn't the standard library have docs at all for this version I use???
 
 And so on.
 
-Using Haskell tooling is like always being in the quantum superposition of **"How do you even use other PLs without such wholesome Haskell tools???"** and **"How Haskellers can live like that without these usability essentials???"**.
+Using Haskell tooling is like always being in the quantum superposition of **"How do you even use other PLs without such wholesome Haskell tools???"** and **"How can Haskellers live like that without these usability essentials???"**.
 
 <hr/>
 
@@ -381,6 +381,7 @@ However, I prefer OCaml nowadays because I feel that I can focus on actually bui
 Besides the comment section below, you can also find the discussions of this blog post in various places:
 
 - [𝕏 by chshersh](https://twitter.com/ChShersh/status/1740303405678006422) (210+ 🧡, 14+ comments)
+- [Hacker News](https://news.ycombinator.com/item?id=42302426) (264+ points, 277+ comments)
 - [OCaml Discuss](https://discuss.ocaml.org/t/8-months-of-ocaml-after-8-years-of-haskell-in-production/13729) (16+ 🧡, 16+ comments)
 - [Haskell Discourse](https://discourse.haskell.org/t/8-months-of-ocaml-after-8-years-of-haskell-in-production/8405) (27+ 🧡, 107+ comments)
 - [Lobste.rs: ml](https://lobste.rs/s/0xsnfj/8_months_ocaml_after_8_years_haskell) (39+ ⬆️, 16+ comments)
