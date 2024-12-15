@@ -160,7 +160,8 @@
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a>- : <span class="dt">int</span> = <span class="dv">3</span></span></code></pre></div>
 <p>An observant eye may notice, that there’s nothing special about <code>int</code> that allows one to take the first element. There’s nothing special needed at all! You can take the first of any value, you don’t need anything!</p>
 <p>The definitions of <code>IntFirst</code> and <code>IntLast</code> can be generalised to work with every type similarly to <em>minimum</em> and <em>maximum</em>. I won’t go into the details here but you can expand the following section to read the code:</p>
-<p>{% spoiler Generalised First and Last %}</p>
+<details>
+<p><summary>Generalised First and Last</summary></p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="kw">module</span> First(T : <span class="kw">sig</span> <span class="kw">type</span> t <span class="kw">end</span>) = <span class="kw">struct</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>  <span class="kw">type</span> t = T.t</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>  <span class="kw">let</span> append x _ = x</span>
@@ -170,7 +171,7 @@
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>  <span class="kw">type</span> t = T.t</span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a>  <span class="kw">let</span> append _ y = y</span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
-<p>{% endspoiler %}</p>
+</details>
 <h2 id="taking-a-step-back">Taking a step back</h2>
 <p>We learned about six ways of appending numbers:</p>
 <ol type="1">
