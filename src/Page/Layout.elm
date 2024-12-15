@@ -39,18 +39,19 @@ bigDesktop model =
 desktop : Model -> Element Msg
 desktop model =
     column
-        [ centerX, width fill, height fill, spacing 50 ]
+        [ centerX, width fill, height fill ]
         [ html FontAwesome.Styles.css
         , column [ centerX, width fill, spacing 30 ]
             [ logo [ Font.size 20, alignTop ]
             , title [ Font.size 24, alignTop ]
-            , linksRow []
+            , linksRow [ alignTop, paddingEach { edges | bottom = 20 } ]
                 [ ggSocial model Social.gitHub
                 , ggSocial model Social.youTube
                 , ggSocial model Social.x
                 , ggSocial model Social.twitch
                 , ggSocial model Social.blueSky
                 , ggSocial model Social.linkedIn
+                , ggSocial model Social.feed
                 , ggSocial model Social.email
                 ]
             ]
