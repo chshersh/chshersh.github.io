@@ -6,6 +6,14 @@ shortName: "pragmatic-category-theory-part-1"
 updated: "August 9th, 2024"
 ---
 
+> This is a series of articles. All parts:
+>
+> - [Part 1: Semigroup Intro][part-1] ⬅️ **you're here**
+> - [Part 2: Composing Semigroups][part-2]
+
+[part-1]: 2024-07-30-pragmatic-category-theory-part-01.html
+[part-2]: 2024-08-19-pragmatic-category-theory-part-02.html
+
 ## Motivation
 
 Functional Programming abstractions have a bad rap for not being accessible.
