@@ -28,6 +28,7 @@ bigDesktop model =
                 , ggSocial model Social.twitch
                 , ggSocial model Social.blueSky
                 , ggSocial model Social.linkedIn
+                , ggSocial model Social.feed
                 , ggSocial model Social.email
                 ]
             ]
@@ -81,6 +82,7 @@ phone _ =
             , linksRow []
                 [ social Social.blueSky
                 , social Social.linkedIn
+                , social Social.feed
                 , social Social.email
                 ]
             ]

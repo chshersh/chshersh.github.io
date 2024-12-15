@@ -4,6 +4,7 @@ import Dict
 import FontAwesome exposing (Icon, WithoutId)
 import FontAwesome.Brands as Icon
 import FontAwesome.Regular as Icon
+import FontAwesome.Solid as IconSolid
 
 
 type alias T =
@@ -68,6 +69,15 @@ linkedIn =
     }
 
 
+feed : T
+feed =
+    { name = "RSS Feed"
+    , icon = IconSolid.rss
+    , url = "https://chshersh.com/rss.xml"
+    , gg = 'f'
+    }
+
+
 email : T
 email =
     { name = "Contact Me"
@@ -86,5 +96,6 @@ socials =
         , ( 't', twitch )
         , ( 'b', blueSky )
         , ( 'l', linkedIn )
+        , ( 'f', feed )
         , ( 'e', email )
         ]

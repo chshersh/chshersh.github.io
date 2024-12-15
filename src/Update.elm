@@ -13,7 +13,9 @@ import Model.Route exposing (toRoute)
 import Model.Social as Social
 import Url
 
+
 port newTab : String -> Cmd msg
+
 
 selected : Model -> Info -> ( Model, Cmd Msg )
 selected model info =
