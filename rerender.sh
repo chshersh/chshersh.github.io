@@ -8,7 +8,7 @@ for file in posts/*; do
 
     # Convert Markdown to HTML
     pandoc "$file" \
-      --template=template-article.html \
+      --template=templates/article.html \
       --output "blog/${article_name}.html"
 
     echo "$file -> blog/${article_name}.html"
