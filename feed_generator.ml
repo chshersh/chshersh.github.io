@@ -48,7 +48,7 @@ let get_file_metada file_path =
     |> List.find (String.starts_with ~prefix:"description: ")
     |> strip_prefix ~prefix:"description: "
   in
-  let issued = String.sub path 0 10 in
+  let issued = String.sub file_path 0 10 in
 
   { title; issued; abstract; file_path }
 
