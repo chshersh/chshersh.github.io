@@ -258,11 +258,19 @@ blog =
         , spacing 20
         , paddingEach { edges | top = 5, bottom = 5, left = 10 }
         ]
-        (List.map viewArticle Blog.articles)
+        (List.indexedMap viewArticle Blog.articles)
 
 
-viewArticle : Blog.T -> Element msg
-viewArticle article =
+viewArticle : Int -> Blog.T -> Element msg
+viewArticle i article =
+    let
+        newTag =
+            if i == 0 then
+                mono [ Font.color Color.yellow, Font.bold ] " NEW"
+
+            else
+                none
+    in
     link
         [ padding 10
         , width fill
@@ -273,9 +281,10 @@ viewArticle article =
         , label =
             column [ spacing 10 ]
                 [ paragraph []
-                    [ el [ Font.family monoFont, Font.color Color.blue ] (text "{")
-                    , el [ Font.family monoFont ] (text article.title)
-                    , el [ Font.family monoFont, Font.color Color.blue ] (text "}")
+                    [ mono [ Font.color Color.blue ] "{"
+                    , mono [] article.title
+                    , mono [ Font.color Color.blue ] "}"
+                    , newTag
                     ]
                 , paragraph []
                     [ tSecondary [] article.createdAt ]
