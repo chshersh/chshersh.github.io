@@ -65,6 +65,25 @@ for file in posts/*; do
     copy_file "blog/${article_name}.html"
 done
 
+## Produce feeds metadata
+ocaml feed_generator.ml
+
+## Generate an Atom feed
+pandoc -M updated="$(date --iso-8601='seconds')" \
+  --metadata-file=feeds.yaml \
+  --template=templates/atom.xml \
+  -t html \
+  -o atom.xml < /dev/null
+copy_file "atom.xml"
+
+## Generate an RSS feed
+pandoc -M updated="$(date '+%a, %d %b %Y %T %z')" \
+  --template=templates/rss.xml \
+  --metadata-file=feeds.yaml \
+  -t html \
+  -o rss.xml < /dev/null
+copy_file "rss.xml"
+
 # Step into cloned dir and add all new files
 cd "$clone_dir"
 git add .

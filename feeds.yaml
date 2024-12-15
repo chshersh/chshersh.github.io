@@ -1,0 +1,50 @@
+title: chshersh.com
+references:
+- title: "Pragmatic Category Theory | Part 2: Composing Semigroups"
+  issued: posts/2024
+  URL: https://chshersh.com/blog/2024-08-19-pragmatic-category-theory-part-02.html
+  abstract: Learning how to compose primitive Semigroups
+- title: "Pragmatic Category Theory | Part 1: Semigroup Intro"
+  issued: posts/2024
+  URL: https://chshersh.com/blog/2024-07-30-pragmatic-category-theory-part-01.html
+  abstract: Introducing the Semigroup abstraction
+- title: 7 OCaml Gotchas
+  issued: posts/2024
+  URL: https://chshersh.com/blog/2024-05-20-7-ocaml-gotchas.html
+  abstract: Surprising OCaml behaviours
+- title: Learn Lambda Calculus in 10 minutes with OCaml
+  issued: posts/2024
+  URL: https://chshersh.com/blog/2024-02-05-learn-lambda-calculus-in-10-minutes-with-ocaml.html
+  abstract: Brief intro to Lambda Calculus
+- title: 8 months of OCaml after 8 years of Haskell in production
+  issued: posts/2023
+  URL: https://chshersh.com/blog/2023-12-16-8-months-of-ocaml-after-8-years-of-haskell.html
+  abstract: Comparing my experience in OCaml with Haskell
+- title: Avoiding space leaks at all costs
+  issued: posts/2022
+  URL: https://chshersh.com/blog/2022-08-08-space-leak.html
+  abstract: Guidelines for avoding space leaks in Haskell programs
+- title: Using a 50-years old technique for solving modern issues
+  issued: posts/2022
+  URL: https://chshersh.com/blog/2022-06-30-cps.html
+  abstract: Utilising the CPS transformation for code maintainability
+- title: Dead simple cross-platform GitHub Actions for Haskell
+  issued: posts/2020
+  URL: https://chshersh.com/blog/2020-05-07-github-actions.html
+  abstract: GitHub Actions CI settings for Haskell projects with Cabal and Stack
+- title: The Power of RecordWildCards
+  issued: posts/2019
+  URL: https://chshersh.com/blog/2019-07-29-recordwildcards.html
+  abstract: Best-practices for the RecordWildCards language extension
+- title: "A story told by Type Errors"
+  issued: posts/2019
+  URL: https://chshersh.com/blog/2019-07-01-type-errors.html
+  abstract: Tutorial on custom type errors in Haskell with a lot of examples
+- title: Comonadic builders
+  issued: posts/2019
+  URL: https://chshersh.com/blog/2019-03-25-comonadic-builders.html
+  abstract: Builder pattern in Haskell using Comonads
+- title: Dead simple Haskell Travis settings for cabal and stack
+  issued: posts/2019
+  URL: https://chshersh.com/blog/2019-02-25-haskell-travis.html
+  abstract: Travis CI settings for Haskell projects with cabal and stack

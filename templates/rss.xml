@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+ <title>$title$</title>
+ <description>Articles by Dmitrii Kovanikov</description>
+ <link>https://chshersh.com/</link>
+ <atom:link href="https://chshersh.com/rss.xml" rel="self" type="application/rss+xml" />
+ <lastBuildDate>$updated$</lastBuildDate>
+ <ttl>1440</ttl>
+
+ $for(references)$
+ <item>
+  <title>$references.title$</title>
+  <description>$references.abstract$ (Updated $references.issued$)</description>
+  <link>$references.URL$</link>
+  <guid>$references.URL$@$references.issued$</guid>
+ </item>
+ $endfor$
+
+</channel>
+</rss>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <author>
+    <name>chshersh</name>
+    <email>chshersh@gmail.com</email>
+  </author>
+  <title>$title$</title>
+  <id>https://chshersh.com/</id>
+  <link rel="self" href="https://chshersh.com/atom.xml" />
+  <updated>$updated$</updated>
+
+  $for(references)$
+  <entry>
+    <id>$references.URL$</id>
+    <title>$references.title$</title>
+    <updated>$references.issued$T00:00:00+00:00</updated>
+    <link href="$references.URL$" />
+    <summary>$references.abstract$</summary>
+  </entry>
+  $endfor$
+</feed>
