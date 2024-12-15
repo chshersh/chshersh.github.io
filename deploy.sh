@@ -66,6 +66,7 @@ for file in posts/*; do
 done
 
 ## Produce feeds metadata
+eval $(opam env)
 ocaml feed_generator.ml
 
 ## Generate an Atom feed
