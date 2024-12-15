@@ -49,7 +49,6 @@ copy_file "fonts/NotoSansMono-Regular.woff2"
 mkdir -p "$clone_dir/files"
 copy_file "files/CV_Dmitrii_Kovanikov.pdf"
 
-mkdir -p "$clone_dir/images"
 cp -r images/ "$clone_dir/images/"
 
 mkdir -p "blog"
