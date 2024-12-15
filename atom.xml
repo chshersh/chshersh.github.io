@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <author>
+    <name>chshersh</name>
+    <email>chshersh@gmail.com</email>
+  </author>
+  <title>chshersh.com</title>
+  <id>https://chshersh.com/</id>
+  <link rel="self" href="https://chshersh.com/atom.xml" />
+  <updated>2024-12-15T14:49:41+00:00</updated>
+
+    <entry>
+    <id>https://chshersh.com/blog/2024-08-19-pragmatic-category-theory-part-02.html</id>
+    <title>Pragmatic Category Theory | Part 2: Composing Semigroups</title>
+    <updated>posts/2024T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2024-08-19-pragmatic-category-theory-part-02.html" />
+    <summary>Learning how to compose primitive Semigroups</summary>
+  </entry>
+    <entry>
+    <id>https://chshersh.com/blog/2024-07-30-pragmatic-category-theory-part-01.html</id>
+    <title>Pragmatic Category Theory | Part 1: Semigroup Intro</title>
+    <updated>posts/2024T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2024-07-30-pragmatic-category-theory-part-01.html" />
+    <summary>Introducing the Semigroup abstraction</summary>
+  </entry>
+    <entry>
+    <id>https://chshersh.com/blog/2024-05-20-7-ocaml-gotchas.html</id>
+    <title>7 OCaml Gotchas</title>
+    <updated>posts/2024T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2024-05-20-7-ocaml-gotchas.html" />
+    <summary>Surprising OCaml behaviours</summary>
+  </entry>
+    <entry>
+    <id>https://chshersh.com/blog/2024-02-05-learn-lambda-calculus-in-10-minutes-with-ocaml.html</id>
+    <title>Learn Lambda Calculus in 10 minutes with OCaml</title>
+    <updated>posts/2024T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2024-02-05-learn-lambda-calculus-in-10-minutes-with-ocaml.html" />
+    <summary>Brief intro to Lambda Calculus</summary>
+  </entry>
+    <entry>
+    <id>https://chshersh.com/blog/2023-12-16-8-months-of-ocaml-after-8-years-of-haskell.html</id>
+    <title>8 months of OCaml after 8 years of Haskell in production</title>
+    <updated>posts/2023T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2023-12-16-8-months-of-ocaml-after-8-years-of-haskell.html" />
+    <summary>Comparing my experience in OCaml with Haskell</summary>
+  </entry>
+    <entry>
+    <id>https://chshersh.com/blog/2022-08-08-space-leak.html</id>
+    <title>Avoiding space leaks at all costs</title>
+    <updated>posts/2022T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2022-08-08-space-leak.html" />
+    <summary>Guidelines for avoding space leaks in Haskell programs</summary>
+  </entry>
+    <entry>
+    <id>https://chshersh.com/blog/2022-06-30-cps.html</id>
+    <title>Using a 50-years old technique for solving modern issues</title>
+    <updated>posts/2022T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2022-06-30-cps.html" />
+    <summary>Utilising the CPS transformation for code maintainability</summary>
+  </entry>
+    <entry>
+    <id>https://chshersh.com/blog/2020-05-07-github-actions.html</id>
+    <title>Dead simple cross-platform GitHub Actions for Haskell</title>
+    <updated>posts/2020T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2020-05-07-github-actions.html" />
+    <summary>GitHub Actions CI settings for Haskell projects with Cabal and Stack</summary>
+  </entry>
+    <entry>
+    <id>https://chshersh.com/blog/2019-07-29-recordwildcards.html</id>
+    <title>The Power of RecordWildCards</title>
+    <updated>posts/2019T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2019-07-29-recordwildcards.html" />
+    <summary>Best-practices for the RecordWildCards language extension</summary>
+  </entry>
+    <entry>
+    <id>https://chshersh.com/blog/2019-07-01-type-errors.html</id>
+    <title>A story told by Type Errors</title>
+    <updated>posts/2019T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2019-07-01-type-errors.html" />
+    <summary>Tutorial on custom type errors in Haskell with a lot of examples</summary>
+  </entry>
+    <entry>
+    <id>https://chshersh.com/blog/2019-03-25-comonadic-builders.html</id>
+    <title>Comonadic builders</title>
+    <updated>posts/2019T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2019-03-25-comonadic-builders.html" />
+    <summary>Builder pattern in Haskell using Comonads</summary>
+  </entry>
+    <entry>
+    <id>https://chshersh.com/blog/2019-02-25-haskell-travis.html</id>
+    <title>Dead simple Haskell Travis settings for cabal and stack</title>
+    <updated>posts/2019T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2019-02-25-haskell-travis.html" />
+    <summary>Travis CI settings for Haskell projects with cabal and stack</summary>
+  </entry>
+  </feed>
