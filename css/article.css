@@ -59,7 +59,7 @@ blockquote {
 code {
     font-family: 'Noto Sans Mono', monospace;
     font-size: 1rem;
-    background-color: #1e1e1e; /* Optional: Background color to match dark theme */
+    background-color: #1e1e1e;
     padding-left: 0.3rem;
     padding-right: 0.3rem;
 }
@@ -85,9 +85,8 @@ code {
 .sourceCode code {
     display: block;
     overflow-x: auto; /* Allow horizontal scroll for long lines */
-    padding: 0.5em; /* Optional: Add padding inside code block */
-    background-color: #1e1e1e; /* Optional: Background color to match dark theme */
-    /* color: #ffffff; /* Optional: White text color */
+    padding: 0.5em;
+    background-color: #1e1e1e;
     font-size: 1rem; /* Ensure proper font size for code */
 }
 
@@ -143,4 +142,30 @@ th, td {
 thead th {
     font-weight: bold; /* Makes header text bold */
     text-align: center;
+}
+
+/* Style for the Home button */
+.home-button-container {
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+}
+
+.home-button {
+    background-color: #1e1e1e;
+    color: #e2e2e2;
+    display: inline-block;
+    text-decoration: none; /* Remove underline for links */
+    text-align: center;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+    background-color: #ffc107;
+    color: #1e1e1e;
+    text-decoration: none;
 }
