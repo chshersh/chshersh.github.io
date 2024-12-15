@@ -130,7 +130,8 @@
 <p>First of all, let’s define a type to model a term in Lambda Calculus. Remember, it can be either a variable name, an application of two terms or a lambda-abstraction.</p>
 <p><strong>Exercise 1.</strong> Create a data type to describe a term in Lambda Calculus.</p>
 <details>
-<p><summary>Solution in OCaml</summary> This is nicely modelled with sum types:</p>
+<p><summary>Solution in OCaml</summary></p>
+<p>This is nicely modelled with sum types:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">type</span> expr =</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>  | Var <span class="kw">of</span> <span class="dt">string</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>  | App <span class="kw">of</span> expr * expr</span>
@@ -163,7 +164,8 @@
 <p>Now that we have a type, let’s implement a function to display a value of our type nicely.</p>
 <p><strong>Exercise 2.</strong> Implement a pretty-printing function for Lambda Calculus.</p>
 <details>
-<p><summary>Solution in OCaml</summary> A simple solution in OCaml (that may produce some redundant parentheses) uses just pattern matching, <code>printf</code> and recursion.</p>
+<p><summary>Solution in OCaml</summary></p>
+<p>A simple solution in OCaml (that may produce some redundant parentheses) uses just pattern matching, <code>printf</code> and recursion.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">let</span> <span class="kw">rec</span> pretty = <span class="kw">function</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  | Var x -&gt; x</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>  | App (l, r) -&gt; <span class="dt">Printf</span>.sprintf <span class="st">&quot;(%s) (%s)&quot;</span> (pretty l) (pretty r)</span>

@@ -169,3 +169,41 @@ thead th {
     color: #1e1e1e;
     text-decoration: none;
 }
+
+/* Styling summary details */
+details {
+    border: 0.1rem solid #ffc107;
+    border-radius: .2rem;
+    padding: 0 .6rem;
+    margin: 1.5625em 0;
+    color: #e2e2e2;
+    transition: background-color 0.3s ease;
+    display: flow-root;
+    page-break-inside: avoid;
+    text-align: left;
+}
+
+/* Styling for the Summary Section */
+details > summary {
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    text-align: left;
+}
+
+details > summary::before {
+    content: "▶"; /* Closed caret symbol */
+    margin-right: 0.5em;
+    transition: transform 0.3s ease;
+}
+
+/* Rotate caret when open */
+details[open] > summary::before {
+    content: "▶";
+    margin-right: 0.5em;
+    transform: rotate(90deg);
+}
