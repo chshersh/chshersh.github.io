@@ -190,7 +190,8 @@ An observant eye may notice, that there's nothing special about `int` that allow
 
 The definitions of `IntFirst` and `IntLast` can be generalised to work with every type similarly to _minimum_ and _maximum_. I won't go into the details here but you can expand the following section to read the code:
 
-{% spoiler Generalised First and Last %}
+<details>
+  <summary>Generalised First and Last</summary>
 ```ocaml
 module First(T : sig type t end) = struct
   type t = T.t
@@ -202,7 +203,7 @@ module Last(T : sig type t end) = struct
   let append _ y = y
 end
 ```
-{% endspoiler %}
+</details>
 
 ## Taking a step back
 

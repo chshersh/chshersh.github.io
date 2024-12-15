@@ -163,7 +163,8 @@ First of all, let's define a type to model a term in Lambda Calculus. Remember, 
 
 **Exercise 1.** Create a data type to describe a term in Lambda Calculus.
 
-{% spoiler Solution in OCaml %}
+<details>
+  <summary>Solution in OCaml</summary>
 This is nicely modelled with sum types:
 
 ```ocaml
@@ -180,7 +181,8 @@ Example of terms in both LC and OCaml:
 | x               | `Var "x"`                           |
 | f x             | `App (Var "f", Var "x")`            |
 | λx.f x          | `Lam ("x", App (Var "f", Var "x"))` |
-{% endspoiler %}
+
+</details>
 
 ### Pretty-printing
 
@@ -188,7 +190,8 @@ Now that we have a type, let's implement a function to display a value of our ty
 
 **Exercise 2.** Implement a pretty-printing function for Lambda Calculus.
 
-{% spoiler Solution in OCaml %}
+<details>
+  <summary>Solution in OCaml</summary>
 A simple solution in OCaml (that may produce some redundant parentheses) uses just pattern matching, `printf` and recursion.
 
 ```ocaml
@@ -197,7 +200,8 @@ let rec pretty = function
   | App (l, r) -> Printf.sprintf "(%s) (%s)" (pretty l) (pretty r)
   | Lam (x, body) -> Printf.sprintf "λ%s.(%s)" x (pretty body)
 ```
-{% endspoiler %}
+
+</details>
 
 ### Parsing
 
@@ -207,7 +211,9 @@ Can we go backwards? Can we parse a string to a value of our type?
 
 **Exercise 3.** Implement a parser for Lambda Calculus.
 
-{% spoiler Solution in OCaml %}
+<details>
+  <summary>Solution in OCaml</summary>
+
 Here I'm using the Parser Combinators approach provided by the wonderful [angstrom] OCaml library.
 
 Parser Combinators deserve a separate blog post, so here I'm just presenting the full code without comments.
@@ -225,14 +231,12 @@ let name_p =
 let var_p = name_p >>| (fun name -> Var name)
 
 let app_p expr_p =
-  let ( let* ) = (>>=) in
   let* l = parens_p expr_p in
   let* _ = char ' ' in
   let* r = parens_p expr_p in
   return (App (l, r))
 
 let lam_p expr_p =
-  let ( let* ) = (>>=) in
   let* _ = string "λ" in
   let* var = name_p in
   let* _ = char '.' in
@@ -249,7 +253,8 @@ let parse str =
   | Ok expr   -> Printf.printf "Success: %s\n%!" (pretty expr)
   | Error msg -> failwith msg
 ```
-{% endspoiler %}
+
+</details>
 
 <hr>
 
