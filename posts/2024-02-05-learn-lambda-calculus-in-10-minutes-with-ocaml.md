@@ -164,7 +164,9 @@ First of all, let's define a type to model a term in Lambda Calculus. Remember, 
 **Exercise 1.** Create a data type to describe a term in Lambda Calculus.
 
 <details>
-  <summary>Solution in OCaml</summary>
+
+<summary>Solution in OCaml</summary>
+
 This is nicely modelled with sum types:
 
 ```ocaml
@@ -191,7 +193,9 @@ Now that we have a type, let's implement a function to display a value of our ty
 **Exercise 2.** Implement a pretty-printing function for Lambda Calculus.
 
 <details>
-  <summary>Solution in OCaml</summary>
+
+<summary>Solution in OCaml</summary>
+
 A simple solution in OCaml (that may produce some redundant parentheses) uses just pattern matching, `printf` and recursion.
 
 ```ocaml
@@ -212,7 +216,8 @@ Can we go backwards? Can we parse a string to a value of our type?
 **Exercise 3.** Implement a parser for Lambda Calculus.
 
 <details>
-  <summary>Solution in OCaml</summary>
+
+<summary>Solution in OCaml</summary>
 
 Here I'm using the Parser Combinators approach provided by the wonderful [angstrom] OCaml library.
 
