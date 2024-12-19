@@ -10,9 +10,11 @@ updated: "August 20th, 2024"
 >
 > - [Part 1: Semigroup Intro][part-1]
 > - [Part 2: Composing Semigroups][part-2] ⬅️ **you're here**
+> - [Part 3: Associativity][part-3]
 
 [part-1]: 2024-07-30-pragmatic-category-theory-part-01.html
 [part-2]: 2024-08-19-pragmatic-category-theory-part-02.html
+[part-3]: 2024-12-20-pragmatic-category-theory-part-03.html
 
 You'll notice the following Functional Programming pattern many times:
 

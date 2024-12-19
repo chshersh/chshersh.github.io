@@ -15,7 +15,11 @@ mkPath article =
 
 articles : List T
 articles =
-    [ { title = "Pragmatic Category Theory | Part 2: Composing Semigroups"
+    [ { title = "Pragmatic Category Theory | Part 3: Associativity"
+      , createdAt = "December 20th, 2024"
+      , path = "2024-12-20-pragmatic-category-theory-part-03"
+      }
+    , { title = "Pragmatic Category Theory | Part 2: Composing Semigroups"
       , createdAt = "August 19th, 2024"
       , path = "2024-08-19-pragmatic-category-theory-part-02"
       }

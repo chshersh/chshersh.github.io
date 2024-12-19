@@ -2,6 +2,9 @@
 
 set -euo
 
+rm -rf ./blog
+mkdir blog
+
 for file in posts/*; do
     file_name=$(basename "$file")
     article_name="${file_name%.*}"

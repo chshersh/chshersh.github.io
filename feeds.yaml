@@ -1,5 +1,9 @@
 title: chshersh.com
 references:
+- title: "Pragmatic Category Theory | Part 3: Associativity"
+  issued: 2024-12-20
+  URL: https://chshersh.com/blog/2024-12-20-pragmatic-category-theory-part-03.html
+  abstract: Understanding why associativity matters
 - title: "Pragmatic Category Theory | Part 2: Composing Semigroups"
   issued: 2024-08-19
   URL: https://chshersh.com/blog/2024-08-19-pragmatic-category-theory-part-02.html
