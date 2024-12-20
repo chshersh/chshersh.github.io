@@ -30,6 +30,10 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
 </head>
 <body>
+    <div id="imagePopup" class="popup-overlay">
+        <img class="popup-image" id="popupImg" src="" alt="">
+    </div>
+
     <header>
       <h1>Pragmatic Category Theory | Part 3: Associativity</h1>
     </header>
@@ -305,5 +309,33 @@
 </ul>
 </blockquote>
     </main>
+
+    <script>
+        const popup = document.getElementById('imagePopup');
+        const popupImg = document.getElementById('popupImg');
+
+        document.querySelectorAll('main img:not(.popup-image)').forEach(img => {
+            img.addEventListener('click', function() {
+                popup.style.display = 'block';
+                popupImg.src = this.src;
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+
+        popup.addEventListener('click', function(e) {
+            if (e.target === popup) {
+                popup.style.display = 'none';
+                document.body.style.overflow = ''; 
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && popup.style.display === 'block') {
+                popup.style.display = 'none';
+                document.body.style.overflow = ''; 
+            }
+        });
+    </script>
 </body>
 </html>
