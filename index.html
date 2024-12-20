@@ -1,46 +1,74 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Dmitrii Kovanikov aka chshersh</title>
-    <meta name="description" content="Personal website and blog">
-    <meta name="author" content="Dmitrii Kovanikov">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="/css/styles.css">
+	<title>Dmitrii Kovanikov aka chshersh</title>
+	<meta name="description" content="Personal website and blog">
+	<meta name="author" content="Dmitrii Kovanikov">
 
-    <!-- Metatags -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Dmitrii Kovanikov aka chshersh" />
-    <meta property="og:title" content="Dmitrii Kovanikov aka chshersh" />
-    <meta property="og:description" content="About, my blog" />
-    <meta property="og:url" content="https://chshersh.com" />
-    <meta property="og:image" content="/images/logo.jpg" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Dmitrii Kovanikov aka chshersh" />
-    <meta name="twitter:description" content="$description$" />
-    <meta name="twitter:image:src" content="https://chshersh.com/images/logo.jpg" />
-    <meta name="twitter:url" content="https://chshersh.com" />
+	<link rel="stylesheet" href="/css/styles.css">
 
-    <!-- Favicon -->
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script src="./build/main.min.js"></script>
-    <script>
-      var app = Elm.Main.init({
-        node: document.getElementById("root"),
-        flags: {
-          height: window.innerHeight,
-          width: window.innerWidth
-        }
-      });
+	<!-- Metatags -->
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Dmitrii Kovanikov aka chshersh" />
+	<meta property="og:title" content="Dmitrii Kovanikov aka chshersh" />
+	<meta property="og:description" content="About, my blog" />
+	<meta property="og:url" content="https://chshersh.com" />
+	<meta property="og:image" content="/images/logo.jpg" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Dmitrii Kovanikov aka chshersh" />
+	<meta name="twitter:description" content="$description$" />
+	<meta name="twitter:image:src" content="https://chshersh.com/images/logo.jpg" />
+	<meta name="twitter:url" content="https://chshersh.com" />
 
-      app.ports.newTab.subscribe( url => window.open(url, '_blank'));
-    </script>
-  </body>
+	<!-- Favicon -->
+	<link rel="icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
+</head>
+
+<body>
+	<div id="root"></div>
+	<script src="./build/main.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			setTimeout(function () {
+				var app = Elm.Main.init({
+					node: document.getElementById("root"),
+					flags: {
+						height: window.innerHeight,
+						width: window.innerWidth
+					}
+				});
+
+				app.ports.newTab.subscribe(function (url) {
+					window.open(url, '_blank');
+				});
+			}, 0);
+		});
+
+		window.addEventListener('resize', function () {
+			if (app) {
+				app.ports.windowResize.send({
+					width: window.innerHeight,
+					height: window.innerWidth
+				});
+			}
+		});
+
+		var app = Elm.Main.init({
+			node: document.getElementById("root"),
+			flags: {
+				height: window.innerHeight,
+				width: window.innerWidth
+			}
+		});
+
+		app.ports.newTab.subscribe(url => window.open(url, '_blank'));
+	</script>
+</body>
+
 </html>

@@ -8,7 +8,9 @@ My website:
 
 Common instructions to develop this website:
 
+- `./rerender.sh`: generate all HTML files from Markdown
 - `elm-watch make hot`: build website with hot reloading
+- `elm-watch hot "dev"`: run website with hot reloading
 - `elm-watch make --optimize`: build website for production release
 - `elm-format src/ --yes`: format all files inside the `src/` directory
 - `explorer.exe index.html`: open the file in the browser for viewing
@@ -16,3 +18,5 @@ Common instructions to develop this website:
   - **Install:** `elm install elm/time`
   - **Uninstall:** `elm-json uninstall elm/time`
     - _Requires:_ `npm install --global elm-json`
+
+You also need to install `pandoc` to build the website.

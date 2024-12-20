@@ -1,6 +1,6 @@
 {
     "targets": {
-        "My target name": {
+        "dev": {
             "inputs": [
                 "src/Main.elm"
             ],
