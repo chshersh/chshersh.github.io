@@ -5,9 +5,15 @@
  <description>Articles by Dmitrii Kovanikov</description>
  <link>https://chshersh.com/</link>
  <atom:link href="https://chshersh.com/rss.xml" rel="self" type="application/rss+xml" />
- <lastBuildDate>Sun, 15 Dec 2024 18:10:35 +0000</lastBuildDate>
+ <lastBuildDate>Fri, 20 Dec 2024 08:20:06 +0000</lastBuildDate>
  <ttl>1440</ttl>
 
+  <item>
+  <title>Pragmatic Category Theory | Part 3: Associativity</title>
+  <description>Understanding why associativity matters (Updated 2024-12-20)</description>
+  <link>https://chshersh.com/blog/2024-12-20-pragmatic-category-theory-part-03.html</link>
+  <guid>https://chshersh.com/blog/2024-12-20-pragmatic-category-theory-part-03.html@2024-12-20</guid>
+ </item>
   <item>
   <title>Pragmatic Category Theory | Part 2: Composing Semigroups</title>
   <description>Learning how to compose primitive Semigroups (Updated 2024-08-19)</description>

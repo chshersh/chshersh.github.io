@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pragmatic Category Theory | Part 3: Associativity</title>
+    <meta name="author" content="Dmitrii Kovanikov">
+    <meta name="description" content="Understanding why associativity matters">
+
+    <link rel="stylesheet" href="/css/article.css">
+
+    <!-- Metatags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Dmitrii Kovanikov aka chshersh" />
+    <meta property="og:title" content="Pragmatic Category Theory | Part 3: Associativity" />
+    <meta property="og:description" content="Dmitrii Kovanikov's Personas Web Space" />
+    <meta property="og:url" content="https://chshersh.com" />
+    <meta property="og:image" content="https://chshersh.com/images/logo.jpg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Pragmatic Category Theory | Part 3: Associativity" />
+    <meta name="twitter:description" content="Understanding why associativity matters" />
+    <meta name="twitter:image" content="https://chshersh.com/images/logo.jpg" />
+    <meta name="twitter:image:src" content="https://chshersh.com/images/logo.jpg" />
+    <meta name="twitter:url" content="https://chshersh.com" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
+</head>
+<body>
+    <header>
+      <h1>Pragmatic Category Theory | Part 3: Associativity</h1>
+    </header>
+
+    <main>
+<div class="home-button-container">
+  <a href="/index.html" class="home-button"><strong>go ~to:Home</strong></a>
+</div>
+
+<blockquote>
+<p>This is a series of articles. All parts:</p>
+<ul>
+<li><a href="2024-07-30-pragmatic-category-theory-part-01.html">Part 1: Semigroup Intro</a></li>
+<li><a href="2024-08-19-pragmatic-category-theory-part-02.html">Part 2: Composing Semigroups</a></li>
+<li><a href="2024-12-20-pragmatic-category-theory-part-03.html">Part 3: Associativity</a> ⬅️ <strong>you’re here</strong></li>
+</ul>
+</blockquote>
+<p>Let’s recap what we’ve learned so far about Semigroups:</p>
+<ol type="1">
+<li>Semigroup is a type and a binary associative operation on values of this type.</li>
+<li>Quite a lot of things are semigroups: numbers with addition, booleans, string concatenation, min, max, lists, first, last.</li>
+<li>We can combine different semigroups in pairs.</li>
+</ol>
+<p>We’ve looked mostly on trivial semigroup examples but before exploring more advanced and real-life use cases, I’d like to spend more time on exploring why associativity matters.</p>
+<p>We’ll see how this single concept enables:</p>
+<ol type="1">
+<li>Correctness</li>
+<li>Extensibility</li>
+<li>Performance</li>
+</ol>
+<h2 id="example-1-lists-of-chunks">Example 1: Lists of Chunks</h2>
+<p>In the previous part, we’ve looked at the first real-world example of non-trivial Semigroup: a list of chunks with the overall size of element inside.</p>
+<p>To remind, here’s the OCaml code:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">(* --- line.ml --- *)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">type</span> t = {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>  chunks : Chunk.t <span class="dt">list</span>;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>  length : <span class="dt">int</span>;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>}</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="kw">let</span> append line1 line2 =</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>  <span class="kw">let</span> chunks = line1.chunks @ line2.chunks <span class="kw">in</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>  <span class="kw">let</span> length = line1.length + line2.length <span class="kw">in</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>  { chunks; length }</span></code></pre></div>
+<p>I use values of this type in my <a href="https://github.com/chshersh/github-tui">GitHub TUI</a> project to append formatted strings and eventually output them to the terminal.</p>
+<p>Efficient terminal rendering is quite a dirty business. A terminal screen is a mutable 2D-array of bytes. But I don’t have an array of bytes! I have chunks!</p>
+<p>In other words, if I have three renderable parts <code>line1</code>, <code>line2</code>, <code>line3</code>, I want to output them one after another in this exact order.</p>
+<p>Having a code like this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>append (append line1 line2) line3</span></code></pre></div>
+<p>I expect the final rendered result to look like this:</p>
+<figure>
+<img src="/images/pct-part03/line-correct.png" alt="" /><figcaption>Appending lines in order</figcaption>
+</figure>
+<p>You know, it would be a real shame, if I append these three lines like this:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>append line1 (append line2 line3)</span></code></pre></div>
+<p>And suddenly it renders like this:</p>
+<figure>
+<img src="/images/pct-part03/line-incorrect.png" alt="" /><figcaption>Appending lines out of order</figcaption>
+</figure>
+<p>If you ask me, how this could happen, I answer, “Pretty easy, in fact”. If you’ve never heard the phrase “premature optimisation is the root of all evil”, this is the time.</p>
+<p>Imagine a function <code>append</code> that instead of appending two lines, outputs them to a mutable buffer directly. If you do things like this, you’ll get the demonstrated wrong behaviour.</p>
+<p>In my GitHub TUI project, I append quite a lot of strings, and keeping track of their order will quickly become an impossible task that destroys all the productivity.</p>
+<figure>
+<img src="/images/pct-part03/github-tui.png" alt="" /><figcaption>GitHub TUI Example</figcaption>
+</figure>
+<p>However, if I follow associative composable abstractions (which are quite simple in this case), I’ll get a design correct by construction.</p>
+<blockquote>
+<p>🧑‍🔬 In the future parts, we’ll see how to use Semigroup to implement a blazingly fast mutable string builder abstractions (wat?).</p>
+</blockquote>
+<h2 id="example-2-treap">Example 2: Treap</h2>
+<p>Let’s talk about associativity a bit more on the example of a classic Computer Science Data Structure known as <strong>treap</strong>.</p>
+<p>I’m not going to explain it here, you <a href="https://en.wikipedia.org/wiki/Treap">can read</a> about it on the Internet. I’ll just say that it’s a combination of <em>tree</em> and <em>heap</em> (hence the name).</p>
+<p>Treap is a binary search tree over keys and a max-heap over randomly generated numbers.</p>
+<p>We’ll look into special case of this data structure — <strong>treap with implicit keys</strong>. Here keys are indexes in the array.</p>
+<p>To reduce the confusion a bit, let me give an example.</p>
+<p>Imagine an array of values like this one:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="dt">Array</span>: [<span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>]</span></code></pre></div>
+<p>Every element of this array has an index in the 0-based index system:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="dt">Array</span>: [<span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>Index:  <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">2</span>  <span class="dv">3</span>  <span class="dv">4</span></span></code></pre></div>
+<p>Now, let’s also generate a random number from 0 to 9 for every element:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="dt">Array</span>: [<span class="dv">5</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>Index:  <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">2</span>  <span class="dv">3</span>  <span class="dv">4</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="dt">Random</span>: <span class="dv">6</span>  <span class="dv">4</span>  <span class="dv">9</span>  <span class="dv">7</span>  <span class="dv">1</span></span></code></pre></div>
+<p>A <em>treap with implicit keys</em> will represent a dictionary-like data structure, where:</p>
+<ul>
+<li>Indexes are keys</li>
+<li>Array values are our dictionary values</li>
+<li>Indexes (aka keys) form a Binary Search Tree</li>
+<li>Random values form a max-heap</li>
+</ul>
+<p>Visualised, it looks like this:</p>
+<figure>
+<img src="/images/pct-part03/treap.png" alt="" /><figcaption>Treap with implicit key</figcaption>
+</figure>
+<blockquote>
+<p>🧑‍🔬 Another name for <em>treap</em> is <strong>Cartesian Tree</strong>. You can think of keys as x-axis coordinates, and random values as y-axis coordinates for the tree node.</p>
+</blockquote>
+<p>This may sound like a lot of overengineering, but in practice, it’s a quite clever data structure. Think of it as an array on steroids. It supports the following operations efficiently:</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Operation</strong></th>
+<th><strong>Complexity</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>get</td>
+<td>O(log n)</td>
+</tr>
+<tr class="even">
+<td>insert</td>
+<td>O(log n)</td>
+</tr>
+<tr class="odd">
+<td>delete</td>
+<td>O(log n)</td>
+</tr>
+<tr class="even">
+<td>merge</td>
+<td>O(log n)</td>
+</tr>
+<tr class="odd">
+<td>reverse</td>
+<td>O(log n)</td>
+</tr>
+<tr class="even">
+<td>slice</td>
+<td>O(log n)</td>
+</tr>
+<tr class="odd">
+<td>Binary associative operation</td>
+<td>O(log n)</td>
+</tr>
+</tbody>
+</table>
+<p>What’s that last one? You guessed correctly, it’s our old friend <strong>smoosh</strong>.</p>
+<p>Turns out, if treap values form a Semigroup, you can query the result of the Semigroup operation over any segment between two indexes. Moreover, the root of the treap will contain the result of this operation over all alements. So you have <strong>O(1)</strong> access to some operation over all elements.</p>
+<p>To give an example,</p>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Binary Associative Operation</strong></th>
+<th><strong>Root</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Addition</td>
+<td>Sum of all values</td>
+</tr>
+<tr class="even">
+<td>Multiplication</td>
+<td>Product of all values</td>
+</tr>
+<tr class="odd">
+<td>Max</td>
+<td>The largest value</td>
+</tr>
+<tr class="even">
+<td>Min</td>
+<td>The smallest value</td>
+</tr>
+<tr class="odd">
+<td>First</td>
+<td>Element with index 0</td>
+</tr>
+<tr class="even">
+<td>Last</td>
+<td>Element with index <code>len - 1</code></td>
+</tr>
+</tbody>
+</table>
+<p>In fact, why not have everything at the same time???</p>
+<p>From the previous part we know that a pair forms a Semigroup where the binary associative operations for each part of the pair are applied correspondingly and indepedently (some might even say in parallel).</p>
+<p>If we can construct a pair, we can have a triple.</p>
+<p>We can have 7 elements.</p>
+<p>We can have 15 elements.</p>
+<p>To generalise, any record where every field is a Semigroup, automatically becomes a Semigroup itself.</p>
+<p>It means, based just on this absraction of Semigroup, we’ve built an extensible interface where users just need to configure what they want to be calculated, and they automatically get an ability to query this operation over segments.</p>
+<p>In competitive programming this technique becomes even more powerful, because you can be creative with the Semigroup operation. For example, you can calculate the number of elements equal to 0 in the entire treap (yes, this is a Semigroup too!) automatically after every <code>insert</code> and <code>delete</code>.</p>
+<hr>
+<p>This example gives quite a visual explanation of associativity.</p>
+<p>Imagine an array of three elements (it doesn’t matter what’s inside, so let’s give elements generic names):</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="dt">Array</span>: [x, y, z]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>Index:  <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">2</span></span></code></pre></div>
+<p>If we want to calculate some binary operation (again, doesn’t matter which one, let’s just call it ⊕) over these elements, aka:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>x ⊕ y ⊕ z</span></code></pre></div>
+<p>the shape of our Treap shouldn’t matter. It doesn’t matter, right? Let’s see.</p>
+<p>Treap relies on generating random values. As long as those values are random, operations will be efficient. But the shape of the treap could be different.</p>
+<p>If we have random values like this:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="dt">Array</span>: [x, y, z]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>Index:  <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">2</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="dt">Random</span>: <span class="dv">5</span>  <span class="dv">3</span>  <span class="dv">9</span></span></code></pre></div>
+<p>We’ll get the following treap:</p>
+<figure>
+<img src="/images/pct-part03/treap-left.png" alt="" /><figcaption>Left-leaning Treap</figcaption>
+</figure>
+<p>And the root will contain the result of:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>(x ⊕ y) ⊕ z</span></code></pre></div>
+<p>But if random values are slightly different:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="dt">Array</span>: [x, y, z]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>Index:  <span class="dv">0</span>  <span class="dv">1</span>  <span class="dv">2</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a><span class="dt">Random</span>: <span class="dv">9</span>  <span class="dv">3</span>  <span class="dv">5</span></span></code></pre></div>
+<p>We’ll get a different treap</p>
+<figure>
+<img src="/images/pct-part03/treap-right.png" alt="" /><figcaption>Right-leaning Treap</figcaption>
+</figure>
+<p>And the root will instead contain:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>x ⊕ (y ⊕ z)</span></code></pre></div>
+<p>We don’t want these two results be different. And they won’t be if our operation ⊕ is associative.</p>
+<p>That’s why Semigroup is important here. We don’t need to care about internal implementation details as long as we provide the correct interface.</p>
+<blockquote>
+<p>Who would’ve thought the OOP principle of incapsulation and separating internals from the interface would hunt us here??</p>
+</blockquote>
+<p>In fact, the technique of calculating an associative binary operation over tree values can (and has been) succesfully extended to other tree-like data structures e.g. <em>Balanced Binary Search Tree</em>, <em>Segment Tree</em>, or <em>Finger Tree</em>.</p>
+<hr>
+<p>Want to hear the coolest part?</p>
+<p>Treap itself is a Semigroup with the binary associative operation being the merging of two treaps. It also automatically calculates the final result efficiently 🤯</p>
+<p>I’ll leave you with this.</p>
+<h2 id="example-3-mapreduce">Example 3: MapReduce</h2>
+<p>Let’s take a step back and look at a different example.</p>
+<p>Big Data processing has a popular technique <strong>MapReduce</strong>. It’s helpful when you need to process a huge amount of data efficiently. It works in the following way:</p>
+<ol type="1">
+<li><strong>Split:</strong> Split the data in chunks (approximately of the same size)</li>
+<li><strong>Map:</strong> Process the data in parallel</li>
+<li><strong>Reduce:</strong> Combine the results into the final results</li>
+</ol>
+<p>The same idea visualised:</p>
+<figure>
+<img src="/images/pct-part03/map-reduce.png" alt="" /><figcaption>Map-Reduce (credit to Junaid Effendi and Vu Trinh)</figcaption>
+</figure>
+<p>To give an example, let’s find out what is the most popular word on, idk, let’s say, <strong>THE ENTIRE INTERNET</strong>. As you can imagine, this is quite a lot of data and processing the entire Internet webpage by webpage will take a while.</p>
+<p>So the solution is to process webpages in parallel and then combine the results, as shown on the following picture.</p>
+<figure>
+<img src="/images/pct-part03/map-reduce-assoc.png" alt="" /><figcaption>Map-Reduce Associative (credit to Gianluca Bontempi)</figcaption>
+</figure>
+<p>In practice, MapReduce pipelines are so massively parallel, a single reducer is not processing all the data at once. It process some chunks, ideally in parallel too, and when more data is available, more data can be combined.</p>
+<p>This is where the <strong>associativity</strong> property comes into play.</p>
+<p>If you have three expected results from the <strong>Map</strong> step (let’s name them <code>x</code>, <code>y</code> and <code>z</code>), and the first two are processed faster, you’ll get the final result in the shape of:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>combine (combine x y) z</span></code></pre></div>
+<p>But if <code>y</code> and <code>z</code> are ready earlier, you’ll get this instead:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>combine x (combine y z)</span></code></pre></div>
+<p>As you can guess, you’ll get the same result only when the operation <code>combine</code> is <strong>associative</strong>.</p>
+<p>In other words, you don’t need to wait for all the results to finish! You can start combining the chunks earlier if the combiner is a Semigroup, thus, processing all the items faster.</p>
+<p>Zero-cost abstractions?? Pff, how about <strong>Negative-cost abstractions</strong> that actually improve the performance after you use them!!</p>
+<details>
+<p><summary>Commutativity</summary></p>
+<p>Associativity is great but it’s not strong enough for <strong>MapReduce</strong>.</p>
+<p>If in our example we have <code>x</code> and <code>z</code> available earlier, we still need to wait for <code>y</code> to finish before we can combine. If all we know about <code>combine</code> is <em>associativity</em>, we can’t just do the following:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>(combine x z) y</span></code></pre></div>
+<p>For this, we need a stronger property <strong>commutativity</strong>. This property was briefly mentioned in <a href="2024-07-30-pragmatic-category-theory-part-01.html">Part 1</a> of this series. But to formalise it a bit, a binary operation is <strong>commutative</strong> when the following property holds for all values <code>x</code> and <code>y</code>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a>x ⊕ y = y ⊕ x</span></code></pre></div>
+<p>Quite a lot of real-world operations actually satisfy this property, so this seemingly stronger requirement is not a huge limitation for flows like <strong>MapReduce</strong> in practice.</p>
+<blockquote>
+<p>🧑‍🔬 A Semigroup with a commutative binary operation is called <strong>Commutative Semigroup</strong> or <strong>Abelian Semigroup</strong>.</p>
+</blockquote>
+</details>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this part, I explained why associativity truly matters. On a few practical examples I demonstrated the benefits of composable abstractions for correctness, extensibility and performance.</p>
+<p>In the next part, we’ll explore how to implement polymorphic functions that work efficiently with every Semigroup (wat??).</p>
+
+<hr>
+<blockquote>
+<p>If you liked this blog post, consider supporting my work on GitHub Sponsors, or following me on the Internet:</p>
+<ul>
+<li><a target="_blank" href="https://github.com/sponsors/chshersh">GitHub Sponsors: @chshersh</a></li>
+<li><a target="_blank" href="https://youtube.com/c/chshersh">YouTube: @chshersh</a></li>
+<li><a target="_blank" href="https://x.com/ChShersh">𝕏: @chshersh</a></li>
+<li><a target="_blank" href="https://bsky.app/profile/chshersh.com">BlueSky: @chshersh</a></li>
+<li><a target="_blank" href="https://functional.cafe/@chshersh">Mastodon: functional.cafe@chshersh</a></li>
+<li><a target="_blank" href="https://www.twitch.tv/chshersh">Twitch: @chshersh </a></li>
+</ul>
+</blockquote>
+    </main>
+</body>
+</html>

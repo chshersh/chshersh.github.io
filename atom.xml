@@ -7,8 +7,15 @@
   <title>chshersh.com</title>
   <id>https://chshersh.com/</id>
   <link rel="self" href="https://chshersh.com/atom.xml" />
-  <updated>2024-12-15T18:10:35+00:00</updated>
+  <updated>2024-12-20T08:20:06+00:00</updated>
 
+    <entry>
+    <id>https://chshersh.com/blog/2024-12-20-pragmatic-category-theory-part-03.html</id>
+    <title>Pragmatic Category Theory | Part 3: Associativity</title>
+    <updated>2024-12-20T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2024-12-20-pragmatic-category-theory-part-03.html" />
+    <summary>Understanding why associativity matters</summary>
+  </entry>
     <entry>
     <id>https://chshersh.com/blog/2024-08-19-pragmatic-category-theory-part-02.html</id>
     <title>Pragmatic Category Theory | Part 2: Composing Semigroups</title>
