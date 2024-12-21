@@ -275,7 +275,7 @@ That's why Semigroup is important here. We don't need to care about internal
 implementation details as long as we provide the correct interface.
 
 > Who would've thought the OOP principle of incapsulation and separating
-> internals from the interface would hunt us here??
+> internals from the interface would haunt us here??
 
 In fact, the technique of calculating an associative binary operation over tree
 values can (and has been) succesfully extended to other tree-like data

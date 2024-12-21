@@ -74,7 +74,8 @@ So let's not waste any more time.
 
 ### So what is it actually?
 
-A **semigroup** describes an operation of appending two values of some type to get a value of the same type.
+A **semigroup** is a pair of a type and an operation of appending two values of
+this type to get a third value of the same type.
 
 > 👩‍🔬 For the sake of simplicity, here we're using the definition of semigroup from _abstract algebra_. For completeness, a Category Theory definition: a _semigroup_ is a hom-set in a semicategory with a single object. But let's stick with appending two values for now.
 
