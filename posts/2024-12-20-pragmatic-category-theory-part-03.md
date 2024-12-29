@@ -274,11 +274,11 @@ We don't want these two results be different. And they won't be if our operation
 That's why Semigroup is important here. We don't need to care about internal
 implementation details as long as we provide the correct interface.
 
-> Who would've thought the OOP principle of incapsulation and separating
+> Who would've thought the OOP principle of encapsulation and separating
 > internals from the interface would haunt us here??
 
 In fact, the technique of calculating an associative binary operation over tree
-values can (and has been) succesfully extended to other tree-like data
+values can (and has been) successfully extended to other tree-like data
 structures e.g. _Balanced Binary Search Tree_, _Segment Tree_, or
 _Finger Tree_.
 

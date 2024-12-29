@@ -12,7 +12,11 @@ mkPath article =
 
 articles : List T
 articles =
-    [ { title = "Pragmatic Category Theory | Part 3: Associativity"
+    [ { title = "The Most Elegant Configuration Language"
+      , createdAt = "January 6th, 2025"
+      , path = "2025-01-06-the-most-elegant-configuration-language"
+      }
+    , { title = "Pragmatic Category Theory | Part 3: Associativity"
       , createdAt = "December 20th, 2024"
       , path = "2024-12-20-pragmatic-category-theory-part-03"
       }
