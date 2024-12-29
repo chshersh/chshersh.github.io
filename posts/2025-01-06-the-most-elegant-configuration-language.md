@@ -165,7 +165,7 @@ createdAt = 2025-01-06
 howManyYearsWasIPlanningThis = 2
 ```
 
-In OCaml, this can be modelled with the following (hopefully, self-explainable) types:
+In OCaml, the following self-explainablethis types modells a single key-value entry:
 
 ```ocaml
 type key_val = {
@@ -197,7 +197,7 @@ To give a slightly more formal definition:
 
 You can see that the definition of **value** is a bit vague but it'll make sense soon.
 
-## I'VE BEEN PROMISED GOLD AND THAT'S ALL YOUR INNOVATION???
+## YOU PROMISED GOLD AND THAT'S ALL YOUR INNOVATION???
 
 Hold on, cowboy. I've only started.
 
@@ -250,7 +250,7 @@ example:
 ```ocaml
 x : Int = 3
 y : Double = 4.
-msg = "The type of this string should be inferred!"
+msg = "Infer the type of this string!"
 ```
 
 Configuration is specific to a particular application. What you want is to
@@ -258,7 +258,7 @@ follow the rule of the least surprise and utility functions to parse
 strings.
 
 > ⭐ **BONUS:** Because everything is a string, CCL doesn't require quotes. So
-> the config is kept with as little noise as possible.
+> the config doesn't have noise.
 
 ## Roses are red. Violets are blue. I love key-value pairs. Soon you will too.
 
@@ -266,7 +266,7 @@ You can say that having just key-value pairs is not enough. You'll be wrong.
 
 ### Lists
 
-With key-values, you can easily have lists! Keys are allowed to be empty, so you
+With key-values, you can easily have lists! Keys can be empty, so you
 can just bind multiple different items to an empty key:
 
 ```ocaml
@@ -384,8 +384,8 @@ You're the boss, not the language.
 
 ### Sections
 
-You can have sections too! Empty lines are ignored, and as you've seen, you can
-become creative with names.
+You can have sections too! Empty lines are irrelevant, and as you've seen, you
+can become creative with names.
 
 ```ocaml
 === Section: Data ===
@@ -624,15 +624,13 @@ If you have named constructors instead of positional, you can use nested named k
 
 ## Category Theory Enters The Chat
 
-You think I'd be finished by now after describing all the CCL features. In
-fact, I haven't even started. The most interesting part only begins.
+You think I finished. In fact, I haven't even started.
 
 ### Composition
 
 When writing software that works with configuration, it's common to follow this pattern:
 
-1. Have a default configuration that will be applied when no explicit
-   configuration is provided.
+1. Have a default configuration.
 1. Have a system-specific configuration for all users on the system.
 1. Have a global user-specific configuration.
 1. Have a project-specific local configuration.
@@ -677,7 +675,7 @@ valid config in the end. There's no special magic.
 
 A **category** in Category Theory comprises _objects_ (you can choose them:
 numbers, strings, sets, types, other categories, etc.) and _morphisms_ (arrows
-between objects). Morphisms can be composed, and this composition is
+between objects). You can compose morphisms, and this composition is
 **associative**.
 
 Turns out, composing CCL configs in the above way is an associative operation.
@@ -795,7 +793,7 @@ let settings_example =
   ]
 ```
 
-The list append operator in OCaml is called `@`. Turns out, appending lists is
+The list append operator in OCaml is `@`. Turns out, appending lists is
 an associative operation, and therefore lists with `@` form a Semigroup.
 
 Moreover, empty list `[]` satisfies the _identity_ properties in relation to
@@ -818,7 +816,7 @@ parsing two files separately and then appending the resulting lists of key-value
 pairs.
 
 We have two Monoids: CCL (aka text files) and lists of key-value pairs. And we
-have a function `parse` with the above property. In this case, `parse` is called
+have a function `parse` with the above property. In this case, `parse` is
 a **monoid homomorphism**.
 
 A _monoid homomorphism_ is a function that maps one monoid to another while
@@ -952,7 +950,7 @@ Is a _monoid homomorphism_ too. Together with `parse` they form
 **monoid isomorphisms**: you can convert both ways while preserving the structure.
 
 This property is incredibly useful for testing when you want to parse, then
-pretty-print back and make sure that no information was lost in the process.
+pretty-print back and make sure you don't lose any information in the process.
 
 </details>
 
@@ -1081,7 +1079,7 @@ You got it correctly. It's not two keys of the same name mapped to two different
 string values. It's two keys mapped to two different nested singleton objects
 where keys are values.
 
-And after parsing and applying `fix`, keys we'll be merged, and we'll get the following:
+Parsing and applying `fix` merges the keys, and we get the following:
 
 ```ocaml
 ports =
@@ -1126,8 +1124,8 @@ If you try it and discover bugs, please report! I'll try to fix them.
 Currently, I'm focusing on building [GitHub TUI][github-tui] in OCaml. If at
 some point the need for a config arises, I return to `ccl`.
 
-For example, one thing that will be needed is implementing a nice API for
-decoding CCL values into actual programming values.
+For example, one essential part of API is decoding CCL values into actual
+programming values.
 
 I envision an API in OCaml like this one:
 
@@ -1162,7 +1160,7 @@ favourite language, and this could be a nice hobby project!
 
 My goal is not to make everyone use this new language. What I want is to inspire you.
 
-I hope you can see how much can be achieved with so little.
+I hope you can see how much you can achieve with so little.
 
 I hope you'll try to pursue simplicity as well.
 
