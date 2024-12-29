@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# from: https://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
+
 irregulars="awoken|\
 been|born|beat|\
 become|begun|bent|\

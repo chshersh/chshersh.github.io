@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# from: https://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
+
 weasels="many|various|very|fairly|several|extremely\
 |exceedingly|quite|remarkably|few|surprisingly\
 |mostly|largely|huge|tiny|((are|is) a number)\
