@@ -49,7 +49,7 @@ Based on Category Theory ideas, I'd like to present to you:
 
 ## Why another configuration language?
 
-Great question! Indeed, we already have quite a few configuration languages used
+Great question! Indeed, we already have configuration languages used
 in the wild:
 
 1. [JSON](https://www.json.org/json-en.html)
@@ -78,7 +78,7 @@ in the wild:
 1. [Dhall](https://dhall-lang.org/)
    - We're type-maxxing at this point. Let's just stop pretending we can be
      satisfied with a simple config language, and implement a
-     **FULL FP LANGUAGE WITH DEPENDENT TYPES** just to create a few nested lists.
+     **FULL FP LANGUAGE WITH DEPENDENT TYPES** just to create nested lists.
 1. And I probably missed your favourite one
 
 They all have one problem:
@@ -128,7 +128,7 @@ property, and _how_ is its value.
 In other words, a config is just a list of key-value pairs.
 
 In practice, you also want **why** aka some documentation explaining why this
-property is there. The configuration also can become quite complex if the
+property is there. The configuration can become complex if the
 software is also complex.
 
 <hr>
@@ -221,7 +221,7 @@ version = 2.15
 
 You know, it would've been a real shame, if the configuration language decided to
 interpret the value now as a floating-point number, and the program would've
-failed at runtime because this implicit behaviour was quite surprising...
+failed at runtime because this implicit behaviour was surprising.
 
 CCL doesn't attach any type semantics to keys or values. In the file, they're
 just strings. So they're passed as strings with minimal processing to the
@@ -254,7 +254,7 @@ msg = "The type of this string should be inferred!"
 ```
 
 Configuration is specific to a particular application. What you want is to
-follow the rule of the least surprise and a few utility functions to parse
+follow the rule of the least surprise and utility functions to parse
 strings.
 
 > ⭐ **BONUS:** Because everything is a string, CCL doesn't require quotes. So
@@ -385,7 +385,7 @@ You're the boss, not the language.
 ### Sections
 
 You can have sections too! Empty lines are ignored, and as you've seen, you can
-become quite creative with names.
+become creative with names.
 
 ```ocaml
 === Section: Data ===
@@ -495,7 +495,7 @@ toml =
   checksum = "f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe"
 ```
 
-This feature can be extremely handy when you're migrating from other configs to
+This feature can be handy when you're migrating from other configs to
 CCL gradually.
 
 ### Nested fields
@@ -636,7 +636,7 @@ When writing software that works with configuration, it's common to follow this 
 1. Have a system-specific configuration for all users on the system.
 1. Have a global user-specific configuration.
 1. Have a project-specific local configuration.
-1. Have a temporary configuration to override a few values during local
+1. Have a temporary configuration to override values during local
    development or experimentation.
 
 For example, you use a linter and you want to have the same consistent
@@ -960,7 +960,7 @@ pretty-print back and make sure that no information was lost in the process.
 
 So far, I haven't explored one important topic: **key overrides**.
 
-In configurations, it's quite common to have the same key mapped to different
+In configurations, it's common to have the same key mapped to different
 values. Especially, if we start combining configs that have overlapping
 properties.
 
@@ -1002,14 +1002,14 @@ what to do with them: keep only the first, keep only the last or use some
 smart logic to combine both of them. You're the boss.
 
 Unfortunately, this business becomes nasty once you start having nested records.
-Manually parsing and resolving all the nested key overrides is quite annoying.
+Manually parsing and resolving all the nested key overrides is annoying.
 
 CCL solved this too.
 
 The key idea here is to treat values as keys (pun intended).
 
 Remember how in the "Nested records" section I mentioned that you can parse
-values using the same CCL config parser? If you do it recursively until the very
+values using the same CCL config parser? If you do it recursively until the
 end, you'll parse all values.
 
 What? You ask when do you stop parsing? That's the neat part, you don't.
@@ -1024,7 +1024,7 @@ key-value pairs. What is it though?
 A configuration in CCL is actually a _fixed point_ for a dictionary from strings
 to.. itself!
 
-In OCaml, it's expressed quite elegantly:
+In OCaml, it's pure elegancy:
 
 ```ocaml
 type t = Fix of t Map.Make(String).t
@@ -1043,7 +1043,7 @@ val fix : key_val list -> t
 When we had lists, we could just append lists (a pretty understandable
 operation). How can we append such fixed points? That's pretty easy too.
 
-The operation to merge two fixed points is quite straightforward, using just the
+The operation to merge two fixed points is straightforward, using just the
 OCaml standard library:
 
 ```ocaml
@@ -1115,8 +1115,8 @@ optimised, code is ugly at some places, the quality of error messages is poor,
 utility functions are lacking, and breaking changes are expected. You know, just
 like a typical SaaS product, except CCL is free.
 
-However, I've implemented a quite exhaustive test suite with dozens of unit
-tests covering various edge-cases as well as property-based tests to verify
+However, I've implemented an exhaustive test suite with dozens of unit
+tests covering diverse edge-cases as well as property-based tests to verify
 algebraic laws.
 
 ![Example of passing tests (they pass, it's true)](/images/ccl/tests.png)
