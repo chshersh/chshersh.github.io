@@ -4,6 +4,7 @@ description: "CCL: Categorical Configuration Language"
 tags: ocaml, functional programming, category theory, math, config
 shortName: "ccl"
 updated: ""
+draft: yes
 ---
 
 > _"If nothing magically works, nothing magically breaks"_ © [Carson Gross][quote]
