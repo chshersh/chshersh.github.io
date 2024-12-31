@@ -89,13 +89,14 @@ email =
 
 socials : Dict.Dict Char T
 socials =
-    Dict.fromList
-        [ ( 'h', gitHub )
-        , ( 'y', youTube )
-        , ( 'x', x )
-        , ( 't', twitch )
-        , ( 'b', blueSky )
-        , ( 'l', linkedIn )
-        , ( 'f', feed )
-        , ( 'e', email )
-        ]
+    Dict.fromList <|
+        List.map (\social -> ( social.gg, social )) <|
+            [ gitHub
+            , youTube
+            , x
+            , twitch
+            , blueSky
+            , linkedIn
+            , feed
+            , email
+            ]
