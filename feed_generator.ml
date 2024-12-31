@@ -5,6 +5,7 @@ type metadata =
     issued: string;
     abstract: string;
     file_path: string;
+    is_draft: bool;
   }
 
 let posts_dir = "posts/"
@@ -48,11 +49,18 @@ let get_file_metada file_path =
     |> List.find (String.starts_with ~prefix:"description: ")
     |> strip_prefix ~prefix:"description: "
   in
+  let is_draft =
+    lines
+    |> List.find_opt (String.starts_with ~prefix:"draft: ")
+    |> Option.is_some
+  in
+
   let issued = String.sub file_path 0 10 in
 
-  { title; issued; abstract; file_path }
+  { title; issued; abstract; file_path; is_draft }
 
-let to_metadata_lines { title; issued; abstract; file_path } =
+let to_metadata_lines { title; issued; abstract; file_path; is_draft } =
+  if is_draft then [] else
   let path = Filename.remove_extension file_path in
   let url = Printf.sprintf "https://chshersh.com/blog/%s.html" path in
   [
