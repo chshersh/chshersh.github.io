@@ -1,7 +1,13 @@
-/* Custom font */
 @font-face {
-    font-family: 'Noto Sans Mono';
-    src: url('/fonts/NotoSansMono-Regular.woff2') format('woff2');
+    font-family: 'JetBrains Mono';
+    src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+    font-weight: 400; /* Regular */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Geist';
+    src: url('/fonts/Geist-Regular.woff2') format('woff2');
     font-weight: 400; /* Regular */
     font-style: normal;
 }
@@ -9,7 +15,8 @@
 body {
     background-color: #121212;
     color: #e2e2e2;
-    font-family: 'Noto Sans Mono', monospace;
+    font-family: 'Geist';
+    font-size: 1.2em;
     margin: 0;
     padding: 0 1em; /* Add some padding for readability */
 }
@@ -57,7 +64,7 @@ blockquote {
 }
 
 code {
-    font-family: 'Noto Sans Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 1rem;
     background-color: #1e1e1e;
     padding-left: 0.3rem;
@@ -66,7 +73,7 @@ code {
 
 /* Style for code blocks */
 .sourceCode {
-    font-family: 'Noto Sans Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 1rem;
     line-height: 1.5; /* Improve readability */
     padding: 0; /* Remove unwanted padding */
