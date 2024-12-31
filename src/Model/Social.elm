@@ -73,7 +73,7 @@ feed : T
 feed =
     { name = "RSS Feed"
     , icon = IconSolid.rss
-    , url = "https://chshersh.com/rss.xml"
+    , url = "https://chshersh.com/atom.xml"
     , gg = 'f'
     }
 
