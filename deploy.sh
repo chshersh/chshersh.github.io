@@ -44,7 +44,8 @@ copy_file "css/styles.css"
 copy_file "css/article.css"
 
 mkdir -p "$clone_dir/fonts"
-copy_file "fonts/NotoSansMono-Regular.woff2"
+copy_file "fonts/JetBrainsMono-Regular.woff2"
+copy_file "fonts/Geist-Regular.woff2"
 
 mkdir -p "$clone_dir/files"
 copy_file "files/CV_Dmitrii_Kovanikov.pdf"

@@ -1,9 +1,13 @@
-/* Custom font */
 @font-face {
-    font-family: 'Noto Sans Mono';
-    src: url('/fonts/NotoSansMono-Regular.woff2') format('woff2');
+    font-family: 'JetBrains Mono';
+    src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
     font-weight: 400; /* Regular */
     font-style: normal;
+}
+
+/* This is needed to force browser to load a font */
+.custom-font {
+    font-family: 'JetBrains Mono', monospace;
 }
 
 /* General scrollbar style */

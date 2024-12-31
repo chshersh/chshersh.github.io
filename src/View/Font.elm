@@ -6,5 +6,5 @@ import Element.Font as Font exposing (Font)
 monoFont : List Font
 monoFont =
     [ Font.monospace
-    , Font.typeface "Noto Sans Mono"
+    , Font.typeface "JetBrains Mono"
     ]
