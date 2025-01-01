@@ -12,7 +12,8 @@ Common instructions to develop this website:
 - `elm-watch make hot`: build website with hot reloading
 - `elm-watch hot "dev"`: run website with hot reloading
 - `elm-watch make --optimize`: build website for production release
-- `elm-format src/ --yes`: format all files inside the `src/` directory
+- `find src -name '*.elm' | grep -v /Model/Blog.elm | xargs elm-format --yes`:
+  format all files inside the `src/` directory except the automatically generated files
 - `explorer.exe index.html`: open the file in the browser for viewing
 - Working with dependencies
   - **Install:** `elm install elm/time`

@@ -1,5 +1,5 @@
 ---
-title: Comonadic builders
+title: "Comonadic builders"
 description: Builder pattern in Haskell using Comonads
 tags: haskell, comonad
 ---

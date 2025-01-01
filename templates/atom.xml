@@ -13,7 +13,7 @@
   <entry>
     <id>$references.URL$</id>
     <title>$references.title$</title>
-    <updated>$references.issued$T00:00:00+00:00</updated>
+    <updated>$references.created_at$T00:00:00+00:00</updated>
     <link href="$references.URL$" />
     <summary>$references.abstract$</summary>
   </entry>

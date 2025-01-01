@@ -13,7 +13,7 @@
   <title>$references.title$</title>
   <description>$references.abstract$ (Updated $references.issued$)</description>
   <link>$references.URL$</link>
-  <guid>$references.URL$@$references.issued$</guid>
+  <guid>$references.URL$@$references.created_at$</guid>
  </item>
  $endfor$
 

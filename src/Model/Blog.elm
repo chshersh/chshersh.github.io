@@ -1,17 +1,14 @@
 module Model.Blog exposing (..)
 
-
 type alias T =
     { title : String
     , createdAt : String
     , path : String
     }
 
-
 mkPath : T -> String
 mkPath article =
     "/blog/" ++ article.path ++ ".html"
-
 
 articles : List T
 articles =
@@ -60,7 +57,7 @@ articles =
       , path = "2019-07-01-type-errors"
       }
     , { title = "Comonadic builders"
-      , createdAt = "Martch 25th, 2019"
+      , createdAt = "March 25th, 2019"
       , path = "2019-03-25-comonadic-builders"
       }
     , { title = "Dead simple Haskell Travis settings for cabal and stack"

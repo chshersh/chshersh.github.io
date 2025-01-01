@@ -1,5 +1,5 @@
 ---
-title: The Power of RecordWildCards
+title: "The Power of RecordWildCards"
 description: Best-practices for the RecordWildCards language extension
 tags: haskell, syntax, language, record
 shortName: recordwildcards

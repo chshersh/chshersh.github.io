@@ -66,10 +66,6 @@ for file in posts/*; do
     copy_file "blog/${article_name}.html"
 done
 
-## Produce feeds metadata
-eval $(opam env)
-ocaml feed_generator.ml
-
 ## Generate an Atom feed
 pandoc -M updated="$(date --iso-8601='seconds')" \
   --metadata-file=feeds.yaml \

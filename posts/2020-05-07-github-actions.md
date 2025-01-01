@@ -1,5 +1,5 @@
 ---
-title: Dead simple cross-platform GitHub Actions for Haskell
+title: "Dead simple cross-platform GitHub Actions for Haskell"
 description: GitHub Actions CI settings for Haskell projects with Cabal and Stack
 tags: haskell, ci, github-actions, cabal, stack
 shortName: github-actions

@@ -1,5 +1,5 @@
 ---
-title: Avoiding space leaks at all costs
+title: "Avoiding space leaks at all costs"
 description: Guidelines for avoding space leaks in Haskell programs
 tags: haskell, performance
 shortName: space-leak

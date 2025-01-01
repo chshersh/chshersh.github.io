@@ -15,6 +15,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up OCaml
+        uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: 5
+
+      - name: Generate blog metadata
+        run: |
+          eval $(opam env)
+          ocaml blog_generator.ml
+
       - uses: jorelali/setup-elm@v6
         with:
           elm-version: 0.19.1
@@ -35,12 +45,6 @@ jobs:
       - name: Install terser
         if: github.ref_name == 'develop'
         run: npm install --global terser
-
-      - name: Set up OCaml
-        if: github.ref_name == 'develop'
-        uses: ocaml/setup-ocaml@v3
-        with:
-          ocaml-compiler: 5
 
       - name: Deploy
         if: github.ref_name == 'develop'

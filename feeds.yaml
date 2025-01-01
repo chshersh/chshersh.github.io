@@ -1,54 +1,54 @@
 title: chshersh.com
 references:
 - title: "Pragmatic Category Theory | Part 3: Associativity"
-  issued: 2024-12-20
+  created_at: 2024-12-20
   URL: https://chshersh.com/blog/2024-12-20-pragmatic-category-theory-part-03.html
   abstract: Understanding why associativity matters
 - title: "Pragmatic Category Theory | Part 2: Composing Semigroups"
-  issued: 2024-08-19
+  created_at: 2024-08-19
   URL: https://chshersh.com/blog/2024-08-19-pragmatic-category-theory-part-02.html
   abstract: Learning how to compose primitive Semigroups
 - title: "Pragmatic Category Theory | Part 1: Semigroup Intro"
-  issued: 2024-07-30
+  created_at: 2024-07-30
   URL: https://chshersh.com/blog/2024-07-30-pragmatic-category-theory-part-01.html
   abstract: Introducing the Semigroup abstraction
-- title: 7 OCaml Gotchas
-  issued: 2024-05-20
+- title: "7 OCaml Gotchas"
+  created_at: 2024-05-20
   URL: https://chshersh.com/blog/2024-05-20-7-ocaml-gotchas.html
   abstract: Surprising OCaml behaviours
-- title: Learn Lambda Calculus in 10 minutes with OCaml
-  issued: 2024-02-05
+- title: "Learn Lambda Calculus in 10 minutes with OCaml"
+  created_at: 2024-02-05
   URL: https://chshersh.com/blog/2024-02-05-learn-lambda-calculus-in-10-minutes-with-ocaml.html
   abstract: Brief intro to Lambda Calculus
-- title: 8 months of OCaml after 8 years of Haskell in production
-  issued: 2023-12-16
+- title: "8 months of OCaml after 8 years of Haskell in production"
+  created_at: 2023-12-16
   URL: https://chshersh.com/blog/2023-12-16-8-months-of-ocaml-after-8-years-of-haskell.html
   abstract: Comparing my experience in OCaml with Haskell
-- title: Avoiding space leaks at all costs
-  issued: 2022-08-08
+- title: "Avoiding space leaks at all costs"
+  created_at: 2022-08-08
   URL: https://chshersh.com/blog/2022-08-08-space-leak.html
   abstract: Guidelines for avoding space leaks in Haskell programs
-- title: Using a 50-years old technique for solving modern issues
-  issued: 2022-06-30
+- title: "Using a 50-years old technique for solving modern issues"
+  created_at: 2022-06-30
   URL: https://chshersh.com/blog/2022-06-30-cps.html
   abstract: Utilising the CPS transformation for code maintainability
-- title: Dead simple cross-platform GitHub Actions for Haskell
-  issued: 2020-05-07
+- title: "Dead simple cross-platform GitHub Actions for Haskell"
+  created_at: 2020-05-07
   URL: https://chshersh.com/blog/2020-05-07-github-actions.html
   abstract: GitHub Actions CI settings for Haskell projects with Cabal and Stack
-- title: The Power of RecordWildCards
-  issued: 2019-07-29
+- title: "The Power of RecordWildCards"
+  created_at: 2019-07-29
   URL: https://chshersh.com/blog/2019-07-29-recordwildcards.html
   abstract: Best-practices for the RecordWildCards language extension
 - title: "A story told by Type Errors"
-  issued: 2019-07-01
+  created_at: 2019-07-01
   URL: https://chshersh.com/blog/2019-07-01-type-errors.html
   abstract: Tutorial on custom type errors in Haskell with a lot of examples
-- title: Comonadic builders
-  issued: 2019-03-25
+- title: "Comonadic builders"
+  created_at: 2019-03-25
   URL: https://chshersh.com/blog/2019-03-25-comonadic-builders.html
   abstract: Builder pattern in Haskell using Comonads
-- title: Dead simple Haskell Travis settings for cabal and stack
-  issued: 2019-02-25
+- title: "Dead simple Haskell Travis settings for cabal and stack"
+  created_at: 2019-02-25
   URL: https://chshersh.com/blog/2019-02-25-haskell-travis.html
   abstract: Travis CI settings for Haskell projects with cabal and stack

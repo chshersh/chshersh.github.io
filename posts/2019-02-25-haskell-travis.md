@@ -1,5 +1,5 @@
 ---
-title: Dead simple Haskell Travis settings for cabal and stack
+title: "Dead simple Haskell Travis settings for cabal and stack"
 description: Travis CI settings for Haskell projects with cabal and stack
 tags: haskell, ci, travis, cabal, stack
 ---
