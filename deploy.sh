@@ -43,6 +43,9 @@ mkdir -p "$clone_dir/css"
 copy_file "css/styles.css"
 copy_file "css/article.css"
 
+mkdir -p "$clone_dir/js"
+copy_file "js/image_popup.js"
+
 mkdir -p "$clone_dir/fonts"
 copy_file "fonts/JetBrainsMono-Regular.woff2"
 copy_file "fonts/Geist-Regular.woff2"
