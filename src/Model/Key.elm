@@ -51,6 +51,9 @@ handleKey keyState key =
         ( Letter 'g', G ) ->
             GG
 
+        ( Letter 'g', GG ) ->
+            G
+
         ( Letter 'g', Go _ ) ->
             G
 
