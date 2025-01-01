@@ -12,7 +12,7 @@ mkPath article =
 
 articles : List T
 articles =
-    , { title = "Pragmatic Category Theory | Part 3: Associativity"
+    [ { title = "Pragmatic Category Theory | Part 3: Associativity"
       , createdAt = "December 20th, 2024"
       , path = "2024-12-20-pragmatic-category-theory-part-03"
       }
