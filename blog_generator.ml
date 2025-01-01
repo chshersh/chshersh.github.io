@@ -129,8 +129,7 @@ let fmt_date iso_date =
     Printf.sprintf "%s %d%s, %d" month day suffix year
   )
 
-let to_elm_lines i { title; created_at; abstract; file_path; is_draft } =
-  if is_draft then [] else
+let to_elm_lines i { title; created_at; abstract; file_path; is_draft = _ } =
   let separator = if i = 0 then "[" else "," in
   let path = Filename.remove_extension file_path in
   let created_at = fmt_date created_at in
@@ -145,6 +144,7 @@ let generate_elm metadata =
   let elm_lines =
     metadata
     |> Array.to_list
+    |> List.filter (fun {is_draft; _} -> not is_draft)
     |> List.mapi to_elm_lines
     |> List.flatten
   in
