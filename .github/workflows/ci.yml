@@ -30,7 +30,7 @@ jobs:
           elm-version: 0.19.1
 
       - name: Build the Elm application
-        run: elm make --optimize src/Main.elm --output=build/main.js
+        run: elm make --optimize src/Main.elm --output=js/main.js
 
       - name: Install Pandoc
         if: github.ref_name == 'develop'

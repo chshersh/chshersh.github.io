@@ -5,6 +5,7 @@ elm-stuff
 repl-temp-*
 ## elm-watch output
 build
+js/main.min.js
 
 ## Locally built HTMLs
 blog/

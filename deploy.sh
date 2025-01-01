@@ -34,17 +34,15 @@ copy_file "CNAME"
 copy_file "index.html"
 copy_file "favicon.ico"
 
-# Minimise JavaScript before copying
-mkdir -p "$clone_dir/build"
-terser build/main.js --output=build/main.min.js --compress --mangle
-copy_file "build/main.min.js"
+# Copy JS assets and minimise the main script
+mkdir -p "$clone_dir/js"
+terser js/main.js --output=js/main.min.js --compress --mangle
+copy_file "js/main.min.js"
+copy_file "js/image_popup.js"
 
 mkdir -p "$clone_dir/css"
 copy_file "css/styles.css"
 copy_file "css/article.css"
-
-mkdir -p "$clone_dir/js"
-copy_file "js/image_popup.js"
 
 mkdir -p "$clone_dir/fonts"
 copy_file "fonts/JetBrainsMono-Regular.woff2"
