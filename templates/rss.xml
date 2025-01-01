@@ -11,7 +11,7 @@
  $for(references)$
  <item>
   <title>$references.title$</title>
-  <description>$references.abstract$ (Updated $references.issued$)</description>
+  <description>$references.abstract$ (Updated $references.created_at$)</description>
   <link>$references.URL$</link>
   <guid>$references.URL$@$references.created_at$</guid>
  </item>
