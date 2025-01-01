@@ -44,6 +44,13 @@
 		});
 
 		app.ports.newTab.subscribe(url => window.open(url, '_blank'));
+
+        app.ports.focusButton.subscribe(buttonId => {
+            var button = document.getElementById(buttonId);
+            if (button) {
+                button.focus();
+            }
+        });
 	</script>
 </body>
 
