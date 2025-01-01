@@ -6,7 +6,7 @@ import Dict
 import Element exposing (classifyDevice)
 import Model exposing (Model)
 import Model.Dimensions exposing (Dimensions)
-import Model.Info exposing (Info)
+import Model.Info exposing (Info, getButtonId)
 import Model.Key as Key
 import Model.Msg exposing (Msg(..))
 import Model.Route exposing (toRoute)
@@ -17,9 +17,12 @@ import Url
 port newTab : String -> Cmd msg
 
 
+port focusButton : String -> Cmd msg
+
+
 selected : Model -> Info -> ( Model, Cmd Msg )
 selected model info =
-    ( { model | info = info }
+    ( { model | info = info, keyState = Key.Go info }
     , Cmd.none
     )
 
@@ -60,6 +63,9 @@ keyPressed model key =
 
         nextCmd =
             case nextState of
+                Key.Go goToInfo ->
+                    focusButton (getButtonId goToInfo)
+
                 Key.GoGo gg ->
                     case Dict.get gg Social.socials of
                         Nothing ->

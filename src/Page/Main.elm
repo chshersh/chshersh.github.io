@@ -5,7 +5,6 @@ import Element.Background as Background
 import Element.Border as Border
 import Element.Events exposing (..)
 import Element.Font as Font
-import Element.Input exposing (button)
 import FontAwesome as Icon exposing (Icon)
 import FontAwesome.Regular as Icon
 import Html exposing (article)
@@ -93,8 +92,8 @@ menu attrs model =
             , spacing 10
             , alignTop
             ]
-            [ menuButton model About
-            , menuButton model Blog
+            [ ViewKey.viewButton model About
+            , ViewKey.viewButton model Blog
             ]
         , column
             [ width fill
@@ -106,27 +105,6 @@ menu attrs model =
             [ viewInfo model.info
             ]
         ]
-
-
-menuButton : Model -> Info -> Element Msg
-menuButton model info =
-    button
-        [ centerX
-        , width fill
-        , Font.size 20
-        , paddingEach { top = 5, bottom = 5, left = 15, right = 15 }
-        , Border.rounded 16
-        , Border.solid
-        , Border.width 2
-        , Border.color Color.darkGrey
-        , Background.color Color.elevatedGrey
-        , Font.color Color.gainsboro
-        , mouseOver [ Background.color Color.yellow, Font.color Color.elevatedGrey ]
-        , focused [ Border.color Color.blue ]
-        ]
-        { onPress = Just (Selected info)
-        , label = ViewKey.viewInfo model info
-        }
 
 
 viewInfo : Info -> Element msg

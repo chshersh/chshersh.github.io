@@ -16,3 +16,13 @@ showInfo info =
 
         Blog ->
             "Blog"
+
+
+getButtonId : Info -> String
+getButtonId info =
+    case info of
+        About ->
+            "button-about"
+
+        Blog ->
+            "button-blog"

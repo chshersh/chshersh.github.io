@@ -1,10 +1,15 @@
 module View.Key exposing (..)
 
 import Element exposing (..)
+import Element.Background as Background
+import Element.Border as Border
 import Element.Font as Font
+import Element.Input exposing (button)
+import Html.Attributes
 import Model exposing (Model)
-import Model.Info exposing (Info(..), showInfo)
+import Model.Info exposing (Info(..), getButtonId, showInfo)
 import Model.Key exposing (KeyState(..))
+import Model.Msg exposing (Msg(..))
 import Model.Social as Social
 import View.Color as Color
 import View.Element exposing (..)
@@ -53,7 +58,7 @@ viewInfo : Model -> Info -> Element msg
 viewInfo model info =
     let
         infoEl =
-            t [ alignLeft ] <| showInfo info
+            mono [ alignLeft ] <| showInfo info
 
         infoChar =
             case info of
@@ -94,3 +99,34 @@ viewInfo model info =
 
         GoGo _ ->
             plainRow
+
+
+menuButton : Info -> Element Msg -> Element Msg
+menuButton info labelEl =
+    button
+        [ centerX
+        , width fill
+        , Font.size 20
+        , paddingEach { top = 5, bottom = 5, left = 15, right = 15 }
+        , Border.rounded 16
+        , Border.solid
+        , Border.width 2
+        , Border.color Color.darkGrey
+        , Background.color Color.elevatedGrey
+        , Font.color Color.gainsboro
+        , mouseOver [ Background.color Color.yellow, Font.color Color.elevatedGrey ]
+        , focused [ Border.color Color.blue ]
+        , htmlAttribute <| Html.Attributes.id <| getButtonId info
+        ]
+        { onPress = Just (Selected info)
+        , label = labelEl
+        }
+
+
+viewButton : Model -> Info -> Element Msg
+viewButton model info =
+    let
+        menuLabelEl =
+            viewInfo model info
+    in
+    menuButton info menuLabelEl
