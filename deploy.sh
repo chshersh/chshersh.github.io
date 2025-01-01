@@ -38,7 +38,7 @@ copy_file "favicon.ico"
 mkdir -p "$clone_dir/js"
 terser js/main.js --output=js/main.min.js --compress --mangle
 copy_file "js/main.min.js"
-copy_file "js/image_popup.js"
+copy_file "js/article.js"
 
 mkdir -p "$clone_dir/css"
 copy_file "css/styles.css"
