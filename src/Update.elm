@@ -50,6 +50,14 @@ keyPressed model key =
         nextState =
             Key.handleKey model.keyState parsedKey
 
+        info =
+            case nextState of
+                Key.Go newInfo ->
+                    newInfo
+
+                _ ->
+                    model.info
+
         nextCmd =
             case nextState of
                 Key.GoGo gg ->
@@ -63,7 +71,7 @@ keyPressed model key =
                 _ ->
                     Cmd.none
     in
-    ( { model | keyState = nextState }
+    ( { model | keyState = nextState, info = info }
     , nextCmd
     )
 

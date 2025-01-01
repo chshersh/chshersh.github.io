@@ -12,7 +12,7 @@ import Html exposing (article)
 import Html.Attributes exposing (class)
 import Model exposing (Model)
 import Model.Blog as Blog
-import Model.Info exposing (Info(..), showInfo)
+import Model.Info exposing (Info(..))
 import Model.Msg exposing (Msg(..))
 import Model.Social as Social
 import View.Code exposing (code)
@@ -109,7 +109,7 @@ menu attrs model =
 
 
 menuButton : Model -> Info -> Element Msg
-menuButton _ info =
+menuButton model info =
     button
         [ centerX
         , width fill
@@ -125,7 +125,7 @@ menuButton _ info =
         , focused [ Border.color Color.blue ]
         ]
         { onPress = Just (Selected info)
-        , label = el [ Font.family monoFont, centerX ] (text <| showInfo info)
+        , label = ViewKey.viewInfo model info
         }
 
 

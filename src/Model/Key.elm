@@ -1,5 +1,7 @@
 module Model.Key exposing (..)
 
+import Model.Info exposing (Info(..))
+
 
 type Key
     = Letter Char
@@ -26,6 +28,7 @@ parseKey key =
 type KeyState
     = Start
     | G
+    | Go Info
     | GG
     | GoGo Char
 
@@ -39,8 +42,17 @@ handleKey keyState key =
         ( Letter 'g', Start ) ->
             G
 
+        ( Letter 'a', G ) ->
+            Go About
+
+        ( Letter 'b', G ) ->
+            Go Blog
+
         ( Letter 'g', G ) ->
             GG
+
+        ( Letter 'g', Go _ ) ->
+            G
 
         ( Letter 'g', GoGo _ ) ->
             G
