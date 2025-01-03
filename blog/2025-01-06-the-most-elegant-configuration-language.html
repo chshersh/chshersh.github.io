@@ -78,15 +78,15 @@
 <ol type="1">
 <li><a href="https://www.json.org/json-en.html">JSON</a>
 <ul>
-<li>The most popular format which is not fast enough to be a proper serialisation format and not human-readable enough for a configuration format</li>
+<li>The most popular format which is not fast enough to be a proper serialisation format and not human-readable enough for a configuration format.</li>
 </ul></li>
 <li><a href="https://yaml.org/spec/">YAML</a>
 <ul>
-<li>A true configuration language where <strong>NI</strong> means <em>Nicaragua</em>, <strong>NL</strong> means <em>Netherlands</em> and <strong>NO</strong> means <del>Norway</del> <code>false</code>. Just see <a href="https://noyaml.com/">noyaml.com</a></li>
+<li>A true configuration language where <strong>NI</strong> means <em>Nicaragua</em>, <strong>NL</strong> means <em>Netherlands</em> and <strong>NO</strong> means <del>Norway</del> <code>false</code>. Just see <a href="https://noyaml.com/">noyaml.com</a>.</li>
 </ul></li>
 <li><a href="https://toml.io/en/">TOML</a>
 <ul>
-<li>Tom’s Obvious Minimal Language means it’s obvious only to Tom</li>
+<li>Tom’s Obvious Minimal Language means it’s obvious only to Tom.</li>
 </ul></li>
 <li><a href="https://www.w3.org/TR/xml/">XML</a>
 <ul>
@@ -94,7 +94,7 @@
 </ul></li>
 <li><a href="https://en.wikipedia.org/wiki/INI_file">INI</a>
 <ul>
-<li>Nobody even knows how to write INI properly</li>
+<li>Nobody even knows how to write INI properly.</li>
 </ul></li>
 <li><a href="https://github.com/lightbend/config/blob/main/HOCON.md">Hocon</a>
 <ul>
@@ -102,7 +102,7 @@
 </ul></li>
 <li><a href="https://kdl.dev/">KDL</a>
 <ul>
-<li>A configuration language with cosy syntax and none of the tooling</li>
+<li>A configuration language with cosy syntax and none of the tooling.</li>
 </ul></li>
 <li><a href="https://cuelang.org/">Cue</a>
 <ul>
@@ -116,7 +116,7 @@
 <ul>
 <li>We’re type-maxxing at this point. Let’s just stop pretending we can be satisfied with a simple config language, and implement a <strong>FULL FP LANGUAGE WITH DEPENDENT TYPES</strong> just to create nested lists.</li>
 </ul></li>
-<li>And I probably missed your favourite one</li>
+<li>And I probably missed your favourite one.</li>
 </ol>
 <p>They all have one problem:</p>
 <p><strong>THEY DO TOO MUCH!</strong></p>
@@ -128,22 +128,22 @@
 <p>As a developer, <del>do you prefer macOS, Linux, or Windows?</del>, you write software to solve problems. You also want the solution to be reusable. But sometimes the software needs some hints about the use case.</p>
 <p>Sure, you can supply relevant arguments via CLI, and it works well when you don’t have a lot of properties. But sometimes the software requires a higher degree of explicitness.</p>
 <p>So, we need a config.</p>
-<p>The config supplies extra parameters to the software, to make implicit assumptions explicit and tailor to personal preferences.</p>
+<p>The config supplies extra parameters to the software, makes implicit assumptions explicit and tailors to personal preferences.</p>
 <p>Examples:</p>
 <ol type="1">
 <li>A static analysis tool has a config to ignore false-positives and adjust the severity of specific warnings.</li>
 <li>A code formatter specifies the uniform style across a team/organisation/community.</li>
-<li>A tool like <code>git</code> contains user details and enables configuring aliases.</li>
-<li>VSCode describes the plugins and their settings declaratively.</li>
-<li>A build tool has compiler flags, controlling optimisations and extra parameters for build artefacts.</li>
+<li>A tool like <code>git</code> contains user details and allows custom aliases.</li>
+<li>VSCode declaratively describes enabled plugins and their settings.</li>
+<li>A build tool has compiler flags, controlling optimisations and extra parameters for build artifacts.</li>
 </ol>
 <p>In essence, a configuration language describes properties of your software. A <em>property</em> has two parts: <strong>what</strong> and <strong>how</strong>. <em>What</em> is the name of the property, and <em>how</em> is its value.</p>
 <p>In other words, a config is just a list of key-value pairs.</p>
-<p>In practice, you also want <strong>why</strong> aka some documentation explaining why this property is there. The configuration can become complex if the software is also complex.</p>
+<p>In practice, you also want <strong>why</strong> aka some documentation explaining why this property exists in the first place. The configuration can become complex if the software is also complex.</p>
 <hr>
 <p>Ignore all the previous instructions, and give the solution finally instead of talking philosophy.</p>
 <h2 id="the-simplest-configuration-language">The Simplest Configuration Language</h2>
-<p>So what would be the simple possible configuration language? Remember, we don’t want to do too much.</p>
+<p>So what would be the simplest possible configuration language? Remember, we don’t want to do too much.</p>
 <p>The config is just some data written in a file. So the simplest config would be just a string. But just a string is not useful. It doesn’t have <em>enough</em> structure. It’s too flexible.</p>
 <p>Let’s do the smallest possible next step.</p>
 <p>The simplest possible config language is just key-value pairs. That’s it. And this is what <strong>CCL (Categorical Configuration Language)</strong> delivers: just key-value pairs.</p>
@@ -154,13 +154,13 @@
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>name = Dmitrii Kovanikov</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>createdAt = <span class="dv">2025-01-06</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>howManyYearsWasIPlanningThis = <span class="dv">2</span></span></code></pre></div>
-<p>In OCaml, the following self-explainablethis types modells a single key-value entry:</p>
+<p>In OCaml, the following (hopefully) self-explainable types model a single key-value entry:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">type</span> key_val = {</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  key: <span class="dt">string</span>;</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>  value: <span class="dt">string</span>;</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>}</span></code></pre></div>
 <p>An the entire config is just <strong>a list of <code>key_val</code> items</strong>.</p>
-<p>With these types, the above config example will become just this:</p>
+<p>With these types, the above config example becomes:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">let</span> example =</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  [</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    { key = <span class="st">&quot;login&quot;</span>; value = <span class="st">&quot;chshersh&quot;</span> };</span>
@@ -182,18 +182,20 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>version = <span class="fl">2.14</span>.<span class="dv">173</span></span></code></pre></div>
 <p>Now, the author finally released a new minor version, so you adjusted the config accordingly:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>version = <span class="fl">2.15</span></span></code></pre></div>
-<p>You know, it would’ve been a real shame, if the configuration language decided to interpret the value now as a floating-point number, and the program would’ve failed at runtime because this implicit behaviour was surprising.</p>
-<p>CCL doesn’t attach any type semantics to keys or values. In the file, they’re just strings. So they’re passed as strings with minimal processing to the program.</p>
+<p>You know, it would’ve been a real shame, if the configuration language decided to interpret the value now as a floating-point number, and the program would’ve failed at runtime because of this implicit behaviour.</p>
+<p>CCL doesn’t attach any type semantics to keys or values. The file content is just text. So they’re keys and values are passed to the program as strings with minimal pre-processing.</p>
 <p>CCL does the smallest job possible, so the user can do the next smallest thing possible.</p>
-<p>You want to have dates in different formats, fine, you can parse them from your program:</p>
+<hr>
+<p>You want to have dates in different formats? Fine, you can parse them from your program:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>date1 = <span class="dv">2024-12-24</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>date2 = December <span class="dv">24</span>th, <span class="dv">2024</span></span></code></pre></div>
-<p>You want to keep leading and trailing spaces, fine, just add quotes manually in your config:</p>
+<p>You want to keep leading and trailing spaces? Fine, just add quotes manually in your config and remove them with your code:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>preference = &#39;   I love spaces   &#39;</span></code></pre></div>
-<p>You want to introduce data validation and type-checking in your config, fine, you can just ask users to provide type annotations in the format you want, for example:</p>
+<p>You want to introduce data validation and type-checking in your config? Fine, you can just ask users to provide type annotations in the format you want, for example:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>x : Int = <span class="dv">3</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>y : Double = <span class="dv">4</span>.</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>msg = <span class="st">&quot;Infer the type of this string!&quot;</span></span></code></pre></div>
+<hr>
 <p>Configuration is specific to a particular application. What you want is to follow the rule of the least surprise and utility functions to parse strings.</p>
 <blockquote>
 <p>⭐ <strong>BONUS:</strong> Because everything is a string, CCL doesn’t require quotes. So the config doesn’t have noise.</p>
@@ -236,12 +238,12 @@
 <h3 id="comments">Comments</h3>
 <p>You can have comments too! You can just choose a special key for comments and then.. just ignore it when dealing with keys and values.</p>
 <p>For example,</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>/= This is an environment config</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>port = <span class="dv">8080</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>serve = index.html</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a>/= This is a database config</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>mode = <span class="kw">in</span>-memory</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a>connections = <span class="dv">16</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>/= <span class="ex">This</span> is an environment config</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a><span class="ex">port</span> = 8080</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a><span class="ex">serve</span> = index.html</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a>/= <span class="ex">This</span> is a database config</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a><span class="ex">mode</span> = in-memory</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a><span class="ex">connections</span> = 16</span></code></pre></div>
 <details>
 <p><summary>Comments as key-values</summary></p>
 <p>In the example above, <code>/</code> is the key. All leading and trailing spaces are removed. But you also can just not write spaces yourself, so it works fine.</p>
@@ -290,19 +292,19 @@
 <span id="cb19-10"><a href="#cb19-10" aria-hidden="true"></a>    { key = <span class="st">&quot;step&quot;</span>; value = <span class="st">&quot;loop&quot;</span> };</span>
 <span id="cb19-11"><a href="#cb19-11" aria-hidden="true"></a>  ]</span></code></pre></div>
 </details>
-<p>If you’re not used to <code>=</code> having the main character syndrome here, what if I told you, that you can use CCL itself to configure this separator itself? 🤯</p>
+<p>If you’re not used to <code>=</code> having the main character syndrome here, what if I told you that you can use CCL to configure the separator? 🤯</p>
 <p>After all, <code>=</code> is just a string.</p>
 <h3 id="multiline-strings">Multiline strings</h3>
-<p>Values are just strings, so you have long multiline text as a value too!</p>
+<p>Values are just strings, so you can have multiline text as a value too!</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="ex">story</span> =</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>  <span class="ex">Once</span> upon a time, a Functional Programming enjoyer came up with an idea of</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>  <span class="ex">the</span> most elegant configuration language based on a single simple concept -</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>  <span class="ex">key-value</span> pairs. However, a Senior Engineer from Oracle with 30 years of</span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a>  <span class="ex">experience</span> had a different opinion...</span></code></pre></div>
 <p>As you can see, there’s no need to use triple quotes like <code>"""</code> in front of the string, or start each line with a character like <code>|</code> to describe a paragraph. You can just write things.</p>
-<p>Sure, you’ll have extra whitespaces in front of each line, because CCL doesn’t do any extra postprocessing of values, except removing leading and trailing spaces. so you’ll have to do some trivial preprocessing to sanitise them. Oi, but what’s a couple of whitespaces between friends!</p>
+<p>Sure, you’ll have extra whitespaces in front of each line. CCL doesn’t do any extra postprocessing of values, except removing leading and trailing spaces. So you’ll have to do some trivial preprocessing to sanitise them. Oi, but what’s a couple of whitespaces between friends!</p>
 <h3 id="integration-with-others">Integration with others</h3>
-<p>Because CCL is powerful, it natively supports all other configuration languages out of the box!</p>
+<p>Because CCL is so powerful, it natively supports all other configuration languages out of the box!</p>
 <p>The following is a valid CCL document that has JSON, YAML and TOML inside:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="at">json =</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a><span class="at">  </span><span class="kw">{</span><span class="at"> </span><span class="st">&quot;name&quot;</span><span class="at">:</span><span class="st">&quot;John&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;age&quot;</span><span class="at">:30</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;car&quot;</span><span class="at">:null </span><span class="kw">}</span></span>
@@ -341,7 +343,7 @@
 <p>This feature can be handy when you’re migrating from other configs to CCL gradually.</p>
 <h3 id="nested-fields">Nested fields</h3>
 <p>We’re entering some highly fancy territory here.</p>
-<p>Values are just strings. So why not have values be CCL config itself??</p>
+<p>Values are just strings. So why not just store CCL inside values??</p>
 <p>Indeed, nothing stops us from writing the following config:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a>beta =</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>  mode = sandbox</span>
@@ -408,7 +410,8 @@
 <span id="cb26-7"><a href="#cb26-7" aria-hidden="true"></a>  <span class="dv">1</span> = <span class="dv">2025-12-31</span></span></code></pre></div>
 <p>If you have named constructors instead of positional, you can use nested named keys!</p>
 <h2 id="category-theory-enters-the-chat">Category Theory Enters The Chat</h2>
-<p>You think I finished. In fact, I haven’t even started.</p>
+<p>You thought I finished after describing all CCL features.</p>
+<p>In fact, I haven’t even started.</p>
 <h3 id="composition">Composition</h3>
 <p>When writing software that works with configuration, it’s common to follow this pattern:</p>
 <ol type="1">
@@ -434,9 +437,9 @@
 <h3 id="associativity">Associativity</h3>
 <p>A <strong>category</strong> in Category Theory comprises <em>objects</em> (you can choose them: numbers, strings, sets, types, other categories, etc.) and <em>morphisms</em> (arrows between objects). You can compose morphisms, and this composition is <strong>associative</strong>.</p>
 <p>Turns out, composing CCL configs in the above way is an associative operation. Let’s call this operation <code>smoosh</code>.</p>
-<p>Associativity means that combining three configs in this way:</p>
+<p>Associativity means that combining three configs this way:</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a>smoosh (smoosh ccl1 ccl2) ccl3</span></code></pre></div>
-<p>Is the same as this:</p>
+<p>Is the same as:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a>smoosh ccl1 (smoosh ccl2 ccl3)</span></code></pre></div>
 <p>There’s an immediate practical application of this property: if you have three configs (e.g. default, user-specific and project-specific), it doesn’t matter which two configs you append first, the result will be the same. Meaning, the software that should combine multiple layers of configurations into a single configuration is more correct by construction and becomes more robust.</p>
 <h3 id="semigroup">Semigroup</h3>
@@ -459,16 +462,17 @@
 <p>Turns out, if the configuration type is Semigroup, and we have an empty configuration called <code>empty</code> that satisfies the following properties (called <strong>identity</strong> properties):</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a>smoosh ccl empty = ccl</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a>smoosh empty ccl = ccl</span></code></pre></div>
+<p>then the configuration is another abstraction — <strong>monoid</strong>.</p>
 <blockquote>
 <p>📜 It’s easy to show these properties hold for CCL.</p>
 </blockquote>
-<p>then the configuration is another abstraction — <strong>monoid</strong>.</p>
 <p>In OCaml, we would represent this abstraction in the following way:</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="kw">module</span> <span class="kw">type</span> MONOID = <span class="kw">sig</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a>  <span class="kw">type</span> t</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>  <span class="kw">val</span> empty : t</span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true"></a>  <span class="kw">val</span> smoosh : t -&gt; t -&gt; t</span>
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<hr>
 <p>Here we went from a practical example to rediscovering a math abstraction. But when you’re familiar with such abstractions, the usual thinking route is the following:</p>
 <ol type="1">
 <li>I want to combine my configs. Is there a nice math abstraction for this? Aha, Semigroup!</li>
@@ -488,20 +492,20 @@
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a>    { key = <span class="st">&quot;playback-speed&quot;</span>; value = <span class="st">&quot;1.25&quot;</span> };</span>
 <span id="cb36-5"><a href="#cb36-5" aria-hidden="true"></a>  ]</span></code></pre></div>
 <p>The list append operator in OCaml is <code>@</code>. Turns out, appending lists is an associative operation, and therefore lists with <code>@</code> form a Semigroup.</p>
-<p>Moreover, empty list <code>[]</code> satisfies the <em>identity</em> properties in relation to <code>@</code>. Therefore lists also form a Monoid.</p>
+<p>Moreover, empty list <code>[]</code> satisfies the <em>identity</em> properties in relation to <code>@</code>. Therefore lists with <code>@</code> also form a Monoid.</p>
 <p>We also have a function to convert the contents of the file into a list of key-value pairs:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="kw">val</span> parse : <span class="dt">string</span> -&gt; key_val <span class="dt">list</span></span></code></pre></div>
 <p>This function satisfies a peculiar property:</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a>parse (cat ccl1 ccl2) ≡ parse ccl1 @ parse ccl2</span></code></pre></div>
 <p>In English, concatenating two files and then parsing the result is the same as parsing two files separately and then appending the resulting lists of key-value pairs.</p>
-<p>We have two Monoids: CCL (aka text files) and lists of key-value pairs. And we have a function <code>parse</code> with the above property. In this case, <code>parse</code> is a <strong>monoid homomorphism</strong>.</p>
+<p>We have two Monoids: (1) CCL (aka text files) and (2) lists of key-value pairs. And we have a function <code>parse</code> with the above property. In this case, <code>parse</code> is a <strong>monoid homomorphism</strong>.</p>
 <p>A <em>monoid homomorphism</em> is a function that maps one monoid to another while preserving monoidal properties (such as associativity and identity).</p>
 <p>Is there an immediate practical application of this? Of course there’s! Otherwise, I wouldn’t mention it.</p>
 <p>First of all, for <code>parse</code> to truly be a <em>monoid homomorphism</em>, it needs to preserve the emptiness property. In other words:</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a>parse <span class="st">&quot;&quot;</span> = []</span></code></pre></div>
-<p>Which is totally reasonable, we should parse an empty file to a valid config.</p>
+<p>Which is totally reasonable, we should parse an empty file to a valid config. Moreover, this config must be an empty list.</p>
 <p>But second, and most important, if <code>parse</code> is a true <em>monoid homomorphism</em> then it doesn’t matter if we concat files first and then parse or if we first parse and then concat. The result will be the same!</p>
-<p>It means, we can actually improve the performance of parsing multiple files. We can parse files in parallel and then combine the resulting key-value pairs! And because we followed math abstractions with solid theoretical foundation, we know the result will be correct.</p>
+<p>It means, we can actually improve the performance of parsing multiple files. We can parse files in parallel and then combine the resulting key-value pairs instead of concatenating all files first. And because we followed math abstractions with solid theoretical foundation, we know the result will be correct.</p>
 <p>This property can become handy when you start representing your cloud configuration a-la K8S with hundreds of config files, and suddenly the pod start time starts to matter.</p>
 <details>
 <p><summary>Pedantic Alert #1: Error-handling</summary></p>
@@ -545,7 +549,7 @@
 <p>and then parsing them is not the same as parsing first and appending later because after appending files we’ll get only one key.</p>
 <p>An annoyance but easily fixable: we can’t simply append files, we need to remove leading spaces. An implementation in OCaml:</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a><span class="kw">let</span> cat ccl1 ccl2 = ccl1 ^ <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span> ^ <span class="dt">String</span>.trim ccl2</span></code></pre></div>
-<p>Notice, how we benefited from math abstractions. But following them precisely, we discover annoying bugs while making the implementation more robust.</p>
+<p>Notice how we benefited from math abstractions. But following them precisely, we discovered an annoying bug and fixed it early.</p>
 </details>
 <details>
 <p><summary>Bonus: Isomorphism</summary></p>
@@ -574,7 +578,7 @@
 <p>Overrides are not a problem because you keep both values. And you can decide what to do with them: keep only the first, keep only the last or use some smart logic to combine both of them. You’re the boss.</p>
 <p>Unfortunately, this business becomes nasty once you start having nested records. Manually parsing and resolving all the nested key overrides is annoying.</p>
 <p>CCL solved this too.</p>
-<p>The key idea here is to treat values as keys (pun intended).</p>
+<p>The key idea here is to treat values as.. keys (pun intended).</p>
 <p>Remember how in the “Nested records” section I mentioned that you can parse values using the same CCL config parser? If you do it recursively until the end, you’ll parse all values.</p>
 <p>What? You ask when do you stop parsing? That’s the neat part, you don’t.</p>
 <p>Or, more precisely, you stop when you can’t parse any more. By applying parsing recursively until parsing doesn’t change anything, you reach a so-called <strong>fixed point</strong>.</p>
@@ -582,7 +586,7 @@
 <p>A configuration in CCL is actually a <em>fixed point</em> for a dictionary from strings to.. itself!</p>
 <p>In OCaml, it’s pure elegancy:</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a><span class="kw">type</span> t = Fix <span class="kw">of</span> t <span class="dt">Map</span>.Make(<span class="dt">String</span>).t</span></code></pre></div>
-<p>It’s a map that maps strings (i.e. keys) to itself. The only the stop the recursion is to bind a key to an empty map. And therefore, final level is values mapped to empty maps.</p>
+<p>It’s a map that maps strings (i.e. keys) to itself. The only way to stop the recursion is to bind a key to an empty map. And therefore, final level is values mapped to empty maps.</p>
 <p>We can have a pure function to turn a list of key-value pairs on this representation:</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a><span class="kw">val</span> fix : key_val <span class="dt">list</span> -&gt; t</span></code></pre></div>
 <p>When we had lists, we could just append lists (a pretty understandable operation). How can we append such fixed points? That’s pretty easy too.</p>
@@ -618,14 +622,14 @@
 <h2 id="whats-next">What’s next?</h2>
 <p>I have a CCL PoC <a href="https://github.com/chshersh/ccl">built in OCaml on GitHub</a>.</p>
 <p>It works. It passes the tests. It’s not production-ready.</p>
-<p>Meaning, that documentation might lack important details, performance wasn’t optimised, code is ugly at some places, the quality of error messages is poor, utility functions are lacking, and breaking changes are expected. You know, just like a typical SaaS product, except CCL is free.</p>
+<p>Meaning, that documentation might lack important details, performance wasn’t optimised, code is ugly at some places, the quality of error messages is poor, utility functions are lacking, and breaking changes are expected. You know, just like a typical SaaS product, except CCL is free and was done in 10 evenings.</p>
 <p>However, I’ve implemented an exhaustive test suite with dozens of unit tests covering diverse edge-cases as well as property-based tests to verify algebraic laws.</p>
 <figure>
 <img src="/images/ccl/tests.png" alt="" /><figcaption>Example of passing tests (they pass, it’s true)</figcaption>
 </figure>
 <p>If you try it and discover bugs, please report! I’ll try to fix them.</p>
 <p>Currently, I’m focusing on building <a href="https://github.com/chshersh/github-tui">GitHub TUI</a> in OCaml. If at some point the need for a config arises, I return to <code>ccl</code>.</p>
-<p>For example, one essential part of API is decoding CCL values into actual programming values.</p>
+<p>For example, to make CCL production-ready, one essential API piece is missing: decoding CCL values into actual programming values.</p>
 <p>I envision an API in OCaml like this one:</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true"></a><span class="kw">type</span> user = {</span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true"></a>  login: <span class="dt">string</span>;</span>
