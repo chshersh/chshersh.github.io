@@ -52,6 +52,17 @@ document.addEventListener("keydown", (event) => {
     window.history.back();
   }
 
+  // Check for 'gg' sequence to scroll to the top
+  if (pressedKeys.join("").endsWith("gg")) {
+    window.scrollTo({ top: 0, behavior: "auto" });
+    pressedKeys = [];
+  }
+
+  // Check for 'G' key to scroll to the bottom
+  if (event.key === "G") {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "auto" });
+  }
+
   // Limit the size of pressedKeys to avoid excessive memory usage
   if (pressedKeys.length > 2) {
     pressedKeys.shift();
