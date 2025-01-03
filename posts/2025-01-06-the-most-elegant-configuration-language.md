@@ -55,23 +55,23 @@ in the wild:
 
 1. [JSON](https://www.json.org/json-en.html)
    - The most popular format which is not fast enough to be a proper
-     serialisation format and not human-readable enough for a configuration format
+     serialisation format and not human-readable enough for a configuration format.
 1. [YAML](https://yaml.org/spec/)
    - A true configuration language where **NI** means _Nicaragua_, **NL** means
    _Netherlands_ and **NO** means ~~Norway~~ `false`. Just see
-   [noyaml.com](https://noyaml.com/)
+   [noyaml.com](https://noyaml.com/).
 1. [TOML](https://toml.io/en/)
-   - Tom's Obvious Minimal Language means it's obvious only to Tom
+   - Tom's Obvious Minimal Language means it's obvious only to Tom.
 1. [XML](https://www.w3.org/TR/xml/)
    - `<you><just><gotta><love><xml></xml></love></gotta></just></you>`
 1. [INI](https://en.wikipedia.org/wiki/INI_file)
-   - Nobody even knows how to write INI properly
+   - Nobody even knows how to write INI properly.
 1. [Hocon](https://github.com/lightbend/config/blob/main/HOCON.md)
    - People write too much configs, so let's add some string interpolation but
      let's make it half-baked, so it's still doesn't solve 95% of real-world use
      cases.
 1. [KDL](https://kdl.dev/)
-   - A configuration language with cosy syntax and none of the tooling
+   - A configuration language with cosy syntax and none of the tooling.
 1. [Cue](https://cuelang.org/)
    - It's not enough to have just config, let's add **TYPES TO CONFIG, LET'S GO**!
 1. [Pkl](https://pkl-lang.org/index.html)
@@ -80,7 +80,7 @@ in the wild:
    - We're type-maxxing at this point. Let's just stop pretending we can be
      satisfied with a simple config language, and implement a
      **FULL FP LANGUAGE WITH DEPENDENT TYPES** just to create nested lists.
-1. And I probably missed your favourite one
+1. And I probably missed your favourite one.
 
 They all have one problem:
 
@@ -108,8 +108,8 @@ degree of explicitness.
 
 So, we need a config.
 
-The config supplies extra parameters to the software, to make implicit
-assumptions explicit and tailor to personal preferences.
+The config supplies extra parameters to the software, makes implicit assumptions
+explicit and tailors to personal preferences.
 
 Examples:
 
@@ -117,10 +117,10 @@ Examples:
    severity of specific warnings.
 1. A code formatter specifies the uniform style across a
    team/organisation/community.
-1. A tool like `git` contains user details and enables configuring aliases.
-1. VSCode describes the plugins and their settings declaratively.
+1. A tool like `git` contains user details and allows custom aliases.
+1. VSCode declaratively describes enabled plugins and their settings.
 1. A build tool has compiler flags, controlling optimisations and extra
-   parameters for build artefacts.
+   parameters for build artifacts.
 
 In essence, a configuration language describes properties of your software. A
 _property_ has two parts: **what** and **how**. _What_ is the name of the
@@ -129,7 +129,7 @@ property, and _how_ is its value.
 In other words, a config is just a list of key-value pairs.
 
 In practice, you also want **why** aka some documentation explaining why this
-property is there. The configuration can become complex if the
+property exists in the first place. The configuration can become complex if the
 software is also complex.
 
 <hr>
@@ -139,8 +139,8 @@ talking philosophy.
 
 ## The Simplest Configuration Language
 
-So what would be the simple possible configuration language? Remember, we don't
-want to do too much.
+So what would be the simplest possible configuration language? Remember, we
+don't want to do too much.
 
 The config is just some data written in a file. So the simplest config would be
 just a string. But just a string is not useful. It doesn't have _enough_
@@ -166,7 +166,8 @@ createdAt = 2025-01-06
 howManyYearsWasIPlanningThis = 2
 ```
 
-In OCaml, the following self-explainablethis types modells a single key-value entry:
+In OCaml, the following (hopefully) self-explainable types model a single
+key-value entry:
 
 ```ocaml
 type key_val = {
@@ -177,7 +178,7 @@ type key_val = {
 
 An the entire config is just **a list of `key_val` items**.
 
-With these types, the above config example will become just this:
+With these types, the above config example becomes:
 
 ```ocaml
 let example =
@@ -222,29 +223,31 @@ version = 2.15
 
 You know, it would've been a real shame, if the configuration language decided to
 interpret the value now as a floating-point number, and the program would've
-failed at runtime because this implicit behaviour was surprising.
+failed at runtime because of this implicit behaviour.
 
-CCL doesn't attach any type semantics to keys or values. In the file, they're
-just strings. So they're passed as strings with minimal processing to the
-program.
+CCL doesn't attach any type semantics to keys or values. The file content is
+just text. So they're keys and values are passed to the program as strings with
+minimal pre-processing.
 
 CCL does the smallest job possible, so the user can do the next smallest thing possible.
 
-You want to have dates in different formats, fine, you can parse them from your program:
+<hr>
+
+You want to have dates in different formats? Fine, you can parse them from your program:
 
 ```ocaml
 date1 = 2024-12-24
 date2 = December 24th, 2024
 ```
 
-You want to keep leading and trailing spaces, fine, just add quotes manually in
-your config:
+You want to keep leading and trailing spaces? Fine, just add quotes manually in
+your config and remove them with your code:
 
 ```ocaml
 preference = '   I love spaces   '
 ```
 
-You want to introduce data validation and type-checking in your config, fine, you
+You want to introduce data validation and type-checking in your config? Fine, you
 can just ask users to provide type annotations in the format you want, for
 example:
 
@@ -253,6 +256,8 @@ x : Int = 3
 y : Double = 4.
 msg = "Infer the type of this string!"
 ```
+
+<hr>
 
 Configuration is specific to a particular application. What you want is to
 follow the rule of the least surprise and utility functions to parse
@@ -332,7 +337,7 @@ then.. just ignore it when dealing with keys and values.
 
 For example,
 
-```ocaml
+```bash
 /= This is an environment config
 port = 8080
 serve = index.html
@@ -427,13 +432,13 @@ let example =
 </details>
 
 If you're not used to `=` having the main character syndrome here, what if I
-told you, that you can use CCL itself to configure this separator itself? 🤯
+told you that you can use CCL to configure the separator? 🤯
 
 After all, `=` is just a string.
 
 ### Multiline strings
 
-Values are just strings, so you have long multiline text as a value too!
+Values are just strings, so you can have multiline text as a value too!
 
 ```bash
 story =
@@ -447,15 +452,15 @@ As you can see, there's no need to use triple quotes like `"""` in front of the
 string, or start each line with a character like `|` to describe a paragraph.
 You can just write things.
 
-Sure, you'll have extra whitespaces in front of each line, because CCL doesn't
+Sure, you'll have extra whitespaces in front of each line. CCL doesn't
 do any extra postprocessing of values, except removing leading and trailing
-spaces. so you'll have to do some trivial preprocessing to sanitise them. Oi,
+spaces. So you'll have to do some trivial preprocessing to sanitise them. Oi,
 but what's a couple of whitespaces between friends!
 
 ### Integration with others
 
-Because CCL is powerful, it natively supports all other configuration languages
-out of the box!
+Because CCL is so powerful, it natively supports all other configuration
+languages out of the box!
 
 The following is a valid CCL document that has JSON, YAML and TOML inside:
 
@@ -503,7 +508,7 @@ CCL gradually.
 
 We're entering some highly fancy territory here.
 
-Values are just strings. So why not have values be CCL config itself??
+Values are just strings. So why not just store CCL inside values??
 
 Indeed, nothing stops us from writing the following config:
 
@@ -625,7 +630,9 @@ If you have named constructors instead of positional, you can use nested named k
 
 ## Category Theory Enters The Chat
 
-You think I finished. In fact, I haven't even started.
+You thought I finished after describing all CCL features.
+
+In fact, I haven't even started.
 
 ### Composition
 
@@ -682,13 +689,13 @@ between objects). You can compose morphisms, and this composition is
 Turns out, composing CCL configs in the above way is an associative operation.
 Let's call this operation `smoosh`.
 
-Associativity means that combining three configs in this way:
+Associativity means that combining three configs this way:
 
 ```ocaml
 smoosh (smoosh ccl1 ccl2) ccl3
 ```
 
-Is the same as this:
+Is the same as:
 
 ```ocaml
 smoosh ccl1 (smoosh ccl2 ccl3)
@@ -743,9 +750,9 @@ smoosh ccl empty = ccl
 smoosh empty ccl = ccl
 ```
 
-> 📜 It's easy to show these properties hold for CCL.
-
 then the configuration is another abstraction — **monoid**.
+
+> 📜 It's easy to show these properties hold for CCL.
 
 In OCaml, we would represent this abstraction in the following way:
 
@@ -756,6 +763,8 @@ module type MONOID = sig
   val smoosh : t -> t -> t
 end
 ```
+
+<hr>
 
 Here we went from a practical example to rediscovering a math abstraction. But
 when you're familiar with such abstractions, the usual thinking route is the
@@ -798,9 +807,10 @@ The list append operator in OCaml is `@`. Turns out, appending lists is
 an associative operation, and therefore lists with `@` form a Semigroup.
 
 Moreover, empty list `[]` satisfies the _identity_ properties in relation to
-`@`. Therefore lists also form a Monoid.
+`@`. Therefore lists with `@` also form a Monoid.
 
-We also have a function to convert the contents of the file into a list of key-value pairs:
+We also have a function to convert the contents of the file into a list of
+key-value pairs:
 
 ```ocaml
 val parse : string -> key_val list
@@ -816,8 +826,8 @@ In English, concatenating two files and then parsing the result is the same as
 parsing two files separately and then appending the resulting lists of key-value
 pairs.
 
-We have two Monoids: CCL (aka text files) and lists of key-value pairs. And we
-have a function `parse` with the above property. In this case, `parse` is
+We have two Monoids: (1) CCL (aka text files) and (2) lists of key-value pairs.
+And we have a function `parse` with the above property. In this case, `parse` is
 a **monoid homomorphism**.
 
 A _monoid homomorphism_ is a function that maps one monoid to another while
@@ -834,15 +844,17 @@ parse "" = []
 ```
 
 Which is totally reasonable, we should parse an empty file to a valid config.
+Moreover, this config must be an empty list.
 
 But second, and most important, if `parse` is a true _monoid homomorphism_ then it
 doesn't matter if we concat files first and then parse or if we first parse and
 then concat. The result will be the same!
 
 It means, we can actually improve the performance of parsing multiple files. We
-can parse files in parallel and then combine the resulting key-value pairs! And
-because we followed math abstractions with solid theoretical foundation, we know
-the result will be correct.
+can parse files in parallel and then combine the resulting key-value pairs
+instead of concatenating all files first. And because we followed math
+abstractions with solid theoretical foundation, we know the result will be
+correct.
 
 This property can become handy when you start representing your cloud
 configuration a-la K8S with hundreds of config files, and suddenly the pod
@@ -932,8 +944,8 @@ leading spaces. An implementation in OCaml:
 let cat ccl1 ccl2 = ccl1 ^ "\n" ^ String.trim ccl2
 ```
 
-Notice, how we benefited from math abstractions. But following them precisely,
-we discover annoying bugs while making the implementation more robust.
+Notice how we benefited from math abstractions. But following them precisely,
+we discovered an annoying bug and fixed it early.
 
 </details>
 
@@ -1005,7 +1017,7 @@ Manually parsing and resolving all the nested key overrides is annoying.
 
 CCL solved this too.
 
-The key idea here is to treat values as keys (pun intended).
+The key idea here is to treat values as.. keys (pun intended).
 
 Remember how in the "Nested records" section I mentioned that you can parse
 values using the same CCL config parser? If you do it recursively until the
@@ -1029,7 +1041,7 @@ In OCaml, it's pure elegancy:
 type t = Fix of t Map.Make(String).t
 ```
 
-It's a map that maps strings (i.e. keys) to itself. The only the stop the
+It's a map that maps strings (i.e. keys) to itself. The only way to stop the
 recursion is to bind a key to an empty map. And therefore, final level is values
 mapped to empty maps.
 
@@ -1112,7 +1124,7 @@ It works. It passes the tests. It's not production-ready.
 Meaning, that documentation might lack important details, performance wasn't
 optimised, code is ugly at some places, the quality of error messages is poor,
 utility functions are lacking, and breaking changes are expected. You know, just
-like a typical SaaS product, except CCL is free.
+like a typical SaaS product, except CCL is free and was done in 10 evenings.
 
 However, I've implemented an exhaustive test suite with dozens of unit
 tests covering diverse edge-cases as well as property-based tests to verify
@@ -1125,8 +1137,8 @@ If you try it and discover bugs, please report! I'll try to fix them.
 Currently, I'm focusing on building [GitHub TUI][github-tui] in OCaml. If at
 some point the need for a config arises, I return to `ccl`.
 
-For example, one essential part of API is decoding CCL values into actual
-programming values.
+For example, to make CCL production-ready, one essential API piece is missing:
+decoding CCL values into actual programming values.
 
 I envision an API in OCaml like this one:
 
