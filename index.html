@@ -51,6 +51,13 @@
                 button.focus();
             }
         });
+
+		app.ports.scrollElement.subscribe(function (scrollData) {
+            var element = document.getElementById(scrollData.id);
+            if (element) {
+                element.scrollBy({ top: scrollData.delta, behavior: "smooth" });
+            }
+        });
 	</script>
 </body>
 
