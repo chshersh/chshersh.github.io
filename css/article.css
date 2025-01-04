@@ -163,13 +163,15 @@ thead th {
 }
 
 .home-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: #1e1e1e;
     color: #e2e2e2;
     display: inline-block;
     text-decoration: none; /* Remove underline for links */
-    text-align: center;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 10px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.8em;
     border-radius: 5px;
@@ -181,6 +183,19 @@ thead th {
     background-color: #ffc107;
     color: #1e1e1e;
     text-decoration: none;
+}
+
+.home-button .left-text {
+  margin-right: 2em;
+}
+
+.home-button .right-text {
+  margin-left: auto;
+  color: #919191;
+}
+
+.home-button:hover .right-text {
+  color: #1e1e1e;
 }
 
 /* Styling summary details */
