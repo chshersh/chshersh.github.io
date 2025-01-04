@@ -13,6 +13,11 @@ mkPath article =
     "/blog/" ++ article.path ++ ".html"
 
 
+mkArticleId : Int -> String
+mkArticleId i =
+    "article-" ++ String.fromInt i
+
+
 totalArticles : Int
 totalArticles =
     List.length articles

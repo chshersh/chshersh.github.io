@@ -294,7 +294,7 @@ viewArticle model i article =
                 Color.elevatedGrey
     in
     link
-        [ htmlAttribute <| Html.Attributes.id ("article-" ++ String.fromInt i)
+        [ htmlAttribute <| Html.Attributes.id <| Blog.mkArticleId i
         , padding 10
         , width fill
         , Font.color Color.gainsboro

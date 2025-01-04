@@ -7,7 +7,7 @@ import Dict
 import Element exposing (classifyDevice)
 import Html exposing (article)
 import Model exposing (Model)
-import Model.Blog exposing (articlesArr, mkPath, totalArticles)
+import Model.Blog exposing (articlesArr, mkArticleId, mkPath, totalArticles)
 import Model.Dimensions exposing (Dimensions)
 import Model.Info exposing (Info(..), getButtonId)
 import Model.Key as Key
@@ -80,7 +80,7 @@ handleScroll initialModel key =
                     modBy totalArticles (model.blogPosition + increment + totalArticles)
 
                 articleId =
-                    "article-" ++ String.fromInt newBlogPosition
+                    mkArticleId newBlogPosition
             in
             ( { model | blogPosition = newBlogPosition }, Port.scrollToElement articleId )
 
@@ -135,12 +135,12 @@ keyPressed initialModel key =
         nextCmd =
             case nextState of
                 Key.Go About ->
-                    Port.focusButton (getButtonId About)
+                    Port.focusButton <| getButtonId About
 
                 Key.Go Blog ->
                     Cmd.batch
-                        [ Port.focusButton (getButtonId Blog)
-                        , Port.scrollToElement ("article-" ++ String.fromInt model.blogPosition)
+                        [ Port.focusButton <| getButtonId Blog
+                        , Port.scrollToElement <| mkArticleId model.blogPosition
                         ]
 
                 Key.GoGo gg ->
