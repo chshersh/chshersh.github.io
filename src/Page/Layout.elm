@@ -17,11 +17,12 @@ bigDesktop model =
     column
         [ centerX, width fill, height fill, spacing 50 ]
         [ html FontAwesome.Styles.css
-        , column [ height (fillPortion 4), centerX, width fill, spacing 30 ]
-            [ logo [ Font.size 20, alignBottom ]
-            , title [ Font.size 24, alignBottom ]
+        , column
+            [ centerX, width fill, spacing 35, paddingEach { edges | top = 40 } ]
+            [ logo [ Font.size 20 ]
+            , title [ Font.size 24 ]
             , linksRow
-                [ alignBottom ]
+                []
                 [ ggSocial model Social.gitHub
                 , ggSocial model Social.youTube
                 , ggSocial model Social.x
@@ -32,7 +33,7 @@ bigDesktop model =
                 , ggSocial model Social.email
                 ]
             ]
-        , menu [ height (fillPortion 3) ] model
+        , menu 400 [] model
         ]
 
 
@@ -55,7 +56,7 @@ desktop model =
                 , ggSocial model Social.email
                 ]
             ]
-        , menu [ alignTop, height fill ] model
+        , menu 330 [ alignTop, height fill ] model
         ]
 
 

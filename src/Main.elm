@@ -8,7 +8,7 @@ import Json.Decode as Decode exposing (Decoder)
 import Model exposing (Model)
 import Model.Dimensions exposing (Dimensions)
 import Model.Info exposing (Info(..))
-import Model.Key exposing (KeyState(..))
+import Model.Key exposing (KeyState(..), ScrollState(..))
 import Model.Msg exposing (Msg(..))
 import Model.Route exposing (Route(..), toRoute)
 import Update exposing (update)
@@ -48,6 +48,7 @@ init dimensions url key =
             , key = key
             , route = toRoute url
             , keyState = Start
+            , scrollState = NoScroll
             }
     in
     ( model

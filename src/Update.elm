@@ -47,17 +47,17 @@ urlChanged model url =
     )
 
 
-getScrollCmd : Model -> Key.Key -> Cmd Msg
-getScrollCmd _ key =
+handleScroll : Key.Key -> ( Key.ScrollState, Cmd Msg )
+handleScroll key =
     case key of
         Key.Letter 'j' ->
-            scrollElement { id = "scrollable-info", delta = 50 }
+            ( Key.ScrollDown, scrollElement { id = "scrollable-info", delta = 50 } )
 
         Key.Letter 'k' ->
-            scrollElement { id = "scrollable-info", delta = -50 }
+            ( Key.ScrollUp, scrollElement { id = "scrollable-info", delta = -50 } )
 
         _ ->
-            Cmd.none
+            ( Key.NoScroll, Cmd.none )
 
 
 keyPressed : Model -> String -> ( Model, Cmd Msg )
@@ -66,11 +66,11 @@ keyPressed model key =
         parsedKey =
             Key.parseKey key
 
-        scrollCmd =
-            getScrollCmd model parsedKey
+        ( newScrollState, scrollCmd ) =
+            handleScroll parsedKey
 
         nextState =
-            Key.handleKey model.keyState parsedKey
+            Key.handleKeyState model.keyState parsedKey
 
         info =
             case nextState of
@@ -99,7 +99,11 @@ keyPressed model key =
         finalCmd =
             Cmd.batch [ nextCmd, scrollCmd ]
     in
-    ( { model | keyState = nextState, info = info }
+    ( { model
+        | keyState = nextState
+        , scrollState = newScrollState
+        , info = info
+      }
     , finalCmd
     )
 

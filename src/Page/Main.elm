@@ -12,6 +12,7 @@ import Html.Attributes exposing (class)
 import Model exposing (Model)
 import Model.Blog as Blog
 import Model.Info exposing (Info(..))
+import Model.Key exposing (ScrollState(..))
 import Model.Msg exposing (Msg(..))
 import Model.Social as Social
 import View.Code exposing (code)
@@ -83,36 +84,68 @@ icon i =
     el [] (html <| Icon.view i)
 
 
-menu : List (Attribute Msg) -> Model -> Element Msg
-menu attrs model =
-    row ([ width fill, spacing 10 ] ++ attrs)
-        [ column
-            [ centerX
-            , paddingEach { edges | left = 10, right = 10 }
-            , spacing 10
-            , alignTop
-            ]
-            [ ViewKey.viewButton model About
-            , ViewKey.viewButton model Blog
-            ]
-        , column
-            [ htmlAttribute <| Html.Attributes.id "scrollable-info"
-            , width fill
-            , height (fill |> maximum 350)
-            , paddingEach { edges | right = 10 }
-            , scrollbarY
-            , htmlAttribute (class "custom-scrollbar")
-            ]
-            [ viewInfo model.info
+menu : Int -> List (Attribute Msg) -> Model -> Element Msg
+menu clipSize attrs model =
+    column [ width fill ]
+        [ scrollHint model.scrollState
+        , row ([ width fill, spacing 10 ] ++ attrs)
+            [ column
+                [ centerX
+                , paddingEach { edges | left = 10, right = 10 }
+                , spacing 10
+                , alignTop
+                ]
+                [ ViewKey.viewButton model About
+                , ViewKey.viewButton model Blog
+                ]
+            , column
+                [ htmlAttribute <| Html.Attributes.id "scrollable-info"
+                , width fill
+                , height (fill |> maximum clipSize)
+                , paddingEach { edges | right = 10 }
+                , scrollbarY
+                , htmlAttribute (class "custom-scrollbar")
+                ]
+                [ viewInfo model
+                ]
             ]
         ]
 
 
-viewInfo : Info -> Element msg
-viewInfo info =
+scrollHint : ScrollState -> Element msg
+scrollHint scrollState =
+    let
+        downHint =
+            case scrollState of
+                ScrollDown ->
+                    t [ Font.color Color.yellow ] "j/↓"
+
+                _ ->
+                    mono [] "j/↓"
+
+        upHint =
+            case scrollState of
+                ScrollUp ->
+                    t [ Font.color Color.yellow ] "k/↑"
+
+                _ ->
+                    mono [] "k/↑"
+    in
+    row
+        [ centerX
+        , Font.size 12
+        , Font.color Color.suvaGrey
+        , spacing 15
+        , paddingEach { edges | bottom = 10 }
+        ]
+        [ downHint, upHint ]
+
+
+viewInfo : Model -> Element msg
+viewInfo model =
     let
         content =
-            case info of
+            case model.info of
                 About ->
                     about
 

@@ -33,8 +33,8 @@ type KeyState
     | GoGo Char
 
 
-handleKey : KeyState -> Key -> KeyState
-handleKey keyState key =
+handleKeyState : KeyState -> Key -> KeyState
+handleKeyState keyState key =
     case ( key, keyState ) of
         ( Other, _ ) ->
             Start
@@ -65,3 +65,9 @@ handleKey keyState key =
 
         ( _, _ ) ->
             Start
+
+
+type ScrollState
+    = NoScroll
+    | ScrollDown
+    | ScrollUp
