@@ -20,6 +20,9 @@ port newTab : String -> Cmd msg
 port focusButton : String -> Cmd msg
 
 
+port scrollElement : { id : String, delta : Int } -> Cmd msg
+
+
 selected : Model -> Info -> ( Model, Cmd Msg )
 selected model info =
     ( { model | info = info, keyState = Key.Go info }
@@ -44,11 +47,27 @@ urlChanged model url =
     )
 
 
+getScrollCmd : Model -> Key.Key -> Cmd Msg
+getScrollCmd _ key =
+    case key of
+        Key.Letter 'j' ->
+            scrollElement { id = "scrollable-info", delta = 50 }
+
+        Key.Letter 'k' ->
+            scrollElement { id = "scrollable-info", delta = -50 }
+
+        _ ->
+            Cmd.none
+
+
 keyPressed : Model -> String -> ( Model, Cmd Msg )
 keyPressed model key =
     let
         parsedKey =
             Key.parseKey key
+
+        scrollCmd =
+            getScrollCmd model parsedKey
 
         nextState =
             Key.handleKey model.keyState parsedKey
@@ -76,9 +95,12 @@ keyPressed model key =
 
                 _ ->
                     Cmd.none
+
+        finalCmd =
+            Cmd.batch [ nextCmd, scrollCmd ]
     in
     ( { model | keyState = nextState, info = info }
-    , nextCmd
+    , finalCmd
     )
 
 

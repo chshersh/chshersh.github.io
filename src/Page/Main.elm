@@ -50,7 +50,7 @@ title attrs =
             ++ attrs
         )
         [ t [ centerX ] "Dmitrii Kovanikov"
-        , t [ centerX ] "Senior Software Engineer @ Bloomberg"
+        , t [ centerX ] "Senior SWE @ Bloomberg"
         , t [ centerX, Font.color Color.suvaGrey ] "Functional Programming Adept"
         ]
 
@@ -96,7 +96,8 @@ menu attrs model =
             , ViewKey.viewButton model Blog
             ]
         , column
-            [ width fill
+            [ htmlAttribute <| Html.Attributes.id "scrollable-info"
+            , width fill
             , height (fill |> maximum 350)
             , paddingEach { edges | right = 10 }
             , scrollbarY

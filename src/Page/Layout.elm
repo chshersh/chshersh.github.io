@@ -72,7 +72,7 @@ phone _ =
         ]
         [ html FontAwesome.Styles.css
         , logo [ Font.size 8 ]
-        , title [ Font.size 12 ]
+        , title [ Font.size 14 ]
         , column [ centerX, spacing 10 ]
             [ linksRow []
                 [ social Social.gitHub
