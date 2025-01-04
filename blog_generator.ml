@@ -88,6 +88,8 @@ let elm_header =
   [
     {elm|module Model.Blog exposing (..)|elm};
     {elm||elm};
+    {elm|import Array|elm};
+    {elm||elm};
     {elm|type alias T =|elm};
     {elm|    { title : String|elm};
     {elm|    , createdAt : String|elm};
@@ -100,6 +102,9 @@ let elm_header =
     {elm||elm};
     {elm|totalArticles : Int|elm};
     {elm|totalArticles = List.length articles|elm};
+    {elm||elm};
+    {elm|articlesArr : Array.Array T|elm};
+    {elm|articlesArr = Array.fromList articles|elm};
     {elm||elm};
     {elm|articles : List T|elm};
     {elm|articles =|elm};

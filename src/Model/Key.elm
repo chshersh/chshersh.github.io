@@ -7,6 +7,7 @@ type Key
     = Letter Char
     | ArrowDown
     | ArrowUp
+    | Enter
     | Other
 
 
@@ -18,6 +19,9 @@ parseKey key =
 
         "ArrowDown" ->
             ArrowDown
+
+        "Enter" ->
+            Enter
 
         _ ->
             case String.uncons key of

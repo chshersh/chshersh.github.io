@@ -1,11 +1,13 @@
 port module Update exposing (..)
 
+import Array
 import Browser
 import Browser.Navigation as Nav
 import Dict
 import Element exposing (classifyDevice)
+import Html exposing (article)
 import Model exposing (Model)
-import Model.Blog exposing (totalArticles)
+import Model.Blog exposing (articlesArr, mkPath, totalArticles)
 import Model.Dimensions exposing (Dimensions)
 import Model.Info exposing (Info(..), getButtonId)
 import Model.Key as Key
@@ -94,6 +96,33 @@ handleScroll initialModel key =
             ( { model | blogPosition = newBlogPosition }, scrollToElement articleId )
 
 
+loadArticle : Model -> Key.Key -> Cmd Msg
+loadArticle model key =
+    let
+        loadArticleAt i =
+            case Array.get i articlesArr of
+                Nothing ->
+                    Cmd.none
+
+                Just article ->
+                    Nav.load (mkPath article)
+    in
+    case model.info of
+        About ->
+            Cmd.none
+
+        Blog ->
+            case key of
+                Key.Enter ->
+                    loadArticleAt model.blogPosition
+
+                Key.Letter 'l' ->
+                    loadArticleAt model.blogPosition
+
+                _ ->
+                    Cmd.none
+
+
 keyPressed : Model -> String -> ( Model, Cmd Msg )
 keyPressed initialModel key =
     let
@@ -136,8 +165,11 @@ keyPressed initialModel key =
                 _ ->
                     Cmd.none
 
+        goToArticleCmd =
+            loadArticle model parsedKey
+
         finalCmd =
-            Cmd.batch [ nextCmd, scrollCmd ]
+            Cmd.batch [ nextCmd, scrollCmd, goToArticleCmd ]
     in
     ( { model
         | keyState = nextState

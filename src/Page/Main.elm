@@ -130,6 +130,9 @@ scrollHint scrollState =
 
                 _ ->
                     mono [] "k/↑"
+
+        openHint =
+            mono [] "l/Enter"
     in
     row
         [ centerX
@@ -138,7 +141,7 @@ scrollHint scrollState =
         , spacing 15
         , paddingEach { edges | bottom = 10 }
         ]
-        [ downHint, upHint ]
+        [ downHint, upHint, openHint ]
 
 
 viewInfo : Model -> Element msg

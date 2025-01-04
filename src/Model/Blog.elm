@@ -1,5 +1,7 @@
 module Model.Blog exposing (..)
 
+import Array
+
 type alias T =
     { title : String
     , createdAt : String
@@ -12,6 +14,9 @@ mkPath article =
 
 totalArticles : Int
 totalArticles = List.length articles
+
+articlesArr : Array.Array T
+articlesArr = Array.fromList articles
 
 articles : List T
 articles =
