@@ -17,17 +17,22 @@ body {
     color: #e2e2e2;
     font-family: 'Geist';
     font-size: 1.2em;
+    line-height: 1.5;
     margin: 0;
     padding: 0 1em; /* Add some padding for readability */
 }
 
 header {
-    margin-bottom: 1.5em;
+    margin-bottom: 0em;
     text-align: center;
 }
 
 h1, h2, h3, h4, h5, h6 {
     color: #e2e2e2; /* Ensure headings are also white */
+}
+
+h1 {
+    margin-bottom: 0;
 }
 
 a {
@@ -42,7 +47,7 @@ a:hover {
 main {
     max-width: 800px;
     margin: 0 auto;
-    padding: 1em;
+    padding: 0.5em 1em;
 }
 
 ul {
@@ -165,7 +170,8 @@ thead th {
     text-align: center;
     border: none;
     padding: 10px 20px;
-    font-size: 1em;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8em;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
