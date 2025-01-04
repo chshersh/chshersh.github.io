@@ -58,6 +58,14 @@
                 element.scrollBy({ top: scrollData.delta, behavior: "smooth" });
             }
         });
+
+        app.ports.scrollToElement.subscribe(function (elementId) {
+            var element = document.getElementById(elementId);
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+            }
+        });
+
 	</script>
 </body>
 
