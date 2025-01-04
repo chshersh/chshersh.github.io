@@ -98,6 +98,9 @@ let elm_header =
     {elm|mkPath article =|elm};
     {elm|    "/blog/" ++ article.path ++ ".html"|elm};
     {elm||elm};
+    {elm|totalArticles : Int|elm};
+    {elm|totalArticles = List.length articles|elm};
+    {elm||elm};
     {elm|articles : List T|elm};
     {elm|articles =|elm};
   ]

@@ -49,6 +49,7 @@ init dimensions url key =
             , route = toRoute url
             , keyState = Start
             , scrollState = NoScroll
+            , blogPosition = 0
             }
     in
     ( model

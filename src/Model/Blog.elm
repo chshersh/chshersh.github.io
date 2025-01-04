@@ -10,6 +10,9 @@ mkPath : T -> String
 mkPath article =
     "/blog/" ++ article.path ++ ".html"
 
+totalArticles : Int
+totalArticles = List.length articles
+
 articles : List T
 articles =
     [ { title = "Pragmatic Category Theory | Part 3: Associativity"

@@ -150,7 +150,7 @@ viewInfo model =
                     about
 
                 Blog ->
-                    blog
+                    blog model
     in
     column
         [ width fill
@@ -261,8 +261,8 @@ downloadCV =
         }
 
 
-blog : Element msg
-blog =
+blog : Model -> Element msg
+blog model =
     column
         [ width fill
         , height fill
@@ -270,11 +270,11 @@ blog =
         , spacing 20
         , paddingEach { edges | top = 5, bottom = 5, left = 10 }
         ]
-        (List.indexedMap viewArticle Blog.articles)
+        (List.indexedMap (viewArticle model) Blog.articles)
 
 
-viewArticle : Int -> Blog.T -> Element msg
-viewArticle i article =
+viewArticle : Model -> Int -> Blog.T -> Element msg
+viewArticle model i article =
     let
         newTag =
             if i == 0 then
@@ -282,12 +282,22 @@ viewArticle i article =
 
             else
                 none
+
+        borderColor =
+            if i == model.blogPosition then
+                Color.yellow
+
+            else
+                Color.elevatedGrey
     in
     link
-        [ padding 10
+        [ htmlAttribute <| Html.Attributes.id ("article-" ++ String.fromInt i)
+        , padding 10
         , width fill
         , Font.color Color.gainsboro
         , mouseOver [ Font.color Color.yellow ]
+        , Border.widthEach { edges | left = 5 }
+        , Border.color borderColor
         ]
         { url = Blog.mkPath article
         , label =

@@ -14,4 +14,5 @@ type alias Model =
     , route : Route
     , keyState : KeyState
     , scrollState : ScrollState
+    , blogPosition : Int
     }

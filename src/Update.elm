@@ -5,8 +5,9 @@ import Browser.Navigation as Nav
 import Dict
 import Element exposing (classifyDevice)
 import Model exposing (Model)
+import Model.Blog exposing (totalArticles)
 import Model.Dimensions exposing (Dimensions)
-import Model.Info exposing (Info, getButtonId)
+import Model.Info exposing (Info(..), getButtonId)
 import Model.Key as Key
 import Model.Msg exposing (Msg(..))
 import Model.Route exposing (toRoute)
@@ -21,6 +22,9 @@ port focusButton : String -> Cmd msg
 
 
 port scrollElement : { id : String, delta : Int } -> Cmd msg
+
+
+port scrollToElement : String -> Cmd msg
 
 
 selected : Model -> Info -> ( Model, Cmd Msg )
@@ -47,27 +51,57 @@ urlChanged model url =
     )
 
 
-handleScroll : Key.Key -> ( Key.ScrollState, Cmd Msg )
-handleScroll key =
-    case key of
-        Key.Letter 'j' ->
-            ( Key.ScrollDown, scrollElement { id = "scrollable-info", delta = 50 } )
+handleScroll : Model -> Key.Key -> ( Model, Cmd Msg )
+handleScroll initialModel key =
+    let
+        scrollState =
+            Key.parseScrollState key
 
-        Key.Letter 'k' ->
-            ( Key.ScrollUp, scrollElement { id = "scrollable-info", delta = -50 } )
+        model =
+            { initialModel | scrollState = scrollState }
+    in
+    case model.info of
+        About ->
+            case scrollState of
+                Key.NoScroll ->
+                    ( model, Cmd.none )
 
-        _ ->
-            ( Key.NoScroll, Cmd.none )
+                Key.ScrollDown ->
+                    ( model, scrollElement { id = "scrollable-info", delta = 50 } )
+
+                Key.ScrollUp ->
+                    ( model, scrollElement { id = "scrollable-info", delta = -50 } )
+
+        Blog ->
+            let
+                increment =
+                    case scrollState of
+                        Key.NoScroll ->
+                            0
+
+                        Key.ScrollDown ->
+                            1
+
+                        Key.ScrollUp ->
+                            -1
+
+                newBlogPosition =
+                    modBy totalArticles (model.blogPosition + increment + totalArticles)
+
+                articleId =
+                    "article-" ++ String.fromInt newBlogPosition
+            in
+            ( { model | blogPosition = newBlogPosition }, scrollToElement articleId )
 
 
 keyPressed : Model -> String -> ( Model, Cmd Msg )
-keyPressed model key =
+keyPressed initialModel key =
     let
         parsedKey =
             Key.parseKey key
 
-        ( newScrollState, scrollCmd ) =
-            handleScroll parsedKey
+        ( model, scrollCmd ) =
+            handleScroll initialModel parsedKey
 
         nextState =
             Key.handleKeyState model.keyState parsedKey
@@ -82,8 +116,14 @@ keyPressed model key =
 
         nextCmd =
             case nextState of
-                Key.Go goToInfo ->
-                    focusButton (getButtonId goToInfo)
+                Key.Go About ->
+                    focusButton (getButtonId About)
+
+                Key.Go Blog ->
+                    Cmd.batch
+                        [ focusButton (getButtonId Blog)
+                        , scrollToElement ("article-" ++ String.fromInt model.blogPosition)
+                        ]
 
                 Key.GoGo gg ->
                     case Dict.get gg Social.socials of
@@ -101,7 +141,6 @@ keyPressed model key =
     in
     ( { model
         | keyState = nextState
-        , scrollState = newScrollState
         , info = info
       }
     , finalCmd

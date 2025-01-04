@@ -5,24 +5,34 @@ import Model.Info exposing (Info(..))
 
 type Key
     = Letter Char
+    | ArrowDown
+    | ArrowUp
     | Other
 
 
 parseKey : String -> Key
 parseKey key =
-    case String.uncons key of
-        Nothing ->
-            Other
+    case key of
+        "ArrowUp" ->
+            ArrowUp
 
-        Just ( head, tail ) ->
-            if not (String.isEmpty tail) then
-                Other
+        "ArrowDown" ->
+            ArrowDown
 
-            else if 'a' <= head && head <= 'z' then
-                Letter head
+        _ ->
+            case String.uncons key of
+                Nothing ->
+                    Other
 
-            else
-                Other
+                Just ( head, tail ) ->
+                    if not (String.isEmpty tail) then
+                        Other
+
+                    else if 'a' <= head && head <= 'z' then
+                        Letter head
+
+                    else
+                        Other
 
 
 type KeyState
@@ -71,3 +81,22 @@ type ScrollState
     = NoScroll
     | ScrollDown
     | ScrollUp
+
+
+parseScrollState : Key -> ScrollState
+parseScrollState key =
+    case key of
+        Letter 'j' ->
+            ScrollDown
+
+        ArrowDown ->
+            ScrollDown
+
+        Letter 'k' ->
+            ScrollUp
+
+        ArrowUp ->
+            ScrollUp
+
+        _ ->
+            NoScroll

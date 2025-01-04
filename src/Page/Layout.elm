@@ -61,7 +61,7 @@ desktop model =
 
 
 phone : Model -> Element Msg
-phone _ =
+phone model =
     column
         [ width fill
         , height fill
@@ -100,5 +100,5 @@ phone _ =
             aboutText
         , row [ centerX ] [ downloadCV ]
         , row [ centerX ] [ t [ Font.size 32 ] "Blog" ]
-        , row [ centerX, paddingEach { edges | bottom = 20 } ] [ blog ]
+        , row [ centerX, paddingEach { edges | bottom = 20 } ] [ blog { model | blogPosition = -1 } ]
         ]
