@@ -86,27 +86,15 @@ let generate_feeds metadata =
 
 let elm_header =
   [
-    {elm|module Model.Blog exposing (..)|elm};
+    {elm|module Model.Blog.Data exposing (..)|elm};
     {elm||elm};
-    {elm|import Array|elm};
-    {elm||elm};
-    {elm|type alias T =|elm};
+    {elm|type alias Article =|elm};
     {elm|    { title : String|elm};
     {elm|    , createdAt : String|elm};
     {elm|    , path : String|elm};
     {elm|    }|elm};
     {elm||elm};
-    {elm|mkPath : T -> String|elm};
-    {elm|mkPath article =|elm};
-    {elm|    "/blog/" ++ article.path ++ ".html"|elm};
-    {elm||elm};
-    {elm|totalArticles : Int|elm};
-    {elm|totalArticles = List.length articles|elm};
-    {elm||elm};
-    {elm|articlesArr : Array.Array T|elm};
-    {elm|articlesArr = Array.fromList articles|elm};
-    {elm||elm};
-    {elm|articles : List T|elm};
+    {elm|articles : List Article|elm};
     {elm|articles =|elm};
   ]
 
@@ -160,7 +148,7 @@ let generate_elm metadata =
   let elm_blog = String.concat "\n" lines in
 
   Out_channel.with_open_bin
-    "src/Model/Blog.elm"
+    "src/Model/Blog/Data.elm"
     (fun channel -> Out_channel.output_string channel elm_blog)
 
 let () =
