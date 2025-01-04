@@ -1,4 +1,4 @@
-port module Update exposing (..)
+module Update exposing (..)
 
 import Array
 import Browser
@@ -14,19 +14,8 @@ import Model.Key as Key
 import Model.Msg exposing (Msg(..))
 import Model.Route exposing (toRoute)
 import Model.Social as Social
+import Port
 import Url
-
-
-port newTab : String -> Cmd msg
-
-
-port focusButton : String -> Cmd msg
-
-
-port scrollElement : { id : String, delta : Int } -> Cmd msg
-
-
-port scrollToElement : String -> Cmd msg
 
 
 selected : Model -> Info -> ( Model, Cmd Msg )
@@ -69,10 +58,10 @@ handleScroll initialModel key =
                     ( model, Cmd.none )
 
                 Key.ScrollDown ->
-                    ( model, scrollElement { id = "scrollable-info", delta = 50 } )
+                    ( model, Port.scrollElement { id = "scrollable-info", delta = 50 } )
 
                 Key.ScrollUp ->
-                    ( model, scrollElement { id = "scrollable-info", delta = -50 } )
+                    ( model, Port.scrollElement { id = "scrollable-info", delta = -50 } )
 
         Blog ->
             let
@@ -93,7 +82,7 @@ handleScroll initialModel key =
                 articleId =
                     "article-" ++ String.fromInt newBlogPosition
             in
-            ( { model | blogPosition = newBlogPosition }, scrollToElement articleId )
+            ( { model | blogPosition = newBlogPosition }, Port.scrollToElement articleId )
 
 
 loadArticle : Model -> Key.Key -> Cmd Msg
@@ -146,12 +135,12 @@ keyPressed initialModel key =
         nextCmd =
             case nextState of
                 Key.Go About ->
-                    focusButton (getButtonId About)
+                    Port.focusButton (getButtonId About)
 
                 Key.Go Blog ->
                     Cmd.batch
-                        [ focusButton (getButtonId Blog)
-                        , scrollToElement ("article-" ++ String.fromInt model.blogPosition)
+                        [ Port.focusButton (getButtonId Blog)
+                        , Port.scrollToElement ("article-" ++ String.fromInt model.blogPosition)
                         ]
 
                 Key.GoGo gg ->
@@ -160,7 +149,7 @@ keyPressed initialModel key =
                             Cmd.none
 
                         Just social ->
-                            newTab social.url
+                            Port.newTab social.url
 
                 _ ->
                     Cmd.none
