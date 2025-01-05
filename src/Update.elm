@@ -12,7 +12,7 @@ import Model.Dimensions exposing (Dimensions)
 import Model.Info exposing (Info(..), getButtonId)
 import Model.Key as Key
 import Model.Msg exposing (Msg(..))
-import Model.Route exposing (toRoute)
+import Model.Route as Route
 import Model.Social as Social
 import Port
 import Url
@@ -39,8 +39,8 @@ linkClicked model urlRequest =
 
 
 urlChanged : Model -> Url.Url -> ( Model, Cmd Msg )
-urlChanged model url =
-    ( { model | route = toRoute url }
+urlChanged model _ =
+    ( model
     , Cmd.none
     )
 

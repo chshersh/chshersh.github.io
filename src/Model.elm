@@ -11,7 +11,6 @@ type alias Model =
     { device : Device
     , info : Info
     , key : Nav.Key
-    , route : Route
     , keyState : KeyState
     , scrollState : ScrollState
     , blogPosition : Int

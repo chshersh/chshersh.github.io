@@ -10,7 +10,7 @@ import Model.Dimensions exposing (Dimensions)
 import Model.Info exposing (Info(..))
 import Model.Key exposing (KeyState(..), ScrollState(..))
 import Model.Msg exposing (Msg(..))
-import Model.Route exposing (Route(..), toRoute)
+import Model.Route as Route
 import Update exposing (update)
 import Url
 import View exposing (view)
@@ -42,15 +42,35 @@ init dimensions url key =
         device =
             classifyDevice dimensions
 
-        model =
+        defaultModel =
             { device = device
             , info = About
             , key = key
-            , route = toRoute url
             , keyState = Start
             , scrollState = NoScroll
             , blogPosition = 0
             }
+
+        model =
+            Debug.log "Parsing URL..." <|
+            case Route.parseUrl url of
+                Route.Home ->
+                    defaultModel
+
+                Route.About ->
+                    defaultModel
+
+                Route.BlogPos maybePos ->
+                    { defaultModel
+                        | info = Blog
+                        , blogPosition = Maybe.withDefault 0 maybePos
+                    }
+
+                Route.Blog _ ->
+                    { defaultModel | info = Blog }
+
+                Route.NotFound ->
+                    defaultModel
     in
     ( model
     , Cmd.none
