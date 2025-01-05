@@ -21,7 +21,10 @@ import Url
 selected : Model -> Info -> ( Model, Cmd Msg )
 selected model info =
     ( { model | info = info, keyState = Key.Go info }
-    , Cmd.none
+    , Cmd.batch
+        [ Port.focusButton <| getButtonId info
+        , Port.scrollToElement <| mkArticleId model.blogPosition
+        ]
     )
 
 
