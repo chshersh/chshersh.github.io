@@ -42,7 +42,7 @@ urlChanged model url =
     )
 
 
-handleScroll : Model -> Key.Key -> ( Model, Cmd Msg )
+handleScroll : Model -> Key.Key -> ( Model, List (Cmd Msg) )
 handleScroll initialModel key =
     let
         scrollState =
@@ -55,13 +55,19 @@ handleScroll initialModel key =
         About ->
             case scrollState of
                 Key.NoScroll ->
-                    ( model, Cmd.none )
+                    ( model
+                    , []
+                    )
 
                 Key.ScrollDown ->
-                    ( model, Port.scrollElement { id = "scrollable-info", delta = 50 } )
+                    ( model
+                    , [ Port.scrollElement { id = "scrollable-info", delta = 50 } ]
+                    )
 
                 Key.ScrollUp ->
-                    ( model, Port.scrollElement { id = "scrollable-info", delta = -50 } )
+                    ( model
+                    , [ Port.scrollElement { id = "scrollable-info", delta = -50 } ]
+                    )
 
         Blog ->
             let
@@ -82,23 +88,25 @@ handleScroll initialModel key =
                 articleId =
                     mkArticleId newBlogPosition
             in
-            ( { model | blogPosition = newBlogPosition }, Port.scrollToElement articleId )
+            ( { model | blogPosition = newBlogPosition }
+            , [ Port.scrollToElement articleId ]
+            )
 
 
-loadArticle : Model -> Key.Key -> Cmd Msg
+loadArticle : Model -> Key.Key -> List (Cmd Msg)
 loadArticle model key =
     let
         loadArticleAt i =
             case Array.get i articlesArr of
                 Nothing ->
-                    Cmd.none
+                    []
 
                 Just article ->
-                    Nav.load (mkPath article)
+                    [ Nav.load <| mkPath article ]
     in
     case model.info of
         About ->
-            Cmd.none
+            []
 
         Blog ->
             case key of
@@ -109,7 +117,7 @@ loadArticle model key =
                     loadArticleAt model.blogPosition
 
                 _ ->
-                    Cmd.none
+                    []
 
 
 keyPressed : Model -> String -> ( Model, Cmd Msg )
@@ -135,30 +143,37 @@ keyPressed initialModel key =
         nextCmd =
             case nextState of
                 Key.Go About ->
-                    Port.focusButton <| getButtonId About
+                    [ Port.focusButton <| getButtonId About ]
 
                 Key.Go Blog ->
-                    Cmd.batch
-                        [ Port.focusButton <| getButtonId Blog
-                        , Port.scrollToElement <| mkArticleId model.blogPosition
-                        ]
+                    [ Port.focusButton <| getButtonId Blog
+                    , Port.scrollToElement <| mkArticleId model.blogPosition
+                    ]
 
                 Key.GoGo gg ->
                     case Dict.get gg Social.socials of
                         Nothing ->
-                            Cmd.none
+                            []
 
                         Just social ->
-                            Port.newTab social.url
+                            [ Port.newTab social.url ]
 
                 _ ->
-                    Cmd.none
+                    []
 
         goToArticleCmd =
             loadArticle model parsedKey
 
+        allCmds =
+            nextCmd ++ scrollCmd ++ goToArticleCmd
+
         finalCmd =
-            Cmd.batch [ nextCmd, scrollCmd, goToArticleCmd ]
+            case allCmds of
+                [] ->
+                    Cmd.none
+
+                _ ->
+                    Cmd.batch allCmds
     in
     ( { model
         | keyState = nextState
