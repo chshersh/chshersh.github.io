@@ -23,8 +23,13 @@ app.ports.scrollElement.subscribe(function (scrollData) {
 });
 
 app.ports.scrollToElement.subscribe(function (elementId) {
-    var element = document.getElementById(elementId);
-    if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
-    }
+    // Since Elm updates the DOM asynchronously, it's possible that the element
+    // we want to scroll to isn't present in the DOM at the moment scrollToElement runs,
+    // or its final position isn't ready yet. Use 'requestAnimationFrame' to delay.
+    requestAnimationFrame(function () {
+        var element = document.getElementById(elementId);
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+        }
+    });
 });
