@@ -3,8 +3,6 @@ title: "The Most Elegant Configuration Language"
 description: "CCL: Categorical Configuration Language"
 tags: ocaml, functional programming, category theory, math, config
 shortName: "ccl"
-updated: ""
-draft: yes
 ---
 
 > _"If nothing magically works, nothing magically breaks"_ © [Carson Gross][quote]
@@ -176,7 +174,7 @@ type key_val = {
 }
 ```
 
-An the entire config is just **a list of `key_val` items**.
+And the entire config is just **a list of `key_val` items**.
 
 With these types, the above config example becomes:
 
@@ -892,8 +890,8 @@ let empty = Success []
 let append val1 val2 =
   match val1, val2 with
   | Failure errors1, Failure errors2 -> Failure (errors1 @ errors2)
-  | Failure errors, Validation _ -> Failure errors
-  | Validation _, Failure errors -> Failure errors
+  | Failure errors, Success _ -> Failure errors
+  | Success _, Failure errors -> Failure errors
   | Success a, Success b -> Success (a @ b)
 ```
 

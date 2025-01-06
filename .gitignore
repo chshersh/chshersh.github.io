@@ -9,6 +9,7 @@ js/main.min.js
 
 ## Locally built HTMLs
 blog/
+feeds.yaml
 
 # IDE/support
 ## Vim
