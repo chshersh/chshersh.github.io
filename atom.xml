@@ -7,8 +7,15 @@
   <title>chshersh.com</title>
   <id>https://chshersh.com/</id>
   <link rel="self" href="https://chshersh.com/atom.xml" />
-  <updated>2025-01-05T11:11:21+00:00</updated>
+  <updated>2025-01-06T08:38:46+00:00</updated>
 
+    <entry>
+    <id>https://chshersh.com/blog/2025-01-06-the-most-elegant-configuration-language.html</id>
+    <title>The Most Elegant Configuration Language</title>
+    <updated>2025-01-06T00:00:00+00:00</updated>
+    <link href="https://chshersh.com/blog/2025-01-06-the-most-elegant-configuration-language.html" />
+    <summary>CCL: Categorical Configuration Language</summary>
+  </entry>
     <entry>
     <id>https://chshersh.com/blog/2024-12-20-pragmatic-category-theory-part-03.html</id>
     <title>Pragmatic Category Theory | Part 3: Associativity</title>

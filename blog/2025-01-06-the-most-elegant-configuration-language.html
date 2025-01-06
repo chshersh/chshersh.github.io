@@ -162,7 +162,7 @@
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  key: <span class="dt">string</span>;</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>  value: <span class="dt">string</span>;</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>}</span></code></pre></div>
-<p>An the entire config is just <strong>a list of <code>key_val</code> items</strong>.</p>
+<p>And the entire config is just <strong>a list of <code>key_val</code> items</strong>.</p>
 <p>With these types, the above config example becomes:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">let</span> example =</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  [</span>
@@ -529,8 +529,8 @@
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a><span class="kw">let</span> append val1 val2 =</span>
 <span id="cb41-4"><a href="#cb41-4" aria-hidden="true"></a>  <span class="kw">match</span> val1, val2 <span class="kw">with</span></span>
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true"></a>  | <span class="dt">Failure</span> errors1, <span class="dt">Failure</span> errors2 -&gt; <span class="dt">Failure</span> (errors1 @ errors2)</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true"></a>  | <span class="dt">Failure</span> errors, Validation _ -&gt; <span class="dt">Failure</span> errors</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true"></a>  | Validation _, <span class="dt">Failure</span> errors -&gt; <span class="dt">Failure</span> errors</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true"></a>  | <span class="dt">Failure</span> errors, Success _ -&gt; <span class="dt">Failure</span> errors</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true"></a>  | Success _, <span class="dt">Failure</span> errors -&gt; <span class="dt">Failure</span> errors</span>
 <span id="cb41-8"><a href="#cb41-8" aria-hidden="true"></a>  | Success a, Success b -&gt; Success (a @ b)</span></code></pre></div>
 <p>In English, when we combine two validations:</p>
 <ol type="1">
