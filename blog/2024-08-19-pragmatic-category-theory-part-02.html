@@ -4,22 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Pragmatic Category Theory | Part 2: Composing Semigroups</title>
+    <title>Pragmatic Category Theory | Part 2: Composing
+Semigroups</title>
     <meta name="author" content="Dmitrii Kovanikov">
-    <meta name="description" content="Learning how to compose primitive Semigroups">
+    <meta name="description" content="Learning how to compose primitive
+Semigroups">
 
     <link rel="stylesheet" href="/css/article.css">
 
     <!-- Metatags -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Dmitrii Kovanikov aka chshersh" />
-    <meta property="og:title" content="Pragmatic Category Theory | Part 2: Composing Semigroups" />
+    <meta property="og:title" content="Pragmatic Category Theory | Part
+2: Composing Semigroups" />
     <meta property="og:description" content="Dmitrii Kovanikov's Personas Web Space" />
     <meta property="og:url" content="https://chshersh.com" />
     <meta property="og:image" content="https://chshersh.com/images/logo.jpg" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Pragmatic Category Theory | Part 2: Composing Semigroups" />
-    <meta name="twitter:description" content="Learning how to compose primitive Semigroups" />
+    <meta name="twitter:title" content="Pragmatic Category Theory | Part
+2: Composing Semigroups" />
+    <meta name="twitter:description" content="Learning how to compose
+primitive Semigroups" />
     <meta name="twitter:image" content="https://chshersh.com/images/logo.jpg" />
     <meta name="twitter:image:src" content="https://chshersh.com/images/logo.jpg" />
     <meta name="twitter:url" content="https://chshersh.com" />
@@ -49,27 +54,40 @@
 <blockquote>
 <p>This is a series of articles. All parts:</p>
 <ul>
-<li><a href="2024-07-30-pragmatic-category-theory-part-01.html">Part 1: Semigroup Intro</a></li>
-<li><a href="2024-08-19-pragmatic-category-theory-part-02.html">Part 2: Composing Semigroups</a> ⬅️ <strong>you’re here</strong></li>
-<li><a href="2024-12-20-pragmatic-category-theory-part-03.html">Part 3: Associativity</a></li>
+<li><a href="2024-07-30-pragmatic-category-theory-part-01.html">Part 1:
+Semigroup Intro</a></li>
+<li><a href="2024-08-19-pragmatic-category-theory-part-02.html">Part 2:
+Composing Semigroups</a> ⬅️ <strong>you’re here</strong></li>
+<li><a href="2024-12-20-pragmatic-category-theory-part-03.html">Part 3:
+Associativity</a></li>
 </ul>
 </blockquote>
-<p>You’ll notice the following Functional Programming pattern many times:</p>
+<p>You’ll notice the following Functional Programming pattern many
+times:</p>
 <ol type="1">
 <li>You define trivial fundamental blocks.</li>
 <li>You define trivial ways to compose blocks.</li>
 <li>Suddenly, you end up with something extremely powerful.</li>
 </ol>
-<p>I don’t know how it works but it works every time. Trust the process.</p>
-<p>Thus, it’s important to develop the skill of noticing a particular pattern in diverse situations. We need to pump that <a href="https://en.wikipedia.org/wiki/Tetris_effect">Tetris Effect</a> of yours.</p>
-<p>To develop an even further understanding of the Semigroup concept, we will explore more Semigroup examples and learn a composition of Semigroups to solve a real-world problem.</p>
+<p>I don’t know how it works but it works every time. Trust the
+process.</p>
+<p>Thus, it’s important to develop the skill of noticing a particular
+pattern in diverse situations. We need to pump that <a
+href="https://en.wikipedia.org/wiki/Tetris_effect">Tetris Effect</a> of
+yours.</p>
+<p>To develop an even further understanding of the Semigroup concept, we
+will explore more Semigroup examples and learn a composition of
+Semigroups to solve a real-world problem.</p>
 <blockquote>
-<p>⚠️ <strong>CONTENT WARNING</strong> ⚠️ This section may contain some advanced OCaml code. I’ll do my best to explain the concepts in a beginner-friendly way though.</p>
+<p>⚠️ <strong>CONTENT WARNING</strong> ⚠️ This section may contain some
+advanced OCaml code. I’ll do my best to explain the concepts in a
+beginner-friendly way though.</p>
 </blockquote>
 <blockquote>
 <p>All code snippets can be found on GitHub:</p>
 <ul>
-<li><a href="https://github.com/chshersh/pragmatic-category-theory">chshersh/pragmatic-category-theory</a></li>
+<li><a
+href="https://github.com/chshersh/pragmatic-category-theory">chshersh/pragmatic-category-theory</a></li>
 </ul>
 </blockquote>
 <h2 id="minimum-and-maximum">Minimum and Maximum</h2>
@@ -78,77 +96,125 @@
 <li>Adding</li>
 <li>Multiplying</li>
 </ol>
-<p>What if I told you, there are more ways? In fact, getting the minimum of two numbers is also a valid Semigroup that satisfies associativity!</p>
+<p>What if I told you, there are more ways? In fact, getting the minimum
+of two numbers is also a valid Semigroup that satisfies
+associativity!</p>
 <p>In OCaml, this looks similar to what we had before:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">module</span> IntMin = <span class="kw">struct</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="kw">type</span> t = <span class="dt">int</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>  <span class="kw">let</span> append x y = <span class="kw">if</span> x &lt;= y <span class="kw">then</span> x <span class="kw">else</span> y</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> IntMin = <span class="kw">struct</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">type</span> t = <span class="dt">int</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> append x y = <span class="kw">if</span> x &lt;= y <span class="kw">then</span> x <span class="kw">else</span> y</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <p>Verifying in <code>utop</code> that things work:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>utop # IntMin.append <span class="dv">5</span> <span class="dv">3</span> ;;</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>- : <span class="dt">int</span> = <span class="dv">3</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>utop # IntMin.append <span class="dv">7</span> <span class="dv">10</span> ;;</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>- : <span class="dt">int</span> = <span class="dv">7</span></span></code></pre></div>
-<p>Reasonably, if the minimum operation is a Semigroup, <em>maximum</em> should be a Semigroup too:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">module</span> IntMax = <span class="kw">struct</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  <span class="kw">type</span> t = <span class="dt">int</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>  <span class="kw">let</span> append x y = <span class="kw">if</span> x &gt;= y <span class="kw">then</span> x <span class="kw">else</span> y</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>utop # IntMin.append <span class="dv">5</span> <span class="dv">3</span> ;;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">int</span> = <span class="dv">3</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>utop # IntMin.append <span class="dv">7</span> <span class="dv">10</span> ;;</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">int</span> = <span class="dv">7</span></span></code></pre></div>
+<p>Reasonably, if the minimum operation is a Semigroup, <em>maximum</em>
+should be a Semigroup too:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> IntMax = <span class="kw">struct</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">type</span> t = <span class="dt">int</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> append x y = <span class="kw">if</span> x &gt;= y <span class="kw">then</span> x <span class="kw">else</span> y</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <p>Again, verifying in <code>utop</code> that things work:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>utop # IntMax.append <span class="dv">5</span> <span class="dv">3</span> ;;</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>- : <span class="dt">int</span> = <span class="dv">5</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>utop # IntMax.append <span class="dv">7</span> <span class="dv">10</span> ;;</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>- : <span class="dt">int</span> = <span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>utop # IntMax.append <span class="dv">5</span> <span class="dv">3</span> ;;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">int</span> = <span class="dv">5</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>utop # IntMax.append <span class="dv">7</span> <span class="dv">10</span> ;;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">int</span> = <span class="dv">10</span></span></code></pre></div>
 <p>Congratulations! You learned two more examples of Semigroups!</p>
 <h2 id="generalising-min-and-max">Generalising Min and Max</h2>
-<p>This all sounds cute and nice but this series is called “Pragmatic Category Theory”. And nothing can be further from being pragmatic as implementing a gazillion <em>min</em> and <em>max</em> modules for every single type.</p>
+<p>This all sounds cute and nice but this series is called “Pragmatic
+Category Theory”. And nothing can be further from being pragmatic as
+implementing a gazillion <em>min</em> and <em>max</em> modules for every
+single type.</p>
 <p>Indeed, let’s take this one step further here. Instead of saying</p>
 <ul>
-<li><em><code>int</code> with the minimum operation is a Semigroup</em></li>
+<li><em><code>int</code> with the minimum operation is a
+Semigroup</em></li>
 </ul>
 <p>We want to be able to say (in OCaml):</p>
 <ul>
-<li><em>Any type that supports comparison is a Semigroup with the minimum operation</em></li>
+<li><em>Any type that supports comparison is a Semigroup with the
+minimum operation</em></li>
 </ul>
-<p>Fortunately, the OCaml’s module system is powerful enough to express this idea in the code.</p>
+<p>Fortunately, the OCaml’s module system is powerful enough to express
+this idea in the code.</p>
 <blockquote>
-<p>Other mainstream languages will use their specific features (generics and interfaces in Java, traits in Rust, typeclasses in Haskell, and in Python… just a vibe check on the value).</p>
+<p>Other mainstream languages will use their specific features (generics
+and interfaces in Java, traits in Rust, typeclasses in Haskell, and in
+Python… just a vibe check on the value).</p>
 </blockquote>
-<p>First, how can we say that values of a given type can be compared? We’re going to use a module again! Similar to the <code>SEMIGROUP</code> module type signature, we’ll have the <code>COMPARABLE</code> module type signature:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">module</span> <span class="kw">type</span> COMPARABLE = <span class="kw">sig</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>  <span class="kw">type</span> t</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>  <span class="kw">val</span> <span class="dt">compare</span> : t -&gt; t -&gt; <span class="dt">int</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>First, how can we say that values of a given type can be compared?
+We’re going to use a module again! Similar to the <code>SEMIGROUP</code>
+module type signature, we’ll have the <code>COMPARABLE</code> module
+type signature:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="kw">type</span> COMPARABLE = <span class="kw">sig</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">type</span> t</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">val</span> <span class="dt">compare</span> : t -&gt; t -&gt; <span class="dt">int</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <blockquote>
-<p>Here <code>compare</code> returns <code>int</code> following the popular convention. The result of <code>compare</code> has the following meaning: - <code>compare x y = 0</code> means <code>x = y</code> - <code>compare x y &lt; 0</code> means <code>x &lt; y</code> - <code>compare x y &gt; 0</code> means <code>x &gt; y</code></p>
+<p>Here <code>compare</code> returns <code>int</code> following the
+popular convention. The result of <code>compare</code> has the following
+meaning: - <code>compare x y = 0</code> means <code>x = y</code> -
+<code>compare x y &lt; 0</code> means <code>x &lt; y</code> -
+<code>compare x y &gt; 0</code> means <code>x &gt; y</code></p>
 </blockquote>
-<p>Now we need a way to express that the implementation of the <em>minimum Semigroup</em> depends on the implementation of <code>COMPARABLE</code>. This is relatively straightforward to do in OCaml using <a href="https://ocaml.org/docs/functors"><em>module functors</em></a>:</p>
+<p>Now we need a way to express that the implementation of the
+<em>minimum Semigroup</em> depends on the implementation of
+<code>COMPARABLE</code>. This is relatively straightforward to do in
+OCaml using <a href="https://ocaml.org/docs/functors"><em>module
+functors</em></a>:</p>
 <blockquote>
-<p>👩‍🔬 Fun fact! <strong>Functor</strong> is another popular and extremely useful concept from Category Theory. We’ll get to it later but module functors are called functors for a reason.</p>
+<p>👩‍🔬 Fun fact! <strong>Functor</strong> is another popular and
+extremely useful concept from Category Theory. We’ll get to it later but
+module functors are called functors for a reason.</p>
 </blockquote>
-<div class="sourceCode" id="cb6"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">module</span> Min(C: COMPARABLE) = <span class="kw">struct</span>                      <span class="co">(* 1 *)</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>  <span class="kw">type</span> t = C.t                                          <span class="co">(* 2 *)</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>  <span class="kw">let</span> append x y = <span class="kw">if</span> C.<span class="dt">compare</span> x y &lt;= <span class="dv">0</span> <span class="kw">then</span> x <span class="kw">else</span> y  <span class="co">(* 3 *)</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> Min(C: COMPARABLE) = <span class="kw">struct</span>                      <span class="co">(* 1 *)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">type</span> t = C.t                                          <span class="co">(* 2 *)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> append x y = <span class="kw">if</span> C.<span class="dt">compare</span> x y &lt;= <span class="dv">0</span> <span class="kw">then</span> x <span class="kw">else</span> y  <span class="co">(* 3 *)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <p>Let’s digest this piece of code. Here we say the following:</p>
 <ol type="1">
-<li><strong>Line 1:</strong> We define a new module <code>Min</code>.</li>
-<li><strong>Line 1:</strong> The <code>Min</code> module needs another module <code>C</code> that implements <code>COMPARABLE</code>.</li>
-<li><strong>Line 2:</strong> The type <code>t</code> inside the <code>Min</code> module is the same as inside <code>COMPARABLE</code>. This makes sense because we take the minimum between the values of the type we can compare.</li>
-<li><strong>Line 3:</strong> We use the <code>compare</code> function from the module <code>C</code> to compare values and return the smallest one.</li>
+<li><strong>Line 1:</strong> We define a new module
+<code>Min</code>.</li>
+<li><strong>Line 1:</strong> The <code>Min</code> module needs another
+module <code>C</code> that implements <code>COMPARABLE</code>.</li>
+<li><strong>Line 2:</strong> The type <code>t</code> inside the
+<code>Min</code> module is the same as inside <code>COMPARABLE</code>.
+This makes sense because we take the minimum between the values of the
+type we can compare.</li>
+<li><strong>Line 3:</strong> We use the <code>compare</code> function
+from the module <code>C</code> to compare values and return the smallest
+one.</li>
 </ol>
-<p>Normally, now we would have to implement the <code>COMPARABLE</code> module signature for all types where we want to get the minimum. Fortunately, due to how modules work, every existing module that defines <code>type t</code> and <code>val compare</code> with needed signatures will do!</p>
-<p>And, surprisingly, all common modules implement the desired interface. Did we get lucky or was it intentional? 😉</p>
+<p>Normally, now we would have to implement the <code>COMPARABLE</code>
+module signature for all types where we want to get the minimum.
+Fortunately, due to how modules work, every existing module that defines
+<code>type t</code> and <code>val compare</code> with needed signatures
+will do!</p>
+<p>And, surprisingly, all common modules implement the desired
+interface. Did we get lucky or was it intentional? 😉</p>
 <p>Let’s see how the usage looks in <code>utop</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>utop # <span class="kw">module</span> IntMin = Min(Int) ;;</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>utop # IntMin.append <span class="dv">3</span> <span class="dv">5</span> ;;</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>- : <span class="dt">int</span> = <span class="dv">3</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>utop # <span class="kw">module</span> FloatMin = Min(Float) ;;</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>utop # FloatMin.append <span class="fl">5.2</span> <span class="fl">3.1</span> ;;</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>- : <span class="dt">float</span> = <span class="fl">3.1</span></span></code></pre></div>
-<p>The main motivation for this section is that we want to build <em>reusable abstractions</em> that we can leverage in diverse scenarios. If we have to redefine lots of trivial stuff from scratch every time, this quickly gets tiresome. Fortunately, we can avoid this in many cases.</p>
-<p>Besides, we can see how such abstractions play well with the rest of the language ecosystem.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>utop # <span class="kw">module</span> IntMin = Min(Int) ;;</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>utop # IntMin.append <span class="dv">3</span> <span class="dv">5</span> ;;</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">int</span> = <span class="dv">3</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>utop # <span class="kw">module</span> FloatMin = Min(Float) ;;</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>utop # FloatMin.append <span class="fl">5.2</span> <span class="fl">3.1</span> ;;</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">float</span> = <span class="fl">3.1</span></span></code></pre></div>
+<p>The main motivation for this section is that we want to build
+<em>reusable abstractions</em> that we can leverage in diverse
+scenarios. If we have to redefine lots of trivial stuff from scratch
+every time, this quickly gets tiresome. Fortunately, we can avoid this
+in many cases.</p>
+<p>Besides, we can see how such abstractions play well with the rest of
+the language ecosystem.</p>
 <h2 id="first-and-last">First and Last</h2>
 <p>We learned about four ways of appending numbers:</p>
 <ol type="1">
@@ -157,40 +223,56 @@
 <li>Minimum</li>
 <li>Maximum</li>
 </ol>
-<p>What if I told you, there are more ways?? In fact, getting the first of two numbers is also a valid Semigroup that satisfies associativity!</p>
+<p>What if I told you, there are more ways?? In fact, getting the first
+of two numbers is also a valid Semigroup that satisfies
+associativity!</p>
 <p>In OCaml, this looks similar to what we had before:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">module</span> IntFirst = <span class="kw">struct</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>  <span class="kw">type</span> t = <span class="dt">int</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>  <span class="kw">let</span> append x _ = x</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> IntFirst = <span class="kw">struct</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">type</span> t = <span class="dt">int</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> append x _ = x</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <p>Verifying in <code>utop</code> that things work:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>utop # IntFirst.append <span class="dv">3</span> <span class="dv">5</span> ;;</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>- : <span class="dt">int</span> = <span class="dv">3</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>utop # IntFirst.append <span class="dv">5</span> <span class="dv">3</span> ;;</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>- : <span class="dt">int</span> = <span class="dv">5</span></span></code></pre></div>
-<p>Similarly, getting the last element of two is also a valid Semigroup! Hmm, it’s almost like every example has a twin…</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">module</span> IntLast = <span class="kw">struct</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>  <span class="kw">type</span> t = <span class="dt">int</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>  <span class="kw">let</span> append _ y = y</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>utop # IntFirst.append <span class="dv">3</span> <span class="dv">5</span> ;;</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">int</span> = <span class="dv">3</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>utop # IntFirst.append <span class="dv">5</span> <span class="dv">3</span> ;;</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">int</span> = <span class="dv">5</span></span></code></pre></div>
+<p>Similarly, getting the last element of two is also a valid Semigroup!
+Hmm, it’s almost like every example has a twin…</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> IntLast = <span class="kw">struct</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">type</span> t = <span class="dt">int</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> append _ y = y</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <p>Again, verifying in <code>utop</code> that things work:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>utop # IntLast.append <span class="dv">3</span> <span class="dv">5</span> ;;</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>- : <span class="dt">int</span> = <span class="dv">5</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a>utop # IntLast.append <span class="dv">5</span> <span class="dv">3</span> ;;</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a>- : <span class="dt">int</span> = <span class="dv">3</span></span></code></pre></div>
-<p>An observant eye may notice, that there’s nothing special about <code>int</code> that allows one to take the first element. There’s nothing special needed at all! You can take the first of any value, you don’t need anything!</p>
-<p>The definitions of <code>IntFirst</code> and <code>IntLast</code> can be generalised to work with every type similarly to <em>minimum</em> and <em>maximum</em>. I won’t go into the details here but you can expand the following section to read the code:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>utop # IntLast.append <span class="dv">3</span> <span class="dv">5</span> ;;</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">int</span> = <span class="dv">5</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>utop # IntLast.append <span class="dv">5</span> <span class="dv">3</span> ;;</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">int</span> = <span class="dv">3</span></span></code></pre></div>
+<p>An observant eye may notice, that there’s nothing special about
+<code>int</code> that allows one to take the first element. There’s
+nothing special needed at all! You can take the first of any value, you
+don’t need anything!</p>
+<p>The definitions of <code>IntFirst</code> and <code>IntLast</code> can
+be generalised to work with every type similarly to <em>minimum</em> and
+<em>maximum</em>. I won’t go into the details here but you can expand
+the following section to read the code:</p>
 <details>
-<p><summary>Generalised First and Last</summary></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="kw">module</span> First(T : <span class="kw">sig</span> <span class="kw">type</span> t <span class="kw">end</span>) = <span class="kw">struct</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>  <span class="kw">type</span> t = T.t</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>  <span class="kw">let</span> append x _ = x</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a><span class="kw">end</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a><span class="kw">module</span> Last(T : <span class="kw">sig</span> <span class="kw">type</span> t <span class="kw">end</span>) = <span class="kw">struct</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>  <span class="kw">type</span> t = T.t</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a>  <span class="kw">let</span> append _ y = y</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<summary>
+Generalised First and Last
+</summary>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> First(T : <span class="kw">sig</span> <span class="kw">type</span> t <span class="kw">end</span>) = <span class="kw">struct</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">type</span> t = T.t</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> append x _ = x</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> Last(T : <span class="kw">sig</span> <span class="kw">type</span> t <span class="kw">end</span>) = <span class="kw">struct</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">type</span> t = T.t</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> append _ y = y</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 </details>
 <h2 id="taking-a-step-back">Taking a step back</h2>
 <p>We learned about six ways of appending numbers:</p>
@@ -203,130 +285,236 @@
 <li>Last</li>
 </ol>
 <p>What if I told you, there are more ways???</p>
-<p>But let’s take a step back. You might start thinking, “Aren’t we stretching the definition of <em>append</em> too much?”</p>
+<p>But let’s take a step back. You might start thinking, “Aren’t we
+stretching the definition of <em>append</em> too much?”</p>
 <p>Indeed, I can follow this train of thought:</p>
 <ul>
 <li>Concatenating two strings is kinda like append, ok.</li>
 <li>Adding two numbbers — fine, append too.</li>
-<li>Minimum and Maximum — well, we’re not really <em>appending</em>, we’re <em>choosing</em>.</li>
-<li>Last and First — we can’t be further from <em>appending</em>! We’re, in fact, <em>discarding</em> values!</li>
+<li>Minimum and Maximum — well, we’re not really <em>appending</em>,
+we’re <em>choosing</em>.</li>
+<li>Last and First — we can’t be further from <em>appending</em>! We’re,
+in fact, <em>discarding</em> values!</li>
 </ul>
-<p>You can see that English doesn’t precisely describe the concept. Math is strict. It doesn’t try to be fancy. It just says that a Semigroup has a <em>binary associative operation</em>. It doesn’t name it but we need names to communicate ideas with each other.</p>
-<p>If we think about <em>types as sets</em> (e.g. <code>bool</code> is a set that has only two elements: <code>true</code> and <code>false</code>; <code>int</code> is a set that has 2^64 elements, etc.), we can view Semigroup is a function that picks two elements from a set and returns another element. This element can be one of the given two or completely different.</p>
+<p>You can see that English doesn’t precisely describe the concept. Math
+is strict. It doesn’t try to be fancy. It just says that a Semigroup has
+a <em>binary associative operation</em>. It doesn’t name it but we need
+names to communicate ideas with each other.</p>
+<p>If we think about <em>types as sets</em> (e.g. <code>bool</code> is a
+set that has only two elements: <code>true</code> and
+<code>false</code>; <code>int</code> is a set that has 2^64 elements,
+etc.), we can view Semigroup is a function that picks two elements from
+a set and returns another element. This element can be one of the given
+two or completely different.</p>
 <p>This concept visualised:</p>
 <figure>
-<img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/sbu1jfwv4j24hhs44xox.png" alt="" /><figcaption>A set view of Semigroup</figcaption>
+<img
+src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/sbu1jfwv4j24hhs44xox.png"
+alt="A set view of Semigroup" />
+<figcaption aria-hidden="true">A set view of Semigroup</figcaption>
 </figure>
-<p>This is not the true Category Theory definition of a Semigroup but it’s equivalent and helps build the intuition.</p>
-<p>You can see that when presented like this, the binary associative operation in Semigroup is not always the strict <strong>append</strong> in the English meaning. For this reason, such an operation doesn’t usually have a name in OCaml or other FP languages.</p>
-<p>OCaml can define custom operators. So, another common definition of <code>SEMIGROUP</code> is the following:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="kw">module</span> <span class="kw">type</span> SEMIGROUP = <span class="kw">sig</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>  <span class="kw">type</span> t</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>  <span class="kw">val</span> (&lt;+&gt;) : t -&gt; t -&gt; t</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
-<p>But let’s stick with <code>append</code> for now. Abusing operators can get out of hand pretty quickly.</p>
+<p>This is not the true Category Theory definition of a Semigroup but
+it’s equivalent and helps build the intuition.</p>
+<p>You can see that when presented like this, the binary associative
+operation in Semigroup is not always the strict <strong>append</strong>
+in the English meaning. For this reason, such an operation doesn’t
+usually have a name in OCaml or other FP languages.</p>
+<p>OCaml can define custom operators. So, another common definition of
+<code>SEMIGROUP</code> is the following:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="kw">type</span> SEMIGROUP = <span class="kw">sig</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">type</span> t</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">val</span> (&lt;+&gt;) : t -&gt; t -&gt; t</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<p>But let’s stick with <code>append</code> for now. Abusing operators
+can get out of hand pretty quickly.</p>
 <h2 id="list">List</h2>
-<p>Let’s look at another example of a Semigroup. We know that we can concatenate strings and this is a valid Semigroup. But why stop here? We can also concatenate lists, arrays, vectors, sequences, trees, and so on.</p>
-<p>So List is also a valid Semigroup with <code>append</code> being list concatenation (the <code>@</code> operator in OCaml).</p>
-<p>If we fix the list element type to something like <code>int</code>, we can define the list Semigroup trivially:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="kw">module</span> IntList = <span class="kw">struct</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>  <span class="kw">type</span> t = <span class="dt">int</span> <span class="dt">list</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>  <span class="kw">let</span> append = ( @ )</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
-<p>To go one step further, and define a single <code>List</code> Semigroup for all lists, we need to parametrise our <code>List</code> module with a module that has just type and this type will be our list element:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="kw">module</span> <span class="dt">List</span>(T : <span class="kw">sig</span> <span class="kw">type</span> t <span class="kw">end</span>) = <span class="kw">struct</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>  <span class="kw">type</span> t = T.t <span class="dt">list</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>  <span class="kw">let</span> append = ( @ )</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
-<p>I won’t go into the details of what’s going on but because we can’t say <code>type t = 'a list</code>, we need to bring the type of a list element externally, so we’ll depend on an anonymous module that has only type <code>t</code> inside.</p>
-<p>The implementation looks scary but the usage in <code>utop</code> is no different from our <code>Min</code> module from before:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a>utop # <span class="kw">module</span> IntList = <span class="dt">List</span>(Int) ;;</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>utop # IntList.append [<span class="dv">3</span>; <span class="dv">1</span>; <span class="dv">2</span>] [<span class="dv">4</span>; <span class="dv">5</span>] ;;</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a>- : <span class="dt">int</span> <span class="dt">list</span> = [<span class="dv">3</span>; <span class="dv">1</span>; <span class="dv">2</span>; <span class="dv">4</span>; <span class="dv">5</span>]</span></code></pre></div>
+<p>Let’s look at another example of a Semigroup. We know that we can
+concatenate strings and this is a valid Semigroup. But why stop here? We
+can also concatenate lists, arrays, vectors, sequences, trees, and so
+on.</p>
+<p>So List is also a valid Semigroup with <code>append</code> being list
+concatenation (the <code>@</code> operator in OCaml).</p>
+<p>If we fix the list element type to something like <code>int</code>,
+we can define the list Semigroup trivially:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> IntList = <span class="kw">struct</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">type</span> t = <span class="dt">int</span> <span class="dt">list</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> append = ( @ )</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<p>To go one step further, and define a single <code>List</code>
+Semigroup for all lists, we need to parametrise our <code>List</code>
+module with a module that has just type and this type will be our list
+element:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">List</span>(T : <span class="kw">sig</span> <span class="kw">type</span> t <span class="kw">end</span>) = <span class="kw">struct</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">type</span> t = T.t <span class="dt">list</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> append = ( @ )</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+<p>I won’t go into the details of what’s going on but because we can’t
+say <code>type t = 'a list</code>, we need to bring the type of a list
+element externally, so we’ll depend on an anonymous module that has only
+type <code>t</code> inside.</p>
+<p>The implementation looks scary but the usage in <code>utop</code> is
+no different from our <code>Min</code> module from before:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>utop # <span class="kw">module</span> IntList = <span class="dt">List</span>(Int) ;;</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>utop # IntList.append [<span class="dv">3</span>; <span class="dv">1</span>; <span class="dv">2</span>] [<span class="dv">4</span>; <span class="dv">5</span>] ;;</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">int</span> <span class="dt">list</span> = [<span class="dv">3</span>; <span class="dv">1</span>; <span class="dv">2</span>; <span class="dv">4</span>; <span class="dv">5</span>]</span></code></pre></div>
 <h2 id="pair">Pair</h2>
-<p>You’ll be laughing to learn that all of the content before was just a preamble to this section. The title of this part is “Composing Semigroups”, so let’s finally learn how to compose Semigroups.</p>
-<p>So, okay, we can concatenate two strings. We also can append two numbers. What if I want to concatenate two strings <strong>AND</strong> append two numbers AT THE SAME TIME?</p>
-<p>If I can append things, it’s natural to desire to append multiple different things simultaneously.</p>
-<p>In other words, if I have <em>a pair of things</em>, I want to append two pairs, where the first elements of a pair are appended, and the second elements of the pairs are appended correspondingly.</p>
-<p>So, to rephrase: if a type <code>a</code> is a Semigroup and type <code>b</code> is a Semigroup then a pair of types <code>a * b</code> is naturally a Semigroup.</p>
-<p>In OCaml, this can be implemented straightforwardly using module functors again.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="kw">module</span> Pair(S1: SEMIGROUP) (S2: SEMIGROUP) = <span class="kw">struct</span>  <span class="co">(* 1 *)</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>  <span class="kw">type</span> t = S1.t * S2.t                               <span class="co">(* 2 *)</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>                                                     <span class="co">(* 3 *)</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a>  <span class="kw">let</span> append (a1, b1) (a2, b2) =                     <span class="co">(* 4 *)</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a>    (S1.append a1 a2, S2.append b1 b2)               <span class="co">(* 5 *)</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>You’ll be laughing to learn that all of the content before was just a
+preamble to this section. The title of this part is “Composing
+Semigroups”, so let’s finally learn how to compose Semigroups.</p>
+<p>So, okay, we can concatenate two strings. We also can append two
+numbers. What if I want to concatenate two strings <strong>AND</strong>
+append two numbers AT THE SAME TIME?</p>
+<p>If I can append things, it’s natural to desire to append multiple
+different things simultaneously.</p>
+<p>In other words, if I have <em>a pair of things</em>, I want to append
+two pairs, where the first elements of a pair are appended, and the
+second elements of the pairs are appended correspondingly.</p>
+<p>So, to rephrase: if a type <code>a</code> is a Semigroup and type
+<code>b</code> is a Semigroup then a pair of types <code>a * b</code> is
+naturally a Semigroup.</p>
+<p>In OCaml, this can be implemented straightforwardly using module
+functors again.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> Pair(S1: SEMIGROUP) (S2: SEMIGROUP) = <span class="kw">struct</span>  <span class="co">(* 1 *)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">type</span> t = S1.t * S2.t                               <span class="co">(* 2 *)</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                                                     <span class="co">(* 3 *)</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> append (a1, b1) (a2, b2) =                     <span class="co">(* 4 *)</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    (S1.append a1 a2, S2.append b1 b2)               <span class="co">(* 5 *)</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <p>What it says:</p>
 <ol type="1">
-<li><strong>Line 1:</strong> We define a Semigroup called <code>Pair</code>.</li>
-<li><strong>Line 1:</strong> It depends on two other Semigroups called <code>S1</code> and <code>S2</code> respectively.</li>
-<li><strong>Line 2:</strong> Our type is a pair of types <code>S1.t</code> and <code>S2.t</code>. So we just create a pair of two given types.</li>
-<li><strong>Line 4:</strong> Our <code>append</code> takes two pairs, so we pattern match on them immediately.</li>
-<li><strong>Line 5:</strong> When we append two pairs, we append the first elements using the <code>append</code> operation from <code>S1</code> and the second elements using <code>append</code> from <code>S2</code>.</li>
+<li><strong>Line 1:</strong> We define a Semigroup called
+<code>Pair</code>.</li>
+<li><strong>Line 1:</strong> It depends on two other Semigroups called
+<code>S1</code> and <code>S2</code> respectively.</li>
+<li><strong>Line 2:</strong> Our type is a pair of types
+<code>S1.t</code> and <code>S2.t</code>. So we just create a pair of two
+given types.</li>
+<li><strong>Line 4:</strong> Our <code>append</code> takes two pairs, so
+we pattern match on them immediately.</li>
+<li><strong>Line 5:</strong> When we append two pairs, we append the
+first elements using the <code>append</code> operation from
+<code>S1</code> and the second elements using <code>append</code> from
+<code>S2</code>.</li>
 </ol>
 <blockquote>
-<p>⚠️ <strong>SPOILER ALERT:</strong> Did I mention that two components of a pair are appended independently, meaning that they can be appended in parallel for a performance increase? 🤫</p>
+<p>⚠️ <strong>SPOILER ALERT:</strong> Did I mention that two components
+of a pair are appended independently, meaning that they can be appended
+in parallel for a performance increase? 🤫</p>
 </blockquote>
-<p>This may look scary but I hope that the usage example in <code>utop</code> clarifies things:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a>utop # <span class="kw">module</span> PairStringInt = Pair(<span class="dt">String</span>)(IntAdd) ;;</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>utop # PairStringInt.append (<span class="st">&quot;foo&quot;</span>, <span class="dv">3</span>) (<span class="st">&quot;bar&quot;</span>, <span class="dv">5</span>) ;;</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>- : <span class="dt">string</span> * <span class="dt">int</span> = (<span class="st">&quot;foobar&quot;</span>, <span class="dv">8</span>)</span></code></pre></div>
-<p>Another cute usage is finding the minimum and maximum among multiple numbers simultaneously.</p>
-<p>We can easily find the minimum and maximum among three numbers using a composition of the <code>Min</code> and <code>Max</code> semigroups:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>utop # <span class="kw">module</span> MinMax = Pair(Min(Int))(Max(Int)) ;;</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>utop # MinMax.append (<span class="dv">3</span>, <span class="dv">3</span>) (MinMax.append (<span class="dv">7</span>, <span class="dv">7</span>) (<span class="dv">5</span>, <span class="dv">5</span>)) ;;</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>- : <span class="dt">int</span> * <span class="dt">int</span> = (<span class="dv">3</span>, <span class="dv">7</span>)</span></code></pre></div>
-<p>This may look intimidating, so let’s debug this code using the famous FP technique called <strong>equational reasoning</strong>. We will just apply functions step-by-step to arrive at our result.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>MinMax.append (<span class="dv">3</span>, <span class="dv">3</span>) (MinMax.append (<span class="dv">7</span>, <span class="dv">7</span>) (<span class="dv">5</span>, <span class="dv">5</span>))</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>= MinMax.append (<span class="dv">3</span>, <span class="dv">3</span>) (<span class="dv">5</span>, <span class="dv">7</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>= (<span class="dv">3</span>, <span class="dv">7</span>)</span></code></pre></div>
-<p>The <em>min</em> operation knows nothing about <em>max</em>, and <em>max</em> knows nothing about <em>min</em>. They work on different parts of a pair independently. And by composing them, we’re able to calculate both operations at the same time.</p>
-<p>Generalising this usage from three pairs to a list, we can find the minimum, maximum, sum, product, first, and last element of the list in <strong>ONE SINGLE TRAVERSAL</strong>! It becomes just a matter of composing the needed Semigroups, and we’ll look into this example in detail in one of the future parts.</p>
+<p>This may look scary but I hope that the usage example in
+<code>utop</code> clarifies things:</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>utop # <span class="kw">module</span> PairStringInt = Pair(<span class="dt">String</span>)(IntAdd) ;;</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>utop # PairStringInt.append (<span class="st">&quot;foo&quot;</span>, <span class="dv">3</span>) (<span class="st">&quot;bar&quot;</span>, <span class="dv">5</span>) ;;</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">string</span> * <span class="dt">int</span> = (<span class="st">&quot;foobar&quot;</span>, <span class="dv">8</span>)</span></code></pre></div>
+<p>Another cute usage is finding the minimum and maximum among multiple
+numbers simultaneously.</p>
+<p>We can easily find the minimum and maximum among three numbers using
+a composition of the <code>Min</code> and <code>Max</code>
+semigroups:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>utop # <span class="kw">module</span> MinMax = Pair(Min(Int))(Max(Int)) ;;</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>utop # MinMax.append (<span class="dv">3</span>, <span class="dv">3</span>) (MinMax.append (<span class="dv">7</span>, <span class="dv">7</span>) (<span class="dv">5</span>, <span class="dv">5</span>)) ;;</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">int</span> * <span class="dt">int</span> = (<span class="dv">3</span>, <span class="dv">7</span>)</span></code></pre></div>
+<p>This may look intimidating, so let’s debug this code using the famous
+FP technique called <strong>equational reasoning</strong>. We will just
+apply functions step-by-step to arrive at our result.</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>MinMax.append (<span class="dv">3</span>, <span class="dv">3</span>) (MinMax.append (<span class="dv">7</span>, <span class="dv">7</span>) (<span class="dv">5</span>, <span class="dv">5</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>= MinMax.append (<span class="dv">3</span>, <span class="dv">3</span>) (<span class="dv">5</span>, <span class="dv">7</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>= (<span class="dv">3</span>, <span class="dv">7</span>)</span></code></pre></div>
+<p>The <em>min</em> operation knows nothing about <em>max</em>, and
+<em>max</em> knows nothing about <em>min</em>. They work on different
+parts of a pair independently. And by composing them, we’re able to
+calculate both operations at the same time.</p>
+<p>Generalising this usage from three pairs to a list, we can find the
+minimum, maximum, sum, product, first, and last element of the list in
+<strong>ONE SINGLE TRAVERSAL</strong>! It becomes just a matter of
+composing the needed Semigroups, and we’ll look into this example in
+detail in one of the future parts.</p>
 <h2 id="this-is-getting-chunky">This is getting “chunky”</h2>
 <p>Now, let’s look at a promised real-world example.</p>
-<p>I’m developing a <a href="https://github.com/chshersh/github-tui">GitHub TUI</a> in OCaml. The TUI rendering might get complex since at the end of the day, everything needs to be printed as lines to the terminal. But a single line might contain different parts formatted differently (some are bold, some are not; some are coloured, some are not);</p>
+<p>I’m developing a <a
+href="https://github.com/chshersh/github-tui">GitHub TUI</a> in OCaml.
+The TUI rendering might get complex since at the end of the day,
+everything needs to be printed as lines to the terminal. But a single
+line might contain different parts formatted differently (some are bold,
+some are not; some are coloured, some are not);</p>
 <figure>
-<img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6nfpzl2eml4oykvir8h4.png" alt="" /><figcaption>GitHub TUI Example</figcaption>
+<img
+src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6nfpzl2eml4oykvir8h4.png"
+alt="GitHub TUI Example" />
+<figcaption aria-hidden="true">GitHub TUI Example</figcaption>
 </figure>
-<p>So I defined a <code>chunk</code> type to represent a part of the string with formatting:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="co">(* --- chunk.mli --- *)</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a><span class="kw">type</span> t = {</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>  styles : Style.t;</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a>  <span class="dt">string</span> : <span class="dt">string</span>;</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>}</span></code></pre></div>
+<p>So I defined a <code>chunk</code> type to represent a part of the
+string with formatting:</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">(* --- chunk.mli --- *)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> t = {</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  styles : Style.t;</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">string</span> : <span class="dt">string</span>;</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>And so my line of text is a list of chunks. But here’s the catch.</p>
-<p>During rendering, I need to know the length of strings, so I can do padding and alignment properly. Traversing the entire list of chunks to calculate its length every time is quite expensive. So I’m just storing the length of the line alongside the list of chunks. And when I’m appending two lines, I’m appending their lengths respectively.</p>
+<p>During rendering, I need to know the length of strings, so I can do
+padding and alignment properly. Traversing the entire list of chunks to
+calculate its length every time is quite expensive. So I’m just storing
+the length of the line alongside the list of chunks. And when I’m
+appending two lines, I’m appending their lengths respectively.</p>
 <p>In the code, it looks like this:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="co">(* --- line.mli --- *)</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a><span class="kw">type</span> t</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a><span class="co">(** Append two lines into a single line. *)</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a><span class="kw">val</span> append : t -&gt; t -&gt; t</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true"></a></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true"></a><span class="co">(* --- line.ml --- *)</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true"></a><span class="kw">type</span> t = {</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true"></a>  chunks : Chunk.t <span class="dt">list</span>;</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true"></a>  length : <span class="dt">int</span>;</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true"></a>}</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true"></a></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true"></a><span class="kw">let</span> append line1 line2 =</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true"></a>  <span class="kw">let</span> chunks = line1.chunks @ line2.chunks <span class="kw">in</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true"></a>  <span class="kw">let</span> length = line1.length + line2.length <span class="kw">in</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true"></a>  { chunks; length }</span></code></pre></div>
-<p>Essentially, I created a Pair Semigroup by composing the Int Add Semigroup and List Semigroup.</p>
-<p>This series is called “Pragmatic Category Theory”, and it’s more pragmatic to create a custom record with the custom <code>append</code> operation rather than using the <code>Pair</code> module functors machinery directly. So an important lesson here:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">(* --- line.mli --- *)</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> t</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">(** Append two lines into a single line. *)</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> append : t -&gt; t -&gt; t</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co">(* --- line.ml --- *)</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> t = {</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  chunks : Chunk.t <span class="dt">list</span>;</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  length : <span class="dt">int</span>;</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> append line1 line2 =</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> chunks = line1.chunks @ line2.chunks <span class="kw">in</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> length = line1.length + line2.length <span class="kw">in</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  { chunks; length }</span></code></pre></div>
+<p>Essentially, I created a Pair Semigroup by composing the Int Add
+Semigroup and List Semigroup.</p>
+<p>This series is called “Pragmatic Category Theory”, and it’s more
+pragmatic to create a custom record with the custom <code>append</code>
+operation rather than using the <code>Pair</code> module functors
+machinery directly. So an important lesson here:</p>
 <ul>
 <li><strong>Ideas &gt; Implementations</strong></li>
 </ul>
-<p>If you have enough programming experience, you can come up with this simple <code>line</code> type on your own without knowing the concept of Semigroup. After all, then something is really good, you naturally tend to use it more, even if you’re not aware of all the underlying concepts.</p>
-<p>However, in this rendering example, the <em>associativity</em> property of a Semigroup becomes extremely crucial. And since this part is reaching its limit, we’ll look into associativity closely in the next part.</p>
+<p>If you have enough programming experience, you can come up with this
+simple <code>line</code> type on your own without knowing the concept of
+Semigroup. After all, then something is really good, you naturally tend
+to use it more, even if you’re not aware of all the underlying
+concepts.</p>
+<p>However, in this rendering example, the <em>associativity</em>
+property of a Semigroup becomes extremely crucial. And since this part
+is reaching its limit, we’ll look into associativity closely in the next
+part.</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>I hope this section was still interesting! Maybe some things look not so useful, or too trivial while others look too complex.</p>
-<p>Semigroup is a <strong>deep</strong> concept, so I hope that a smooth introduction will help to demystify it even if unloading the entire context takes a while.</p>
-<p>In the next section, we’ll finally learn why associativity matters. And there’ll be many more pragmatic examples. Be patient!</p>
+<p>I hope this section was still interesting! Maybe some things look not
+so useful, or too trivial while others look too complex.</p>
+<p>Semigroup is a <strong>deep</strong> concept, so I hope that a smooth
+introduction will help to demystify it even if unloading the entire
+context takes a while.</p>
+<p>In the next section, we’ll finally learn why associativity matters.
+And there’ll be many more pragmatic examples. Be patient!</p>
 <h2 id="acknowledgement">Acknowledgement</h2>
-<p>Many thanks to people who proofread the early draft of this article and shared their invaluable feedback: <a href="https://x.com/_____C">_____C</a> <a href="https://x.com/sverien">sverien</a></p>
+<p>Many thanks to people who proofread the early draft of this article
+and shared their invaluable feedback: <a
+href="https://x.com/_____C">_____C</a> <a
+href="https://x.com/sverien">sverien</a></p>
 
 <hr>
 <blockquote>

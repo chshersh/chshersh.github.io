@@ -19,7 +19,8 @@
     <meta property="og:image" content="https://chshersh.com/images/logo.jpg" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="7 OCaml Gotchas" />
-    <meta name="twitter:description" content="Surprising OCaml behaviours" />
+    <meta name="twitter:description" content="Surprising OCaml
+behaviours" />
     <meta name="twitter:image" content="https://chshersh.com/images/logo.jpg" />
     <meta name="twitter:image:src" content="https://chshersh.com/images/logo.jpg" />
     <meta name="twitter:url" content="https://chshersh.com" />
@@ -46,11 +47,18 @@
   </a>
 </div>
 
-<p>I’ve been writing OCaml for about 1 year (check my previous post <a href="/blog/2023-12-16-8-months-of-ocaml-after-8-years-of-haskell.html">8 months of OCaml after 8 years of Haskell</a>).</p>
-<p>I enjoy OCaml. But as any other programming language, OCaml has its quirks. That’s fine, you can enjoy imperfect things too. But it could be useful to learn about potential surprising behaviours.</p>
-<p>In this blog post, I’m highlighting <strong>7 OCaml gotchas</strong>. Some of them might be obvious to experienced OCamlers. But I hope everyone can learn something new or at least enjoy reading!</p>
+<p>I’ve been writing OCaml for about 1 year (check my previous post <a
+href="/blog/2023-12-16-8-months-of-ocaml-after-8-years-of-haskell.html">8
+months of OCaml after 8 years of Haskell</a>).</p>
+<p>I enjoy OCaml. But as any other programming language, OCaml has its
+quirks. That’s fine, you can enjoy imperfect things too. But it could be
+useful to learn about potential surprising behaviours.</p>
+<p>In this blog post, I’m highlighting <strong>7 OCaml gotchas</strong>.
+Some of them might be obvious to experienced OCamlers. But I hope
+everyone can learn something new or at least enjoy reading!</p>
 <p>Let’s start.</p>
-<h2 id="structural-vs-physical-equality">1. Structural vs Physical equality</h2>
+<h2 id="structural-vs-physical-equality">1. Structural vs Physical
+equality</h2>
 <table>
 <thead>
 <tr class="header">
@@ -69,24 +77,33 @@
 </tr>
 </tbody>
 </table>
-<p>Being bitten by different types of equalities in a language like JavaScript, you exhale with relief when you learn that in OCaml you can easily compare numbers with <code>==</code> and it doesn’t allow you to compare values of different types 😮‍💨</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>utop # <span class="dv">255</span> == <span class="dv">255</span> ;;</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>- : <span class="dt">bool</span> = <span class="kw">true</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>utop # <span class="dv">0</span> == <span class="kw">false</span> ;;</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>Error: This expression has <span class="kw">type</span> <span class="dt">bool</span> but an expression was expected <span class="kw">of</span> <span class="kw">type</span> <span class="dt">int</span></span></code></pre></div>
-<p>However, quite soon, with horror, you realise that <code>==</code> doesn’t work with strings!</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>utop # <span class="st">&quot;OCaml&quot;</span> == <span class="st">&quot;OCaml&quot;</span> ;;</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>- : <span class="dt">bool</span> = <span class="kw">false</span></span></code></pre></div>
+<p>Being bitten by different types of equalities in a language like
+JavaScript, you exhale with relief when you learn that in OCaml you can
+easily compare numbers with <code>==</code> and it doesn’t allow you to
+compare values of different types 😮‍💨</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>utop # <span class="dv">255</span> == <span class="dv">255</span> ;;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">bool</span> = <span class="kw">true</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>utop # <span class="dv">0</span> == <span class="kw">false</span> ;;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Error: This expression has <span class="kw">type</span> <span class="dt">bool</span> but an expression was expected <span class="kw">of</span> <span class="kw">type</span> <span class="dt">int</span></span></code></pre></div>
+<p>However, quite soon, with horror, you realise that <code>==</code>
+doesn’t work with strings!</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>utop # <span class="st">&quot;OCaml&quot;</span> == <span class="st">&quot;OCaml&quot;</span> ;;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">bool</span> = <span class="kw">false</span></span></code></pre></div>
 <p>Or with lists:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>utop # [<span class="dv">1</span>; <span class="dv">2</span>; <span class="dv">3</span>] == [<span class="dv">1</span>; <span class="dv">2</span>; <span class="dv">3</span>] ;;</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>- : <span class="dt">bool</span> = <span class="kw">false</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>utop # [<span class="dv">1</span>; <span class="dv">2</span>; <span class="dv">3</span>] == [<span class="dv">1</span>; <span class="dv">2</span>; <span class="dv">3</span>] ;;</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">bool</span> = <span class="kw">false</span></span></code></pre></div>
 <p>Or with pairs</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>utop # (<span class="kw">true</span>, <span class="dv">1</span>) == (<span class="kw">true</span>, <span class="dv">1</span>) ;;</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>- : <span class="dt">bool</span> = <span class="kw">false</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>utop # (<span class="kw">true</span>, <span class="dv">1</span>) == (<span class="kw">true</span>, <span class="dv">1</span>) ;;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">bool</span> = <span class="kw">false</span></span></code></pre></div>
 <p>Or with optionals:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>utop # <span class="dt">Some</span> <span class="dv">10</span> == <span class="dt">Some</span> <span class="dv">10</span> ;;</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>- : <span class="dt">bool</span> = <span class="kw">false</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>utop # <span class="dt">Some</span> <span class="dv">10</span> == <span class="dt">Some</span> <span class="dv">10</span> ;;</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">bool</span> = <span class="kw">false</span></span></code></pre></div>
 <p>Or literally with anything else!</p>
 <p>Well, the thing is, OCaml has two equalities:</p>
 <ul>
@@ -94,13 +111,17 @@
 <li><code>==</code>: physical, compares pointers to values</li>
 </ul>
 <blockquote>
-<p>As well as two inequalities, <code>&lt;&gt;</code> and <code>!=</code>. To figure out which one is physical and which is structural is left as an exercise for the reader.</p>
+<p>As well as two inequalities, <code>&lt;&gt;</code> and
+<code>!=</code>. To figure out which one is physical and which is
+structural is left as an exercise for the reader.</p>
 </blockquote>
 <p>So, to actually check values for equality, use <code>=</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>utop # <span class="st">&quot;I Love OCaml&quot;</span> = <span class="st">&quot;I Love OCaml&quot;</span> ;;</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>- : <span class="dt">bool</span> = <span class="kw">true</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>utop # <span class="st">&quot;I Love OCaml&quot;</span> = <span class="st">&quot;I Love OCaml&quot;</span> ;;</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">bool</span> = <span class="kw">true</span></span></code></pre></div>
 <blockquote>
-<p>And for the love of god, configure your linter to warn on usages of <code>==</code>. How many bugs has it caused…</p>
+<p>And for the love of god, configure your linter to warn on usages of
+<code>==</code>. How many bugs has it caused…</p>
 </blockquote>
 <h2 id="nested-match-with">2. Nested <code>match-with</code></h2>
 <table>
@@ -122,63 +143,78 @@
 </tbody>
 </table>
 <p>Consider the following types:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">type</span> reason =</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>  | Waiting</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>  | Validating</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="kw">type</span> status =</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>  | Pending <span class="kw">of</span> reason</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>  | Cancelled</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>  | Done</span></code></pre></div>
-<p>Let’s write a function to pattern match on a value of type <code>status</code> and convert the value to a string. We can use the <code>match-with</code> syntax in OCaml for this.</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> reason =</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  | Waiting</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  | Validating</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> status =</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  | Pending <span class="kw">of</span> reason</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  | Cancelled</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  | Done</span></code></pre></div>
+<p>Let’s write a function to pattern match on a value of type
+<code>status</code> and convert the value to a string. We can use the
+<code>match-with</code> syntax in OCaml for this.</p>
 <p>However, the following code doesn’t compile!</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">let</span> show_status status =</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>  <span class="kw">match</span> status <span class="kw">with</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>  | Pending reason -&gt;</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>    <span class="kw">match</span> reason <span class="kw">with</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>    | Waiting -&gt; <span class="st">&quot;Pending: Waiting&quot;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a>    | Validating -&gt; <span class="st">&quot;Pending: Validating&quot;</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a>  | Cancelled -&gt; <span class="st">&quot;Cancelled&quot;</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true"></a>  | Done -&gt; <span class="st">&quot;Done&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> show_status status =</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">match</span> status <span class="kw">with</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  | Pending reason -&gt;</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">match</span> reason <span class="kw">with</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    | Waiting -&gt; <span class="st">&quot;Pending: Waiting&quot;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    | Validating -&gt; <span class="st">&quot;Pending: Validating&quot;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  | Cancelled -&gt; <span class="st">&quot;Cancelled&quot;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  | Done -&gt; <span class="st">&quot;Done&quot;</span></span></code></pre></div>
 <p>The compilation error is:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>File <span class="st">&quot;lib/example.ml&quot;</span>, line <span class="dv">16</span>, characters <span class="dv">4-13</span>:</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a><span class="dv">16</span> |   | Cancelled -&gt; <span class="st">&quot;Cancelled&quot;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>         ^^^^^^^^^</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>Error: This variant pattern is expected <span class="kw">to</span> have <span class="kw">type</span> reason</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>       There is no constructor Cancelled within <span class="kw">type</span> reason</span></code></pre></div>
-<p>The explanation is that OCaml is not a layout-sensitive language 🙅</p>
-<p>When matching on <code>reason</code>, the compiler thinks that the <code>| Cancelled -&gt; ...</code> case is the next pattern, hence the error.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>File <span class="st">&quot;lib/example.ml&quot;</span>, line <span class="dv">16</span>, characters <span class="dv">4-13</span>:</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="dv">16</span> |   | Cancelled -&gt; <span class="st">&quot;Cancelled&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>         ^^^^^^^^^</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>Error: This variant pattern is expected <span class="kw">to</span> have <span class="kw">type</span> reason</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>       There is no constructor Cancelled within <span class="kw">type</span> reason</span></code></pre></div>
+<p>The explanation is that OCaml is not a layout-sensitive language
+🙅</p>
+<p>When matching on <code>reason</code>, the compiler thinks that the
+<code>| Cancelled -&gt; ...</code> case is the next pattern, hence the
+error.</p>
 <p>I know three fixes:</p>
-<p><strong>1.</strong> Put <code>()</code> around the nested <code>match</code> explicitly</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">let</span> show_status status =</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>  <span class="kw">match</span> status <span class="kw">with</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>  | Pending reason -&gt;</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a>    (<span class="kw">match</span> reason <span class="kw">with</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>    | Waiting -&gt; <span class="st">&quot;Pending: Waiting&quot;</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>    | Validating -&gt; <span class="st">&quot;Pending: Validating&quot;</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a>  | Cancelled -&gt; <span class="st">&quot;Cancelled&quot;</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a>  | Done -&gt; <span class="st">&quot;Done&quot;</span></span></code></pre></div>
-<p><strong>2.</strong> Move the only nested <code>match-with</code> to the end:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="kw">let</span> show_status status =</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>  <span class="kw">match</span> status <span class="kw">with</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a>  | Cancelled -&gt; <span class="st">&quot;Cancelled&quot;</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a>  | Done -&gt; <span class="st">&quot;Done&quot;</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a>  | Pending reason -&gt;</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a>    <span class="kw">match</span> reason <span class="kw">with</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a>    | Waiting -&gt; <span class="st">&quot;Pending: Waiting&quot;</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a>    | Validating -&gt; <span class="st">&quot;Pending: Validating&quot;</span></span></code></pre></div>
-<p><strong>3.</strong> Extract nested <code>match-with</code> into a separate function</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="kw">let</span> show_reason reason =</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>  <span class="kw">match</span> reason <span class="kw">with</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>  | Waiting -&gt; <span class="st">&quot;Pending: Waiting&quot;</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>  | Validating -&gt; <span class="st">&quot;Pending: Validating&quot;</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a><span class="kw">let</span> show_status status =</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>  <span class="kw">match</span> status <span class="kw">with</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a>  | Pending reason -&gt; show_reason reason</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a>  | Cancelled -&gt; <span class="st">&quot;Cancelled&quot;</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a>  | Done -&gt; <span class="st">&quot;Done&quot;</span></span></code></pre></div>
-<h2 id="labelled-and-optional-arguments">3. Labelled and Optional Arguments</h2>
+<p><strong>1.</strong> Put <code>()</code> around the nested
+<code>match</code> explicitly</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> show_status status =</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">match</span> status <span class="kw">with</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  | Pending reason -&gt;</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    (<span class="kw">match</span> reason <span class="kw">with</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    | Waiting -&gt; <span class="st">&quot;Pending: Waiting&quot;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    | Validating -&gt; <span class="st">&quot;Pending: Validating&quot;</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  | Cancelled -&gt; <span class="st">&quot;Cancelled&quot;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  | Done -&gt; <span class="st">&quot;Done&quot;</span></span></code></pre></div>
+<p><strong>2.</strong> Move the only nested <code>match-with</code> to
+the end:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> show_status status =</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">match</span> status <span class="kw">with</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  | Cancelled -&gt; <span class="st">&quot;Cancelled&quot;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  | Done -&gt; <span class="st">&quot;Done&quot;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  | Pending reason -&gt;</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">match</span> reason <span class="kw">with</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    | Waiting -&gt; <span class="st">&quot;Pending: Waiting&quot;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    | Validating -&gt; <span class="st">&quot;Pending: Validating&quot;</span></span></code></pre></div>
+<p><strong>3.</strong> Extract nested <code>match-with</code> into a
+separate function</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> show_reason reason =</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">match</span> reason <span class="kw">with</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  | Waiting -&gt; <span class="st">&quot;Pending: Waiting&quot;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  | Validating -&gt; <span class="st">&quot;Pending: Validating&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> show_status status =</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">match</span> status <span class="kw">with</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  | Pending reason -&gt; show_reason reason</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  | Cancelled -&gt; <span class="st">&quot;Cancelled&quot;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  | Done -&gt; <span class="st">&quot;Done&quot;</span></span></code></pre></div>
+<h2 id="labelled-and-optional-arguments">3. Labelled and Optional
+Arguments</h2>
 <table>
 <thead>
 <tr class="header">
@@ -198,37 +234,51 @@
 </tbody>
 </table>
 <p>OCaml has labelled (aka named) and optional arguments.</p>
-<p>However, if your function uses both labelled and optional arguments without positional arguments, you get a compiler error!</p>
-<p>The following code implements a function that generates all numbers between the given two with an optional <code>step</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="kw">let</span> range ?(step = <span class="dv">1</span>) ~from ~until =</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>  <span class="kw">let</span> <span class="kw">rec</span> loop i =</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>    <span class="kw">if</span> i &gt; until</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a>      <span class="kw">then</span> []</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>      <span class="kw">else</span> i :: loop (i + step)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>  <span class="kw">in</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a>  loop from</span></code></pre></div>
+<p>However, if your function uses both labelled and optional arguments
+without positional arguments, you get a compiler error!</p>
+<p>The following code implements a function that generates all numbers
+between the given two with an optional <code>step</code>:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> range ?(step = <span class="dv">1</span>) ~from ~until =</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> <span class="kw">rec</span> loop i =</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> i &gt; until</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>      <span class="kw">then</span> []</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>      <span class="kw">else</span> i :: loop (i + step)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">in</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  loop from</span></code></pre></div>
 <p>Unfortunately, it doesn’t compile!</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>File <span class="st">&quot;lib/example.ml&quot;</span>, line <span class="dv">21</span>, characters <span class="dv">12-20</span>:</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a><span class="dv">21</span> | <span class="kw">let</span> range ?(step = <span class="dv">1</span>) ~from ~until =</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>                 ^^^^^^^^</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a>Error (warning <span class="dv">16</span> [unerasable-optional-argument]):</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>this optional argument cannot be erased.</span></code></pre></div>
-<p>The explanation is that you can specify both labelled and optional arguments in any order (you can mix and match):</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>range ~step:<span class="dv">2</span> ~from:<span class="dv">10</span> ~until:<span class="dv">20</span>  <span class="co">(* this is valid *)</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>range ~from:<span class="dv">10</span> ~until:<span class="dv">20</span> ~step:<span class="dv">2</span>  <span class="co">(* also valid! *)</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>File <span class="st">&quot;lib/example.ml&quot;</span>, line <span class="dv">21</span>, characters <span class="dv">12-20</span>:</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="dv">21</span> | <span class="kw">let</span> range ?(step = <span class="dv">1</span>) ~from ~until =</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                 ^^^^^^^^</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>Error (warning <span class="dv">16</span> [unerasable-optional-argument]):</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>this optional argument cannot be erased.</span></code></pre></div>
+<p>The explanation is that you can specify both labelled and optional
+arguments in any order (you can mix and match):</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>range ~step:<span class="dv">2</span> ~from:<span class="dv">10</span> ~until:<span class="dv">20</span>  <span class="co">(* this is valid *)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>range ~from:<span class="dv">10</span> ~until:<span class="dv">20</span> ~step:<span class="dv">2</span>  <span class="co">(* also valid! *)</span></span></code></pre></div>
 <p>So when you call the <code>range</code> function like this:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a>range ~from:<span class="dv">10</span> ~until:<span class="dv">20</span></span></code></pre></div>
-<p>OCaml doesn’t know whether you want to apply the default value of <code>step</code> or whether you want to have a partially applied <code>range</code> with only the default argument missing!</p>
-<p>One of the solutions in this case is to add a positional argument of type <code>unit</code> at the end of the function, like this:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="kw">let</span> range ?(step = <span class="dv">1</span>) ~from ~until () =</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>  <span class="kw">let</span> <span class="kw">rec</span> loop i =</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>    <span class="kw">if</span> i &gt; until</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a>      <span class="kw">then</span> []</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a>      <span class="kw">else</span> i :: loop (i + step)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a>  <span class="kw">in</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true"></a>  loop from</span></code></pre></div>
-<p>Alternatively, if it makes sense, you can convert one or more labelled arguments to positional to avoid adding an extra <code>unit</code>.</p>
-<h2 id="type-inference-doesnt-work-well-part-1">4. Type inference doesn’t work well: Part 1</h2>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>range ~from:<span class="dv">10</span> ~until:<span class="dv">20</span></span></code></pre></div>
+<p>OCaml doesn’t know whether you want to apply the default value of
+<code>step</code> or whether you want to have a partially applied
+<code>range</code> with only the default argument missing!</p>
+<p>One of the solutions in this case is to add a positional argument of
+type <code>unit</code> at the end of the function, like this:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> range ?(step = <span class="dv">1</span>) ~from ~until () =</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> <span class="kw">rec</span> loop i =</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> i &gt; until</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>      <span class="kw">then</span> []</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>      <span class="kw">else</span> i :: loop (i + step)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">in</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  loop from</span></code></pre></div>
+<p>Alternatively, if it makes sense, you can convert one or more
+labelled arguments to positional to avoid adding an extra
+<code>unit</code>.</p>
+<h2 id="type-inference-doesnt-work-well-part-1">4. Type inference
+doesn’t work well: Part 1</h2>
 <table>
 <thead>
 <tr class="header">
@@ -247,43 +297,59 @@
 </tr>
 </tbody>
 </table>
-<p>OCaml has type inference and it works even if you define your own custom types. Usually, it works pretty well.</p>
-<p>Like in the example below, when we have a record type but we don’t write explicit type annotations, OCaml is smart enough to figure out the types:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="kw">type</span> book =</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>  { author: <span class="dt">string</span>;</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>    title: <span class="dt">string</span>;</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>    words: <span class="dt">int</span>;</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a>  }</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a><span class="kw">let</span> is_novel book =</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a>  book.words &gt;= <span class="dv">50000</span></span></code></pre></div>
-<p>The OCaml compiler can easily infer the type of <code>is_novel</code> as</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="kw">val</span> is_novel : book -&gt; <span class="dt">bool</span></span></code></pre></div>
-<p>However, if you move the type definition into a separate module, OCaml gives up immediately:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="co">(* --- book.ml --- *)</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a><span class="kw">type</span> book =</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>  { author: <span class="dt">string</span>;</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>    title: <span class="dt">string</span>;</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a>    words: <span class="dt">int</span>;</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a>  }</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true"></a><span class="co">(* --- example.ml --- *)</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true"></a><span class="kw">let</span> is_novel book =</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true"></a>  book.words &gt;= <span class="dv">50000</span></span></code></pre></div>
+<p>OCaml has type inference and it works even if you define your own
+custom types. Usually, it works pretty well.</p>
+<p>Like in the example below, when we have a record type but we don’t
+write explicit type annotations, OCaml is smart enough to figure out the
+types:</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> book =</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  { author: <span class="dt">string</span>;</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    title: <span class="dt">string</span>;</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    words: <span class="dt">int</span>;</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> is_novel book =</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  book.words &gt;= <span class="dv">50000</span></span></code></pre></div>
+<p>The OCaml compiler can easily infer the type of <code>is_novel</code>
+as</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> is_novel : book -&gt; <span class="dt">bool</span></span></code></pre></div>
+<p>However, if you move the type definition into a separate module,
+OCaml gives up immediately:</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">(* --- book.ml --- *)</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> book =</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  { author: <span class="dt">string</span>;</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    title: <span class="dt">string</span>;</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    words: <span class="dt">int</span>;</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">(* --- example.ml --- *)</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> is_novel book =</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  book.words &gt;= <span class="dv">50000</span></span></code></pre></div>
 <p>The error message is:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a>File <span class="st">&quot;lib/example.ml&quot;</span>, line <span class="dv">31</span>, characters <span class="dv">7-12</span>:</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a><span class="dv">31</span> |   book.words &gt;= <span class="dv">50000</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>            ^^^^^</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a>Error: Unbound record field words</span></code></pre></div>
-<p>On one hand, it makes sense. Trying to guess the correct type across all possible modules and dependencies can decrease the compilation speed and introduce surprising behaviour.</p>
-<p>However, this can be quite annoying when dealing with lots of types.</p>
-<p>One solution is to specify the type explicitly in the inline type signature:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="kw">let</span> is_novel (book : Book.book) =</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>  book.words &gt;= <span class="dv">50000</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>File <span class="st">&quot;lib/example.ml&quot;</span>, line <span class="dv">31</span>, characters <span class="dv">7-12</span>:</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="dv">31</span> |   book.words &gt;= <span class="dv">50000</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>            ^^^^^</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>Error: Unbound record field words</span></code></pre></div>
+<p>On one hand, it makes sense. Trying to guess the correct type across
+all possible modules and dependencies can decrease the compilation speed
+and introduce surprising behaviour.</p>
+<p>However, this can be quite annoying when dealing with lots of
+types.</p>
+<p>One solution is to specify the type explicitly in the inline type
+signature:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> is_novel (book : Book.book) =</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  book.words &gt;= <span class="dv">50000</span></span></code></pre></div>
 <p>Alternatively, you can use the local open syntax:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="kw">let</span> is_novel book =</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>  Book.(book.words) &gt;= <span class="dv">50000</span></span></code></pre></div>
-<h2 id="type-inference-doesnt-work-well-part-2">5. Type Inference doesn’t work well: Part 2</h2>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> is_novel book =</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  Book.(book.words) &gt;= <span class="dv">50000</span></span></code></pre></div>
+<h2 id="type-inference-doesnt-work-well-part-2">5. Type Inference
+doesn’t work well: Part 2</h2>
 <table>
 <thead>
 <tr class="header">
@@ -302,30 +368,48 @@
 </tr>
 </tbody>
 </table>
-<p>You want to write a function that creates a list by replicating the same element <code>n</code> times.</p>
+<p>You want to write a function that creates a list by replicating the
+same element <code>n</code> times.</p>
 <p>The implementation is straightforward:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="kw">let</span> replicate n x = <span class="dt">List</span>.init n (<span class="kw">fun</span> _ -&gt; x)</span></code></pre></div>
-<p>This function works and OCaml correctly infers the polymorphic type of <code>replicate</code>:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="kw">val</span> replicate : <span class="dt">int</span> -&gt; &#39;a -&gt; &#39;a <span class="dt">list</span></span></code></pre></div>
-<p>Now, let’s say we replicate numbers five times specifically a lot, and we want to create a helper function by partially applying <code>replicate</code> to <code>5</code> (honestly, it’s easier to write the code than to explain it in English):</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="kw">let</span> replicate_5 = replicate <span class="dv">5</span></span></code></pre></div>
-<p>This function is partially applied only to the number, so you’d still expect it to be polymorphic, right? Oh, boy…</p>
-<p>Unfortunately, if you use <code>replicate_5</code> two times with different types, the OCaml compiler is not happy:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="kw">let</span> two_lists =</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>  <span class="kw">let</span> five_bools = replicate_5 <span class="kw">true</span> <span class="kw">in</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>  <span class="kw">let</span> five_ints = replicate_5 <span class="dv">21</span> <span class="kw">in</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a>  (five_bools, five_ints)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> replicate n x = <span class="dt">List</span>.init n (<span class="kw">fun</span> _ -&gt; x)</span></code></pre></div>
+<p>This function works and OCaml correctly infers the polymorphic type
+of <code>replicate</code>:</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> replicate : <span class="dt">int</span> -&gt; &#39;a -&gt; &#39;a <span class="dt">list</span></span></code></pre></div>
+<p>Now, let’s say we replicate numbers five times specifically a lot,
+and we want to create a helper function by partially applying
+<code>replicate</code> to <code>5</code> (honestly, it’s easier to write
+the code than to explain it in English):</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> replicate_5 = replicate <span class="dv">5</span></span></code></pre></div>
+<p>This function is partially applied only to the number, so you’d still
+expect it to be polymorphic, right? Oh, boy…</p>
+<p>Unfortunately, if you use <code>replicate_5</code> two times with
+different types, the OCaml compiler is not happy:</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> two_lists =</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> five_bools = replicate_5 <span class="kw">true</span> <span class="kw">in</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> five_ints = replicate_5 <span class="dv">21</span> <span class="kw">in</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  (five_bools, five_ints)</span></code></pre></div>
 <p>The error message is:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a>File <span class="st">&quot;lib/example.ml&quot;</span>, line <span class="dv">42</span>, characters <span class="dv">30-32</span>:</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a><span class="dv">42</span> |   <span class="kw">let</span> five_ints = replicate_5 <span class="dv">21</span> <span class="kw">in</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a>                                   ^^</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>Error: This expression has <span class="kw">type</span> <span class="dt">int</span> but an expression was expected <span class="kw">of</span> <span class="kw">type</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a>         <span class="dt">bool</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>File <span class="st">&quot;lib/example.ml&quot;</span>, line <span class="dv">42</span>, characters <span class="dv">30-32</span>:</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="dv">42</span> |   <span class="kw">let</span> five_ints = replicate_5 <span class="dv">21</span> <span class="kw">in</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                                   ^^</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>Error: This expression has <span class="kw">type</span> <span class="dt">int</span> but an expression was expected <span class="kw">of</span> <span class="kw">type</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>         <span class="dt">bool</span></span></code></pre></div>
 <p>You won’t believe what is the fix the problem.</p>
-<p>The fix is to avoid partial application for polymorphic functions:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="kw">let</span> replicate_5 x = replicate <span class="dv">5</span> x</span></code></pre></div>
-<p>Unfortunately, I know why it’s done this way. OCaml has valid reasons for this behaviour, believe me (you can read on <a href="https://v2.ocaml.org/manual/polymorphism.html">Weak polymorphism</a>). Still, it makes me a bit annoyed.</p>
-<h2 id="implicit-variable-quantification">6. Implicit variable quantification</h2>
+<p>The fix is to avoid partial application for polymorphic
+functions:</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> replicate_5 x = replicate <span class="dv">5</span> x</span></code></pre></div>
+<p>Unfortunately, I know why it’s done this way. OCaml has valid reasons
+for this behaviour, believe me (you can read on <a
+href="https://v2.ocaml.org/manual/polymorphism.html">Weak
+polymorphism</a>). Still, it makes me a bit annoyed.</p>
+<h2 id="implicit-variable-quantification">6. Implicit variable
+quantification</h2>
 <table>
 <thead>
 <tr class="header">
@@ -344,24 +428,41 @@
 </tr>
 </tbody>
 </table>
-<p>I want to write a function that takes an argument and returns it without changes. Again, the implementation is pretty simple:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="kw">let</span> id x = x</span></code></pre></div>
-<p>This function doesn’t do anything specific, and OCaml correctly infers the polymorphic type:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="kw">val</span> id : &#39;a -&gt; &#39;a</span></code></pre></div>
-<p>I can write this function slightly differently by using an anonymous function:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="kw">let</span> id = <span class="kw">fun</span> x -&gt; x</span></code></pre></div>
-<p>And, if I want, I can even specify the inline type signature for the entire function</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="kw">let</span> id : &#39;a -&gt; &#39;a = <span class="kw">fun</span> x -&gt; x</span></code></pre></div>
+<p>I want to write a function that takes an argument and returns it
+without changes. Again, the implementation is pretty simple:</p>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> id x = x</span></code></pre></div>
+<p>This function doesn’t do anything specific, and OCaml correctly
+infers the polymorphic type:</p>
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> id : &#39;a -&gt; &#39;a</span></code></pre></div>
+<p>I can write this function slightly differently by using an anonymous
+function:</p>
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> id = <span class="kw">fun</span> x -&gt; x</span></code></pre></div>
+<p>And, if I want, I can even specify the inline type signature for the
+entire function</p>
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> id : &#39;a -&gt; &#39;a = <span class="kw">fun</span> x -&gt; x</span></code></pre></div>
 <blockquote>
-<p>The example may look artificial, but sometimes I don’t want to bother with creating a separate <code>.mli</code> file, and I want to have type signatures written explicitly</p>
+<p>The example may look artificial, but sometimes I don’t want to bother
+with creating a separate <code>.mli</code> file, and I want to have type
+signatures written explicitly</p>
 </blockquote>
-<p>What I can also do, is completely ignore the type signature and write any nonsense in my implementation:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="kw">let</span> id : &#39;a -&gt; &#39;a = <span class="kw">fun</span> _ -&gt; <span class="dv">123</span></span></code></pre></div>
-<p>And the compiler error will be.. Or, wait, there’s no error this time. OCaml is perfectly fine with this code 🥲</p>
-<p>Turns out, if I really want to enforce the fact that the alpha <code>'a</code> indeed stands for a polymorphic variable, I need to introduce explicit quantification like this:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="kw">let</span> id : &#39;a . &#39;a -&gt; &#39;a = <span class="kw">fun</span> x -&gt; x</span></code></pre></div>
+<p>What I can also do, is completely ignore the type signature and write
+any nonsense in my implementation:</p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> id : &#39;a -&gt; &#39;a = <span class="kw">fun</span> _ -&gt; <span class="dv">123</span></span></code></pre></div>
+<p>And the compiler error will be.. Or, wait, there’s no error this
+time. OCaml is perfectly fine with this code 🥲</p>
+<p>Turns out, if I really want to enforce the fact that the alpha
+<code>'a</code> indeed stands for a polymorphic variable, I need to
+introduce explicit quantification like this:</p>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> id : &#39;a . &#39;a -&gt; &#39;a = <span class="kw">fun</span> x -&gt; x</span></code></pre></div>
 <p>And with this, I can no longer write nonsense.</p>
-<h2 id="right-to-left-order-of-execution">7. Right-to-left order of execution</h2>
+<h2 id="right-to-left-order-of-execution">7. Right-to-left order of
+execution</h2>
 <table>
 <thead>
 <tr class="header">
@@ -380,25 +481,39 @@
 </tr>
 </tbody>
 </table>
-<p>If you want to write a function that takes two actions and runs them sequentially, like this one:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="kw">let</span> (&gt;&gt;) action1 action2 = action1; action2</span></code></pre></div>
+<p>If you want to write a function that takes two actions and runs them
+sequentially, like this one:</p>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> (&gt;&gt;) action1 action2 = action1; action2</span></code></pre></div>
 <p>And then you want to use it:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="kw">let</span> run_example () =</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a>  <span class="dt">print_endline</span> <span class="st">&quot;Hello, &quot;</span> &gt;&gt; <span class="dt">print_endline</span> <span class="st">&quot;World&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> run_example () =</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">print_endline</span> <span class="st">&quot;Hello, &quot;</span> &gt;&gt; <span class="dt">print_endline</span> <span class="st">&quot;World&quot;</span></span></code></pre></div>
 <p>You’ll be surprised by the actual behaviour:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a>utop # run_example () ;;</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>World</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a>Hello,</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true"></a>- : <span class="dt">unit</span> = ()</span></code></pre></div>
-<p>Apparently, OCaml evaluates arguments from right to left, so the second argument is evaluated first.</p>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode ocaml"><code class="sourceCode ocaml"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>utop # run_example () ;;</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>World</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>Hello,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>- : <span class="dt">unit</span> = ()</span></code></pre></div>
+<p>Apparently, OCaml evaluates arguments from right to left, so the
+second argument is evaluated first.</p>
 <blockquote>
 <p>In fact, the order of evaluation is not even guaranteed.</p>
 </blockquote>
-<p>The only solution is to avoid relying on this behaviour. Make your functions accept arguments of type <code>unit -&gt; ...</code> or <code>Lazy.t</code>, so the functions can control the execution order of their arguments.</p>
+<p>The only solution is to avoid relying on this behaviour. Make your
+functions accept arguments of type <code>unit -&gt; ...</code> or
+<code>Lazy.t</code>, so the functions can control the execution order of
+their arguments.</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>That’s all! If you found anything surprising in OCaml, feel free to share!</p>
-<p>As I mentioned, every language has some pitfalls. If you don’t see them in your favourite language, you either don’t know it well enough or nobody uses this language anymore.</p>
-<p>Human brains are really good at focusing on bad things. However, I wrote this blog post not to say that OCaml is bad but rather to reduce the frustration when experiencing something surprising for the first time 😌</p>
+<p>That’s all! If you found anything surprising in OCaml, feel free to
+share!</p>
+<p>As I mentioned, every language has some pitfalls. If you don’t see
+them in your favourite language, you either don’t know it well enough or
+nobody uses this language anymore.</p>
+<p>Human brains are really good at focusing on bad things. However, I
+wrote this blog post not to say that OCaml is bad but rather to reduce
+the frustration when experiencing something surprising for the first
+time 😌</p>
 
 <hr>
 <blockquote>

@@ -6,7 +6,8 @@
 
     <title>A story told by Type Errors</title>
     <meta name="author" content="Dmitrii Kovanikov">
-    <meta name="description" content="Tutorial on custom type errors in Haskell with a lot of examples">
+    <meta name="description" content="Tutorial on custom type errors in
+Haskell with a lot of examples">
 
     <link rel="stylesheet" href="/css/article.css">
 
@@ -19,7 +20,8 @@
     <meta property="og:image" content="https://chshersh.com/images/logo.jpg" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="A story told by Type Errors" />
-    <meta name="twitter:description" content="Tutorial on custom type errors in Haskell with a lot of examples" />
+    <meta name="twitter:description" content="Tutorial on custom type
+errors in Haskell with a lot of examples" />
     <meta name="twitter:image" content="https://chshersh.com/images/logo.jpg" />
     <meta name="twitter:image:src" content="https://chshersh.com/images/logo.jpg" />
     <meta name="twitter:url" content="https://chshersh.com" />
@@ -46,287 +48,570 @@
   </a>
 </div>
 
-<p>Custom type errors is an extremely powerful tool for improving the UX of Haskell libraries. However, they are not used frequently enough. Partially because this technique requires the usage of some advanced Haskell concepts like type families, data kinds and kind polymorphism. And partially because not everyone is aware of such a valuable piece of standard Haskell library.</p>
-<p>In this blog post I’m going to show that using custom type errors is a simple task. I will present a lot of very different usage examples and teach you how to flavour your Haskell code with useful compile-time error messages.</p>
+<p>Custom type errors is an extremely powerful tool for improving the UX
+of Haskell libraries. However, they are not used frequently enough.
+Partially because this technique requires the usage of some advanced
+Haskell concepts like type families, data kinds and kind polymorphism.
+And partially because not everyone is aware of such a valuable piece of
+standard Haskell library.</p>
+<p>In this blog post I’m going to show that using custom type errors is
+a simple task. I will present a lot of very different usage examples and
+teach you how to flavour your Haskell code with useful compile-time
+error messages.</p>
 <ul>
-<li><a href="https://gist.github.com/chshersh/d9413b52aafd2057f1d8c87880aa3df7">Complete version of the code from this blog</a></li>
+<li><a
+href="https://gist.github.com/chshersh/d9413b52aafd2057f1d8c87880aa3df7">Complete
+version of the code from this blog</a></li>
 </ul>
 <h2 id="motivation">Motivation</h2>
-<p>I can not express how important it is to have lucid error messages. An ideal error message should not only point out an incorrect piece of code but also suggest how to fix it. Unfortunately, not all standard error messages are that helpful. Moreover, GHC cannot know in advance about all possible usages for various functions. That’s why error messages are not attached to particular use cases. Often they are vague due to the fact how the type system in GHC is implemented and this makes errors hard to understand sometimes. However, most of the common types and functions became standard idioms in day-to-day Haskell programming. So why not give Haskell users a helping hand and guide them how to use the language efficiently by exploiting the power of the type system itself?</p>
+<p>I can not express how important it is to have lucid error messages.
+An ideal error message should not only point out an incorrect piece of
+code but also suggest how to fix it. Unfortunately, not all standard
+error messages are that helpful. Moreover, GHC cannot know in advance
+about all possible usages for various functions. That’s why error
+messages are not attached to particular use cases. Often they are vague
+due to the fact how the type system in GHC is implemented and this makes
+errors hard to understand sometimes. However, most of the common types
+and functions became standard idioms in day-to-day Haskell programming.
+So why not give Haskell users a helping hand and guide them how to use
+the language efficiently by exploiting the power of the type system
+itself?</p>
 <h2 id="what-is-typeerror">What is TypeError?</h2>
-<p>Custom type errors mechanism allows Haskell developers to introduce their own compile-time error messages about usages of their functions without a need to fork GHC and patch it for the particular use cases. It provides a user-level way for extending the capabilities of the compiler. Custom user error messages can use the information only about types. With such type errors, you can’t introduce new parse errors about Haskell syntax (for that you actually need to fork GHC and patch it). But using type errors you can guide users of your library in the right direction of using your functions and types.</p>
+<p>Custom type errors mechanism allows Haskell developers to introduce
+their own compile-time error messages about usages of their functions
+without a need to fork GHC and patch it for the particular use cases. It
+provides a user-level way for extending the capabilities of the
+compiler. Custom user error messages can use the information only about
+types. With such type errors, you can’t introduce new parse errors about
+Haskell syntax (for that you actually need to fork GHC and patch it).
+But using type errors you can guide users of your library in the right
+direction of using your functions and types.</p>
 <p>To use custom type errors you need to perform two steps:</p>
 <ol type="1">
-<li>Construct an error message itself using the <code>ErrorMessage</code> data type.</li>
-<li>Put the <code>TypeError</code> type family application result to your error message inside the constraint context for your functions or instances.</li>
+<li>Construct an error message itself using the
+<code>ErrorMessage</code> data type.</li>
+<li>Put the <code>TypeError</code> type family application result to
+your error message inside the constraint context for your functions or
+instances.</li>
 </ol>
-<p>The following sections explain what is a type family, how <code>TypeError</code> and <code>ErrorMessage</code> look like and how to use them.</p>
+<p>The following sections explain what is a type family, how
+<code>TypeError</code> and <code>ErrorMessage</code> look like and how
+to use them.</p>
 <blockquote>
-<p>For a deeper understanding of type-level computations in Haskell I recommend reading <a href="https://leanpub.com/thinking-with-types">Thinking with Types</a> by Sandy Maguire.</p>
+<p>For a deeper understanding of type-level computations in Haskell I
+recommend reading <a
+href="https://leanpub.com/thinking-with-types">Thinking with Types</a>
+by Sandy Maguire.</p>
 </blockquote>
 <h3 id="short-intro-to-type-families">Short intro to type families</h3>
-<p>In simple words, <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#type-families">type family</a> is a type-level function from types to types. Below you can see the example of some simple type family that for a given type of unsigned numeric values returns signed type that contains every unsigned value of the corresponding type:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">Signed</span> (<span class="ot">t ::</span> <span class="dt">Type</span>)<span class="ot"> ::</span> <span class="dt">Type</span> <span class="kw">where</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="dt">Signed</span> <span class="dt">Word8</span>   <span class="ot">=</span> <span class="dt">Int16</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="dt">Signed</span> <span class="dt">Natural</span> <span class="ot">=</span> <span class="dt">Integer</span></span></code></pre></div>
-<p>Defining a type family is as simple as defining an ordinary function. The only difference is that type families take types as arguments and return types as their result. You can use <code>:k</code> or <code>:kind</code> command in GHCi to see the type of any type family. And you can use <code>:kind!</code> to apply type family and evaluate it to see the result:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>kind <span class="dt">Signed</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="dt">Signed</span><span class="ot"> ::</span> <span class="op">*</span> <span class="ot">-&gt;</span> <span class="op">*</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>kind<span class="op">!</span> <span class="dt">Signed</span> <span class="dt">Natural</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="dt">Signed</span> <span class="dt">Natural</span><span class="ot"> ::</span> <span class="op">*</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="ot">=</span> <span class="dt">Integer</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>kind<span class="op">!</span> <span class="dt">Signed</span> <span class="dt">Int</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="dt">Signed</span> <span class="dt">Int</span><span class="ot"> ::</span> <span class="op">*</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="ot">=</span> <span class="dt">Signed</span> <span class="dt">Int</span></span></code></pre></div>
+<p>In simple words, <a
+href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#type-families">type
+family</a> is a type-level function from types to types. Below you can
+see the example of some simple type family that for a given type of
+unsigned numeric values returns signed type that contains every unsigned
+value of the corresponding type:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">Signed</span> (<span class="ot">t ::</span> <span class="dt">Type</span>)<span class="ot"> ::</span> <span class="dt">Type</span> <span class="kw">where</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Signed</span> <span class="dt">Word8</span>   <span class="ot">=</span> <span class="dt">Int16</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Signed</span> <span class="dt">Natural</span> <span class="ot">=</span> <span class="dt">Integer</span></span></code></pre></div>
+<p>Defining a type family is as simple as defining an ordinary function.
+The only difference is that type families take types as arguments and
+return types as their result. You can use <code>:k</code> or
+<code>:kind</code> command in GHCi to see the type of any type family.
+And you can use <code>:kind!</code> to apply type family and evaluate it
+to see the result:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>kind <span class="dt">Signed</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">Signed</span><span class="ot"> ::</span> <span class="op">*</span> <span class="ot">-&gt;</span> <span class="op">*</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>kind<span class="op">!</span> <span class="dt">Signed</span> <span class="dt">Natural</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="dt">Signed</span> <span class="dt">Natural</span><span class="ot"> ::</span> <span class="op">*</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ot">=</span> <span class="dt">Integer</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>kind<span class="op">!</span> <span class="dt">Signed</span> <span class="dt">Int</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="dt">Signed</span> <span class="dt">Int</span><span class="ot"> ::</span> <span class="op">*</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ot">=</span> <span class="dt">Signed</span> <span class="dt">Int</span></span></code></pre></div>
 <blockquote>
-<p><strong>NOTE:</strong> GHC is moving towards renaming <code>*</code> to <code>Type</code> and you already can use <a href="https://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Kind.html#t:Type">Type</a> in your code to specify kinds. But GHCi still displays the <code>Type</code> kind as <code>*</code>.</p>
+<p><strong>NOTE:</strong> GHC is moving towards renaming <code>*</code>
+to <code>Type</code> and you already can use <a
+href="https://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Kind.html#t:Type">Type</a>
+in your code to specify kinds. But GHCi still displays the
+<code>Type</code> kind as <code>*</code>.</p>
 </blockquote>
-<p>Our <code>Signed</code> type family is not defined for the <code>Int</code> type that’s why we see in GHCi that the result of <code>Signed Int</code> is not evaluated. Above we’ve implemented so-called <em>closed type family</em> — it is defined only for those types that we specified under <code>where</code> clause. Just like familiar term-level functions. There also exist <em>open type families</em> that can be extended externally. But we are going to talk only about <em>closed type families</em> in this blog post.</p>
-<p>The <code>Signed</code> type family can be useful to define a safe interface like this one:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">ToSigned</span> a <span class="kw">where</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="ot">    toSigned ::</span> a <span class="ot">-&gt;</span> <span class="dt">Signed</span> a</span></code></pre></div>
-<p>In the <code>ToSigned</code> typeclass the result type depends on the argument type and it is possible to have instances of this typeclasses only for types handled by the <code>Signed</code> type family.</p>
+<p>Our <code>Signed</code> type family is not defined for the
+<code>Int</code> type that’s why we see in GHCi that the result of
+<code>Signed Int</code> is not evaluated. Above we’ve implemented
+so-called <em>closed type family</em> — it is defined only for those
+types that we specified under <code>where</code> clause. Just like
+familiar term-level functions. There also exist <em>open type
+families</em> that can be extended externally. But we are going to talk
+only about <em>closed type families</em> in this blog post.</p>
+<p>The <code>Signed</code> type family can be useful to define a safe
+interface like this one:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">ToSigned</span> a <span class="kw">where</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    toSigned ::</span> a <span class="ot">-&gt;</span> <span class="dt">Signed</span> a</span></code></pre></div>
+<p>In the <code>ToSigned</code> typeclass the result type depends on the
+argument type and it is possible to have instances of this typeclasses
+only for types handled by the <code>Signed</code> type family.</p>
 <h3 id="typeerror-type-family">TypeError type family</h3>
-<p>Let’s look at the implementation details of the <a href="https://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-TypeLits.html#t:TypeError">TypeError</a> type family first. Below I provide its full definition from <code>base</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">TypeError</span> (<span class="ot">a ::</span> <span class="dt">ErrorMessage</span>)<span class="ot"> ::</span> b <span class="kw">where</span></span></code></pre></div>
-<p><code>TypeError</code> is a type family that takes a type of <code>ErrorMessage</code> kind and returns a type of a <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#kind-polymorphism">polymorphic kind</a> (not just <code>Type</code> as in the example from the previous section). The fact that <code>TypeError</code> has polymorphic kind of the result means that the result can be used in many places, like constraint context or return value of any function (though usually it’s used inside constraints).</p>
-<p>You can notice that the <code>TypeError</code> type family doesn’t have a body at the language-level. There is nothing after the <code>where</code> keyword. And it is also a <em>closed type family</em> which means that you can’t extend it externally. The implementation of <code>TypeError</code> is baked into GHC internals.</p>
+<p>Let’s look at the implementation details of the <a
+href="https://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-TypeLits.html#t:TypeError">TypeError</a>
+type family first. Below I provide its full definition from
+<code>base</code>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">TypeError</span> (<span class="ot">a ::</span> <span class="dt">ErrorMessage</span>)<span class="ot"> ::</span> b <span class="kw">where</span></span></code></pre></div>
+<p><code>TypeError</code> is a type family that takes a type of
+<code>ErrorMessage</code> kind and returns a type of a <a
+href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#kind-polymorphism">polymorphic
+kind</a> (not just <code>Type</code> as in the example from the previous
+section). The fact that <code>TypeError</code> has polymorphic kind of
+the result means that the result can be used in many places, like
+constraint context or return value of any function (though usually it’s
+used inside constraints).</p>
+<p>You can notice that the <code>TypeError</code> type family doesn’t
+have a body at the language-level. There is nothing after the
+<code>where</code> keyword. And it is also a <em>closed type family</em>
+which means that you can’t extend it externally. The implementation of
+<code>TypeError</code> is baked into GHC internals.</p>
 <h3 id="short-intro-to-datakinds">Short intro to DataKinds</h3>
-<p>In Haskell, every type can be typed. The type of type is called <em>kind</em>. You can inspect the value type in GHCi using <code>:t</code> command. Similarly, you can inspect the kind of type using <code>:k</code> command.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>t <span class="dt">True</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="dt">True</span><span class="ot"> ::</span> <span class="dt">Bool</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>t <span class="dt">Bool</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    <span class="fu">error</span><span class="op">:</span> <span class="dt">Data</span> constructor <span class="fu">not</span> <span class="kw">in</span> scope<span class="op">:</span> <span class="dt">Bool</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>k <span class="dt">Bool</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a><span class="dt">Bool</span><span class="ot"> ::</span> <span class="op">*</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>k <span class="dt">True</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>    <span class="dt">Not</span> <span class="kw">in</span> scope<span class="op">:</span> <span class="kw">type</span> constructor <span class="fu">or</span> <span class="kw">class</span> ‘<span class="dt">True</span>’</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a>    <span class="dt">A</span> <span class="kw">data</span> constructor <span class="kw">of</span> that name is <span class="kw">in</span> scope; did you mean <span class="dt">DataKinds</span><span class="op">?</span></span></code></pre></div>
-<p>You can see that you can’t inspect a type of type and you can’t inspect a kind of value. However, the last error message is intriguing. What does it mean and what is <code>DataKinds</code>?</p>
-<p>Turns out that GHC provides an ability to <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#datatype-promotion">promote value-level data constructors</a> to type-level. To be able to use promoted data constructors you need to enable the <code>DataKinds</code> language extension and add a single quote in front of the constructor:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>set <span class="op">-</span><span class="dt">XDataKinds</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>k <span class="dt">&#39;True</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="dt">&#39;True</span><span class="ot"> ::</span> <span class="dt">Bool</span></span></code></pre></div>
-<p><code>True</code> is a value that has type <code>Bool</code> and <code>Bool</code> has kind <code>Type</code>. But <code>'True</code> is a type that has kind <code>Bool</code>. So we promoted constructors to types and types to kinds. You may ask if <code>'True</code> is a type then what values it has? The answer is that it doesn’t have any values, this type is uninhabited. Not every type has values. Though, such promoted types still can be useful for type-level computations.</p>
+<p>In Haskell, every type can be typed. The type of type is called
+<em>kind</em>. You can inspect the value type in GHCi using
+<code>:t</code> command. Similarly, you can inspect the kind of type
+using <code>:k</code> command.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>t <span class="dt">True</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">True</span><span class="ot"> ::</span> <span class="dt">Bool</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>t <span class="dt">Bool</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">error</span><span class="op">:</span> <span class="dt">Data</span> constructor <span class="fu">not</span> <span class="kw">in</span> scope<span class="op">:</span> <span class="dt">Bool</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>k <span class="dt">Bool</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="dt">Bool</span><span class="ot"> ::</span> <span class="op">*</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>k <span class="dt">True</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Not</span> <span class="kw">in</span> scope<span class="op">:</span> <span class="kw">type</span> constructor <span class="fu">or</span> <span class="kw">class</span> ‘<span class="dt">True</span>’</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">A</span> <span class="kw">data</span> constructor <span class="kw">of</span> that name is <span class="kw">in</span> scope; did you mean <span class="dt">DataKinds</span><span class="op">?</span></span></code></pre></div>
+<p>You can see that you can’t inspect a type of type and you can’t
+inspect a kind of value. However, the last error message is intriguing.
+What does it mean and what is <code>DataKinds</code>?</p>
+<p>Turns out that GHC provides an ability to <a
+href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#datatype-promotion">promote
+value-level data constructors</a> to type-level. To be able to use
+promoted data constructors you need to enable the <code>DataKinds</code>
+language extension and add a single quote in front of the
+constructor:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>set <span class="op">-</span><span class="dt">XDataKinds</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>k <span class="dt">&#39;True</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&#39;True</span><span class="ot"> ::</span> <span class="dt">Bool</span></span></code></pre></div>
+<p><code>True</code> is a value that has type <code>Bool</code> and
+<code>Bool</code> has kind <code>Type</code>. But <code>'True</code> is
+a type that has kind <code>Bool</code>. So we promoted constructors to
+types and types to kinds. You may ask if <code>'True</code> is a type
+then what values it has? The answer is that it doesn’t have any values,
+this type is uninhabited. Not every type has values. Though, such
+promoted types still can be useful for type-level computations.</p>
 <h3 id="errormessage-data-type">ErrorMessage data type</h3>
-<p>Now, let’s have a look at the <a href="https://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-TypeLits.html#t:ErrorMessage">ErrorMessage</a> data type which is used as an argument in the <code>TypeError</code> type family:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">ErrorMessage</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>    <span class="ot">=</span> <span class="dt">Text</span> <span class="dt">Symbol</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>    <span class="op">|</span> <span class="kw">forall</span> t<span class="op">.</span> <span class="dt">ShowType</span> t</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>    <span class="op">|</span> <span class="dt">ErrorMessage</span> <span class="op">:&lt;&gt;:</span> <span class="dt">ErrorMessage</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    <span class="op">|</span> <span class="dt">ErrorMessage</span> <span class="op">:$$:</span> <span class="dt">ErrorMessage</span></span></code></pre></div>
-<p>This data type looks attractive. What we can notice first is that it has several constructors that are defined as operators (<code>:&lt;&gt;:</code> and <code>:$$:</code>). Second, this data type is intended to be used on the type-level, not value-level. That’s why the <code>Text</code> constructor stores a type-level string of kind <code>Symbol</code>, not just <code>String</code>. <a href="https://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-TypeLits.html#t:Symbol">Symbol</a> is a kind of type-level strings in Haskell:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>t <span class="st">&quot;Ordinary string&quot;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="st">&quot;Ordinary string&quot;</span><span class="ot"> ::</span> <span class="dt">String</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>k <span class="st">&quot;Type-level string&quot;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a><span class="st">&quot;Type-level string&quot;</span><span class="ot"> ::</span> <span class="dt">Symbol</span></span></code></pre></div>
-<p>The <code>ErrorMessage</code> constructors have the following meaning:</p>
+<p>Now, let’s have a look at the <a
+href="https://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-TypeLits.html#t:ErrorMessage">ErrorMessage</a>
+data type which is used as an argument in the <code>TypeError</code>
+type family:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">ErrorMessage</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">=</span> <span class="dt">Text</span> <span class="dt">Symbol</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="kw">forall</span> t<span class="op">.</span> <span class="dt">ShowType</span> t</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="dt">ErrorMessage</span> <span class="op">:&lt;&gt;:</span> <span class="dt">ErrorMessage</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="dt">ErrorMessage</span> <span class="op">:$$:</span> <span class="dt">ErrorMessage</span></span></code></pre></div>
+<p>This data type looks attractive. What we can notice first is that it
+has several constructors that are defined as operators
+(<code>:&lt;&gt;:</code> and <code>:$$:</code>). Second, this data type
+is intended to be used on the type-level, not value-level. That’s why
+the <code>Text</code> constructor stores a type-level string of kind
+<code>Symbol</code>, not just <code>String</code>. <a
+href="https://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-TypeLits.html#t:Symbol">Symbol</a>
+is a kind of type-level strings in Haskell:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>t <span class="st">&quot;Ordinary string&quot;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;Ordinary string&quot;</span><span class="ot"> ::</span> <span class="dt">String</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>k <span class="st">&quot;Type-level string&quot;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;Type-level string&quot;</span><span class="ot"> ::</span> <span class="dt">Symbol</span></span></code></pre></div>
+<p>The <code>ErrorMessage</code> constructors have the following
+meaning:</p>
 <ol type="1">
 <li><code>Text</code> specifies a hardcoded text.</li>
 <li><code>ShowType</code> displays any given type.</li>
-<li><code>:&lt;&gt;:</code> concatenates two messages inside a single line.</li>
+<li><code>:&lt;&gt;:</code> concatenates two messages inside a single
+line.</li>
 <li><code>:$$:</code> puts a line break between two messages.</li>
 </ol>
 <p>Let’s try to build our first error message!</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">FooMessage</span> <span class="ot">=</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>    <span class="dt">&#39;Text</span> <span class="st">&quot;First line of the foo message&quot;</span> &#39;<span class="op">:$$:</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>    <span class="dt">&#39;Text</span> <span class="st">&quot;Second line of the foo message: &quot;</span> &#39;<span class="op">:&lt;&gt;:</span> <span class="dt">&#39;ShowType</span> <span class="dt">ErrorMessage</span></span></code></pre></div>
-<p>Note how we prepend every constructor (even operators) with a single quote. This is because we are using <code>DataKinds</code> to create type-level values from promoted constructors. You can check that <code>FooMessage</code> is indeed a type-level value that has <code>ErrorMessage</code> kind:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>k <span class="dt">FooMessage</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="dt">FooMessage</span><span class="ot"> ::</span> <span class="dt">ErrorMessage</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">FooMessage</span> <span class="ot">=</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&#39;Text</span> <span class="st">&quot;First line of the foo message&quot;</span> &#39;<span class="op">:$$:</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&#39;Text</span> <span class="st">&quot;Second line of the foo message: &quot;</span> &#39;<span class="op">:&lt;&gt;:</span> <span class="dt">&#39;ShowType</span> <span class="dt">ErrorMessage</span></span></code></pre></div>
+<p>Note how we prepend every constructor (even operators) with a single
+quote. This is because we are using <code>DataKinds</code> to create
+type-level values from promoted constructors. You can check that
+<code>FooMessage</code> is indeed a type-level value that has
+<code>ErrorMessage</code> kind:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>k <span class="dt">FooMessage</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="dt">FooMessage</span><span class="ot"> ::</span> <span class="dt">ErrorMessage</span></span></code></pre></div>
 <p>After creating an error message we can finally use it!</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="ot">foo ::</span> <span class="dt">TypeError</span> <span class="dt">FooMessage</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>foo <span class="ot">=</span> <span class="fu">error</span> <span class="st">&quot;unreachable&quot;</span></span></code></pre></div>
-<p>Now, if you will try to compile the module which has this <code>foo</code> function, you will see the following error message:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>TypeErrors.hs<span class="op">:</span><span class="dv">19</span><span class="op">:</span><span class="dv">8</span><span class="op">:</span> <span class="fu">error</span><span class="op">:</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>    • <span class="dt">First</span> line <span class="kw">of</span> the foo message</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>      <span class="dt">Second</span> line <span class="kw">of</span> the foo message<span class="op">:</span> <span class="dt">ErrorMessage</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>    • <span class="dt">In</span> the <span class="kw">type</span> signature<span class="op">:</span><span class="ot"> foo ::</span> <span class="dt">TypeError</span> <span class="dt">FooMessage</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a><span class="dv">19</span> <span class="op">|</span><span class="ot"> foo ::</span> <span class="dt">TypeError</span> <span class="dt">FooMessage</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>   <span class="op">|</span>        <span class="op">^^^^^^^^^^^^^^^^^^^^</span></span></code></pre></div>
-<p>This use case is not particularly useful but it should demonstrate how to construct and use custom type errors. In the following sections I’m going to explain how to implement a lot of cool and useful stuff with type errors.</p>
-<h2 id="motivating-example-adding-two-lists">Motivating example: adding two lists</h2>
-<p>One of the most common Haskell typeclasses is the <code>Num</code> typeclass. It contains a lot of arithmetic operations, including number addition:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>t (<span class="op">+</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="ot">(+) ::</span> <span class="dt">Num</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</span></code></pre></div>
-<p>This operator is used to add two numbers. But what will happen if we try to add two lists with this operator?</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> [<span class="dv">1</span>,<span class="dv">2</span>] <span class="op">+</span> [<span class="dv">3</span>,<span class="dv">4</span>]</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a><span class="op">&lt;</span>interactive<span class="op">&gt;:</span><span class="dv">4</span><span class="op">:</span><span class="dv">1</span><span class="op">:</span> <span class="fu">error</span><span class="op">:</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a>    • <span class="dt">Non</span> <span class="kw">type</span><span class="op">-</span>variable argument <span class="kw">in</span> the constraint<span class="op">:</span> <span class="dt">Num</span> [a]</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>      (<span class="dt">Use</span> <span class="dt">FlexibleContexts</span> to permit this)</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a>    • <span class="dt">When</span> checking the inferred <span class="kw">type</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a><span class="ot">        it ::</span> <span class="kw">forall</span> a<span class="op">.</span> (<span class="dt">Num</span> a, <span class="dt">Num</span> [a]) <span class="ot">=&gt;</span> [a]</span></code></pre></div>
-<p>As you can see, we can’t add two lists. It is a compile-time error. And this is a good thing: no implicit casts, no undefined and unexpected behaviour. But the unfavourable part of it is the error message itself. I can imagine how horrified and frustrated Haskell beginners could be after looking at this error message because from the beginner’s point of view the text of the message doesn’t make any sense at all! Sure, it is understandable if you are using Haskell long enough and you learned how to decode error messages. But not at the start of your Haskell adventure…</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ot">foo ::</span> <span class="dt">TypeError</span> <span class="dt">FooMessage</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>foo <span class="ot">=</span> <span class="fu">error</span> <span class="st">&quot;unreachable&quot;</span></span></code></pre></div>
+<p>Now, if you will try to compile the module which has this
+<code>foo</code> function, you will see the following error message:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>TypeErrors.hs<span class="op">:</span><span class="dv">19</span><span class="op">:</span><span class="dv">8</span><span class="op">:</span> <span class="fu">error</span><span class="op">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">First</span> line <span class="kw">of</span> the foo message</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>      <span class="dt">Second</span> line <span class="kw">of</span> the foo message<span class="op">:</span> <span class="dt">ErrorMessage</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">In</span> the <span class="kw">type</span> signature<span class="op">:</span><span class="ot"> foo ::</span> <span class="dt">TypeError</span> <span class="dt">FooMessage</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="dv">19</span> <span class="op">|</span><span class="ot"> foo ::</span> <span class="dt">TypeError</span> <span class="dt">FooMessage</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>   <span class="op">|</span>        <span class="op">^^^^^^^^^^^^^^^^^^^^</span></span></code></pre></div>
+<p>This use case is not particularly useful but it should demonstrate
+how to construct and use custom type errors. In the following sections
+I’m going to explain how to implement a lot of cool and useful stuff
+with type errors.</p>
+<h2 id="motivating-example-adding-two-lists">Motivating example: adding
+two lists</h2>
+<p>One of the most common Haskell typeclasses is the <code>Num</code>
+typeclass. It contains a lot of arithmetic operations, including number
+addition:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> <span class="op">:</span>t (<span class="op">+</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ot">(+) ::</span> <span class="dt">Num</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a</span></code></pre></div>
+<p>This operator is used to add two numbers. But what will happen if we
+try to add two lists with this operator?</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> [<span class="dv">1</span>,<span class="dv">2</span>] <span class="op">+</span> [<span class="dv">3</span>,<span class="dv">4</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>interactive<span class="op">&gt;:</span><span class="dv">4</span><span class="op">:</span><span class="dv">1</span><span class="op">:</span> <span class="fu">error</span><span class="op">:</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">Non</span> <span class="kw">type</span><span class="op">-</span>variable argument <span class="kw">in</span> the constraint<span class="op">:</span> <span class="dt">Num</span> [a]</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>      (<span class="dt">Use</span> <span class="dt">FlexibleContexts</span> to permit this)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">When</span> checking the inferred <span class="kw">type</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="ot">        it ::</span> <span class="kw">forall</span> a<span class="op">.</span> (<span class="dt">Num</span> a, <span class="dt">Num</span> [a]) <span class="ot">=&gt;</span> [a]</span></code></pre></div>
+<p>As you can see, we can’t add two lists. It is a compile-time error.
+And this is a good thing: no implicit casts, no undefined and unexpected
+behaviour. But the unfavourable part of it is the error message itself.
+I can imagine how horrified and frustrated Haskell beginners could be
+after looking at this error message because from the beginner’s point of
+view the text of the message doesn’t make any sense at all! Sure, it is
+understandable if you are using Haskell long enough and you learned how
+to decode error messages. But not at the start of your Haskell
+adventure…</p>
 <p>Imagine if the error message could look like this instead:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> [<span class="dv">1</span>,<span class="dv">2</span>] <span class="op">+</span> [<span class="dv">3</span>,<span class="dv">4</span>]</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>    • <span class="dt">You&#39;ve</span> tried to perform an arithmetic operation on lists<span class="op">.</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a>      <span class="dt">Possibly</span> one <span class="kw">of</span> those<span class="op">:</span> (<span class="op">+</span>), (<span class="op">-</span>), (<span class="op">*</span>), <span class="fu">fromInteger</span>, <span class="fu">negate</span>, <span class="fu">abs</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a>      <span class="dt">If</span> you tried to add two lists like this<span class="op">:</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true"></a></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a>          ghci<span class="op">&gt;</span> [<span class="dv">5</span>, <span class="dv">10</span>] <span class="op">+</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true"></a>      <span class="dt">Then</span> this is probably a typo <span class="fu">and</span> you wanted to append two lists<span class="op">.</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true"></a>      <span class="dt">Use</span> (<span class="op">++</span>) operator to append two lists<span class="op">.</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true"></a></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true"></a>          ghci<span class="op">&gt;</span> [<span class="dv">5</span>, <span class="dv">10</span>] <span class="op">++</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true"></a>          [<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true"></a></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true"></a>      <span class="dt">If</span> you want to combine a list <span class="kw">of</span> numbers with an arithmetic operation,</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true"></a>      you can <span class="fu">either</span> use &#39;zipWith&#39; for <span class="fu">index</span><span class="op">-</span>wise application<span class="op">:</span></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true"></a></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true"></a>          ghci<span class="op">&gt;</span> <span class="fu">zipWith</span> (<span class="op">*</span>) [<span class="dv">5</span>, <span class="dv">10</span>] [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true"></a>          [<span class="dv">5</span>, <span class="dv">20</span>]</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true"></a></span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true"></a>      <span class="fu">or</span> &#39;liftA2&#39; for pairwise application<span class="op">:</span></span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true"></a></span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true"></a>          ghci<span class="op">&gt;</span> liftA2 (<span class="op">*</span>) [<span class="dv">5</span>, <span class="dv">10</span>] [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true"></a>          [<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>]</span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true"></a></span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true"></a>      <span class="dt">If</span> you want to apply unary function to each element <span class="kw">of</span> the list, use &#39;map&#39;<span class="op">:</span></span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true"></a></span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true"></a>          ghci<span class="op">&gt;</span> <span class="fu">map</span> <span class="fu">negate</span> [<span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="op">-</span><span class="dv">5</span>]</span>
-<span id="cb15-30"><a href="#cb15-30" aria-hidden="true"></a>          [<span class="op">-</span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">5</span>]</span>
-<span id="cb15-31"><a href="#cb15-31" aria-hidden="true"></a></span>
-<span id="cb15-32"><a href="#cb15-32" aria-hidden="true"></a></span>
-<span id="cb15-33"><a href="#cb15-33" aria-hidden="true"></a>    • <span class="dt">In</span> the expression<span class="op">:</span> [<span class="dv">1</span>, <span class="dv">2</span>] <span class="op">+</span> [<span class="dv">3</span>, <span class="dv">4</span>]</span>
-<span id="cb15-34"><a href="#cb15-34" aria-hidden="true"></a>      <span class="dt">In</span> an equation for ‘it’<span class="op">:</span> it <span class="ot">=</span> [<span class="dv">1</span>, <span class="dv">2</span>] <span class="op">+</span> [<span class="dv">3</span>, <span class="dv">4</span>]</span></code></pre></div>
-<p>Much better! Now it is more clear what went wrong and how to fix the error. Good news is that it is actually possible to provide such a neat error message. You just need to do the following:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">ListNumMessage</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>    <span class="ot">=</span> <span class="op">...</span> the above text constructed using earlier explained syntax <span class="op">...</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">TypeError</span> <span class="dt">ListNumMessage</span> <span class="ot">=&gt;</span> <span class="dt">Num</span> [a]</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> [<span class="dv">1</span>,<span class="dv">2</span>] <span class="op">+</span> [<span class="dv">3</span>,<span class="dv">4</span>]</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">You&#39;ve</span> tried to perform an arithmetic operation on lists<span class="op">.</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">Possibly</span> one <span class="kw">of</span> those<span class="op">:</span> (<span class="op">+</span>), (<span class="op">-</span>), (<span class="op">*</span>), <span class="fu">fromInteger</span>, <span class="fu">negate</span>, <span class="fu">abs</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">If</span> you tried to add two lists like this<span class="op">:</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>          ghci<span class="op">&gt;</span> [<span class="dv">5</span>, <span class="dv">10</span>] <span class="op">+</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>      <span class="dt">Then</span> this is probably a typo <span class="fu">and</span> you wanted to append two lists<span class="op">.</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">Use</span> (<span class="op">++</span>) operator to append two lists<span class="op">.</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>          ghci<span class="op">&gt;</span> [<span class="dv">5</span>, <span class="dv">10</span>] <span class="op">++</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>          [<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">If</span> you want to combine a list <span class="kw">of</span> numbers with an arithmetic operation,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>      you can <span class="fu">either</span> use &#39;zipWith&#39; for <span class="fu">index</span><span class="op">-</span>wise application<span class="op">:</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>          ghci<span class="op">&gt;</span> <span class="fu">zipWith</span> (<span class="op">*</span>) [<span class="dv">5</span>, <span class="dv">10</span>] [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>          [<span class="dv">5</span>, <span class="dv">20</span>]</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">or</span> &#39;liftA2&#39; for pairwise application<span class="op">:</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>          ghci<span class="op">&gt;</span> liftA2 (<span class="op">*</span>) [<span class="dv">5</span>, <span class="dv">10</span>] [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>          [<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>]</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>      <span class="dt">If</span> you want to apply unary function to each element <span class="kw">of</span> the list, use &#39;map&#39;<span class="op">:</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>          ghci<span class="op">&gt;</span> <span class="fu">map</span> <span class="fu">negate</span> [<span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="op">-</span><span class="dv">5</span>]</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>          [<span class="op">-</span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">5</span>]</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">In</span> the expression<span class="op">:</span> [<span class="dv">1</span>, <span class="dv">2</span>] <span class="op">+</span> [<span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>      <span class="dt">In</span> an equation for ‘it’<span class="op">:</span> it <span class="ot">=</span> [<span class="dv">1</span>, <span class="dv">2</span>] <span class="op">+</span> [<span class="dv">3</span>, <span class="dv">4</span>]</span></code></pre></div>
+<p>Much better! Now it is more clear what went wrong and how to fix the
+error. Good news is that it is actually possible to provide such a neat
+error message. You just need to do the following:</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">ListNumMessage</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">=</span> <span class="op">...</span> the above text constructed using earlier explained syntax <span class="op">...</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">TypeError</span> <span class="dt">ListNumMessage</span> <span class="ot">=&gt;</span> <span class="dt">Num</span> [a]</span></code></pre></div>
 <blockquote>
-<p><strong>NOTE:</strong> If you compile your code with <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/using-warnings.html#ghc-flag--Wredundant-constraints">-Wredundant-constraints</a> flag you see a lot of warnings about unused constraints in your code when using custom type errors. This is an unfortunate drawback but it’s not that bad.</p>
+<p><strong>NOTE:</strong> If you compile your code with <a
+href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/using-warnings.html#ghc-flag--Wredundant-constraints">-Wredundant-constraints</a>
+flag you see a lot of warnings about unused constraints in your code
+when using custom type errors. This is an unfortunate drawback but it’s
+not that bad.</p>
 </blockquote>
-<p>We’ve implemented the <code>Num</code> instance for the list. So every time this instance is used, GHC will kindly tell why we can’t use it and how to fix the error. If, instead, there is no instance for some data type then all you see is the error message saying “There is no such instance”. However, if you know that there is no reasonable instance of this typeclass and it can be used in the wrong context and confuse users of your library then you can forbid this instance and provide helpful error message explaining your motivation and guiding users in the right direction when this instance is used.</p>
-<p>I think that UX of Haskell beginners can be improved a lot if such instances were added not only for lists but also for <code>Bool</code>, <code>Char</code>, <code>String</code>, tuples, <code>IO</code> and many more data types. It will take time to write all the messages. But you only need to do this once and from now on till the end of times all developers would benefit from these instances.</p>
-<p>A similar approach is heavily used by the <a href="https://github.com/mrkgnao/silica">silica</a> library which implements lenses but has a lot of nice custom error messages that help developers to understand the concept of lenses better.</p>
-<h2 id="create-the-restricted-instance-eq-instance-for-the-function">Create the restricted instance: Eq instance for the function</h2>
-<p>In the previous example, we’ve forbidden the instance completely. But sometimes we want to forbid it partially (wat?). I’ll explain what I mean.</p>
-<p>Let’s say that we want to check whether two functions are equal (this might be useful for property-based testing or during refactoring). It is a difficult question: what does the function equality mean in programming? In <a href="https://math.stackexchange.com/questions/1070895/equality-of-functions">math we have a formal definition</a>. This means that in Haskell we can apply this definition in the context of pure computations. We can say that two functions are equal if they produce the same output for all possible values of their arguments. This property can be encoded via the following instance:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="kw">instance</span> (<span class="dt">Bounded</span> a, <span class="dt">Enum</span> a, <span class="dt">Eq</span> b) <span class="ot">=&gt;</span> <span class="dt">Eq</span> (a <span class="ot">-&gt;</span> b) <span class="kw">where</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a><span class="ot">    (==) ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>    f <span class="op">==</span> g <span class="ot">=</span> <span class="kw">let</span> universe <span class="ot">=</span> [<span class="fu">minBound</span> <span class="op">..</span> <span class="fu">maxBound</span>]</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a>             <span class="kw">in</span> <span class="fu">map</span> f universe <span class="op">==</span> <span class="fu">map</span> g universe</span></code></pre></div>
+<p>We’ve implemented the <code>Num</code> instance for the list. So
+every time this instance is used, GHC will kindly tell why we can’t use
+it and how to fix the error. If, instead, there is no instance for some
+data type then all you see is the error message saying “There is no such
+instance”. However, if you know that there is no reasonable instance of
+this typeclass and it can be used in the wrong context and confuse users
+of your library then you can forbid this instance and provide helpful
+error message explaining your motivation and guiding users in the right
+direction when this instance is used.</p>
+<p>I think that UX of Haskell beginners can be improved a lot if such
+instances were added not only for lists but also for <code>Bool</code>,
+<code>Char</code>, <code>String</code>, tuples, <code>IO</code> and many
+more data types. It will take time to write all the messages. But you
+only need to do this once and from now on till the end of times all
+developers would benefit from these instances.</p>
+<p>A similar approach is heavily used by the <a
+href="https://github.com/mrkgnao/silica">silica</a> library which
+implements lenses but has a lot of nice custom error messages that help
+developers to understand the concept of lenses better.</p>
+<h2
+id="create-the-restricted-instance-eq-instance-for-the-function">Create
+the restricted instance: Eq instance for the function</h2>
+<p>In the previous example, we’ve forbidden the instance completely. But
+sometimes we want to forbid it partially (wat?). I’ll explain what I
+mean.</p>
+<p>Let’s say that we want to check whether two functions are equal (this
+might be useful for property-based testing or during refactoring). It is
+a difficult question: what does the function equality mean in
+programming? In <a
+href="https://math.stackexchange.com/questions/1070895/equality-of-functions">math
+we have a formal definition</a>. This means that in Haskell we can apply
+this definition in the context of pure computations. We can say that two
+functions are equal if they produce the same output for all possible
+values of their arguments. This property can be encoded via the
+following instance:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> (<span class="dt">Bounded</span> a, <span class="dt">Enum</span> a, <span class="dt">Eq</span> b) <span class="ot">=&gt;</span> <span class="dt">Eq</span> (a <span class="ot">-&gt;</span> b) <span class="kw">where</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    (==) ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    f <span class="op">==</span> g <span class="ot">=</span> <span class="kw">let</span> universe <span class="ot">=</span> [<span class="fu">minBound</span> <span class="op">..</span> <span class="fu">maxBound</span>]</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>             <span class="kw">in</span> <span class="fu">map</span> f universe <span class="op">==</span> <span class="fu">map</span> g universe</span></code></pre></div>
 <p>And we can verify that the instance works:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a>boolId1, boolId2,<span class="ot"> boolId3 ::</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>boolId1 <span class="ot">=</span> <span class="fu">id</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>boolId2 <span class="ot">=</span> <span class="fu">not</span> <span class="op">.</span> <span class="fu">not</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>boolId3 <span class="ot">=</span> <span class="fu">not</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a>ghci<span class="op">&gt;</span> boolId1 <span class="op">==</span> boolId2</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a><span class="dt">True</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a>ghci<span class="op">&gt;</span> boolId1 <span class="op">==</span> boolId3</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a><span class="dt">False</span></span></code></pre></div>
-<p>However, this instance is dangerous because we can accidentally compare two functions that have an argument of type <code>Int</code> (or some other type with a lot of values) and checking that two functions produce the same result for every <code>Int</code> might take half of the Universe lifetime. So, what we eventually want is to allow function equality but only when function argument is a “small” data type. Fortunately, this can be achieved by the combination of type families and custom error types. The idea is to implement a type family that pattern-matches on a type and returns type error constraint only for non-small types. Otherwise, it should return empty constraint. See the code snippet below for the implementation:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">FunEqMessage</span> (<span class="ot">arg ::</span> <span class="dt">Type</span>) (<span class="ot">res ::</span> <span class="dt">Type</span>) <span class="ot">=</span> <span class="op">...</span> message <span class="op">...</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">CheckFunArg</span> (<span class="ot">arg ::</span> <span class="dt">Type</span>) (<span class="ot">res ::</span> <span class="dt">Type</span>)<span class="ot"> ::</span> <span class="dt">Constraint</span> <span class="kw">where</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a>    <span class="dt">CheckFunArg</span> <span class="dt">Bool</span>  _ <span class="ot">=</span> ()</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a>    <span class="dt">CheckFunArg</span> <span class="dt">Int8</span>  _ <span class="ot">=</span> ()</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a>    <span class="dt">CheckFunArg</span> <span class="dt">Word8</span> _ <span class="ot">=</span> ()</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a>    <span class="dt">CheckFunArg</span> arg   r <span class="ot">=</span> <span class="dt">TypeError</span> (<span class="dt">FunEqMessage</span> arg r)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true"></a></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true"></a><span class="kw">instance</span> (<span class="dt">CheckFunArg</span> a b, <span class="dt">Bounded</span> a, <span class="dt">Enum</span> a, <span class="dt">Eq</span> b) <span class="ot">=&gt;</span> <span class="dt">Eq</span> (a <span class="ot">-&gt;</span> b) <span class="kw">where</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true"></a>   <span class="op">...</span> implementation stays the same <span class="op">...</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>boolId1, boolId2,<span class="ot"> boolId3 ::</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>boolId1 <span class="ot">=</span> <span class="fu">id</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>boolId2 <span class="ot">=</span> <span class="fu">not</span> <span class="op">.</span> <span class="fu">not</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>boolId3 <span class="ot">=</span> <span class="fu">not</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> boolId1 <span class="op">==</span> boolId2</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="dt">True</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> boolId1 <span class="op">==</span> boolId3</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="dt">False</span></span></code></pre></div>
+<p>However, this instance is dangerous because we can accidentally
+compare two functions that have an argument of type <code>Int</code> (or
+some other type with a lot of values) and checking that two functions
+produce the same result for every <code>Int</code> might take half of
+the Universe lifetime. So, what we eventually want is to allow function
+equality but only when function argument is a “small” data type.
+Fortunately, this can be achieved by the combination of type families
+and custom error types. The idea is to implement a type family that
+pattern-matches on a type and returns type error constraint only for
+non-small types. Otherwise, it should return empty constraint. See the
+code snippet below for the implementation:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">FunEqMessage</span> (<span class="ot">arg ::</span> <span class="dt">Type</span>) (<span class="ot">res ::</span> <span class="dt">Type</span>) <span class="ot">=</span> <span class="op">...</span> message <span class="op">...</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">CheckFunArg</span> (<span class="ot">arg ::</span> <span class="dt">Type</span>) (<span class="ot">res ::</span> <span class="dt">Type</span>)<span class="ot"> ::</span> <span class="dt">Constraint</span> <span class="kw">where</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">CheckFunArg</span> <span class="dt">Bool</span>  _ <span class="ot">=</span> ()</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">CheckFunArg</span> <span class="dt">Int8</span>  _ <span class="ot">=</span> ()</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">CheckFunArg</span> <span class="dt">Word8</span> _ <span class="ot">=</span> ()</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">CheckFunArg</span> arg   r <span class="ot">=</span> <span class="dt">TypeError</span> (<span class="dt">FunEqMessage</span> arg r)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> (<span class="dt">CheckFunArg</span> a b, <span class="dt">Bounded</span> a, <span class="dt">Enum</span> a, <span class="dt">Eq</span> b) <span class="ot">=&gt;</span> <span class="dt">Eq</span> (a <span class="ot">-&gt;</span> b) <span class="kw">where</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>   <span class="op">...</span> implementation stays the same <span class="op">...</span></span></code></pre></div>
 <blockquote>
-<p>We’ve implemented <code>CheckFunArg</code> type family manually. The <a href="@hackage">type-errors</a> library can help with more complicated functions.</p>
+<p>We’ve implemented <code>CheckFunArg</code> type family manually. The
+<a href="@hackage">type-errors</a> library can help with more
+complicated functions.</p>
 </blockquote>
 <p>And now we can safely use it!</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>inc1,<span class="ot"> inc2 ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>inc1 <span class="ot">=</span> (<span class="op">+</span><span class="dv">1</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>inc2 <span class="ot">=</span> <span class="fu">succ</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>inc1,<span class="ot"> inc2 ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>inc1 <span class="ot">=</span> (<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>inc2 <span class="ot">=</span> <span class="fu">succ</span></span></code></pre></div>
 <hr>
-<div class="sourceCode" id="cb21"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> inc1 <span class="op">==</span> inc2</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>    • <span class="dt">You&#39;ve</span> attempted to <span class="fu">compare</span> two functions <span class="kw">of</span> the <span class="kw">type</span><span class="op">:</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>          <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a>      <span class="dt">To</span> <span class="fu">compare</span> functions their argument should be one <span class="kw">of</span> the following types<span class="op">:</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true"></a>          <span class="dt">Bool</span>, <span class="dt">Int8</span>, <span class="dt">Word8</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true"></a></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true"></a>      <span class="dt">However</span>, the functions have the following argument <span class="kw">type</span><span class="op">:</span></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true"></a></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true"></a>          <span class="dt">Int</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true"></a></span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true"></a>    • <span class="dt">In</span> the expression<span class="op">:</span> inc1 <span class="op">==</span> inc2</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true"></a>      <span class="dt">In</span> an equation for ‘it’<span class="op">:</span> it <span class="ot">=</span> inc1 <span class="op">==</span> inc2</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> inc1 <span class="op">==</span> inc2</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">You&#39;ve</span> attempted to <span class="fu">compare</span> two functions <span class="kw">of</span> the <span class="kw">type</span><span class="op">:</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>          <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">To</span> <span class="fu">compare</span> functions their argument should be one <span class="kw">of</span> the following types<span class="op">:</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>          <span class="dt">Bool</span>, <span class="dt">Int8</span>, <span class="dt">Word8</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">However</span>, the functions have the following argument <span class="kw">type</span><span class="op">:</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>          <span class="dt">Int</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">In</span> the expression<span class="op">:</span> inc1 <span class="op">==</span> inc2</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>      <span class="dt">In</span> an equation for ‘it’<span class="op">:</span> it <span class="ot">=</span> inc1 <span class="op">==</span> inc2</span></code></pre></div>
 <blockquote>
-<p><strong>NOTE:</strong> With this instance it is still possible to hang function comparison if you will try to compare two functions of type like:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="dt">Int8</span> <span class="ot">-&gt;</span> <span class="dt">Int8</span> <span class="ot">-&gt;</span> <span class="dt">Int8</span> <span class="ot">-&gt;</span> <span class="dt">Int8</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span></code></pre></div>
-<p>But this is just an implementation detail how to patch this instance to take such cases into consideration.</p>
+<p><strong>NOTE:</strong> With this instance it is still possible to
+hang function comparison if you will try to compare two functions of
+type like:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="dt">Int8</span> <span class="ot">-&gt;</span> <span class="dt">Int8</span> <span class="ot">-&gt;</span> <span class="dt">Int8</span> <span class="ot">-&gt;</span> <span class="dt">Int8</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span></code></pre></div>
+<p>But this is just an implementation detail how to patch this instance
+to take such cases into consideration.</p>
 </blockquote>
-<h2 id="restrict-instance-externally-foldable">Restrict instance externally: Foldable</h2>
-<p>This use case is similar to the previous one, but now we want to restrict some functions from the already implemented instance. Some instances are written in the external libraries. It is not possible in Haskell to not import some instances. But sometimes you really want to not have all of them. Or, alternatively, the instance itself is useful except a couple of dangerous functions.</p>
-<p><strong>Example:</strong> there exist well-known efficient container types <code>Set</code> and <code>HashSet</code> from the <a href="@hackage">containers</a> and <a href="@hackage">unordered-containers</a> packages correspondingly. These data structures provide fast modification and query operation. Like these two:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="ot">member ::</span> <span class="dt">Ord</span> a              <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span>     <span class="dt">Set</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a><span class="ot">member ::</span> (<span class="dt">Eq</span> a, <span class="dt">Hashable</span> a) <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">HashSet</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span></code></pre></div>
-<p>However, default Prelude exports the following method of the <code>Foldable</code> typeclass:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="fu">elem</span><span class="ot"> ::</span> (<span class="dt">Foldable</span> f, <span class="dt">Eq</span> a) <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span></code></pre></div>
-<p>The problem here is that <code>elem</code> for both <code>Set</code> and <code>HashSet</code> works in <code>O(n)</code> time while <code>member</code> works in <code>O(log n)</code> time and it’s quite easy to accidentally use slow <code>elem</code> instead of fast <code>member</code> function.</p>
+<h2 id="restrict-instance-externally-foldable">Restrict instance
+externally: Foldable</h2>
+<p>This use case is similar to the previous one, but now we want to
+restrict some functions from the already implemented instance. Some
+instances are written in the external libraries. It is not possible in
+Haskell to not import some instances. But sometimes you really want to
+not have all of them. Or, alternatively, the instance itself is useful
+except a couple of dangerous functions.</p>
+<p><strong>Example:</strong> there exist well-known efficient container
+types <code>Set</code> and <code>HashSet</code> from the <a
+href="@hackage">containers</a> and <a
+href="@hackage">unordered-containers</a> packages correspondingly. These
+data structures provide fast modification and query operation. Like
+these two:</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ot">member ::</span> <span class="dt">Ord</span> a              <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span>     <span class="dt">Set</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="ot">member ::</span> (<span class="dt">Eq</span> a, <span class="dt">Hashable</span> a) <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">HashSet</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span></code></pre></div>
+<p>However, default Prelude exports the following method of the
+<code>Foldable</code> typeclass:</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">elem</span><span class="ot"> ::</span> (<span class="dt">Foldable</span> f, <span class="dt">Eq</span> a) <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span></code></pre></div>
+<p>The problem here is that <code>elem</code> for both <code>Set</code>
+and <code>HashSet</code> works in <code>O(n)</code> time while
+<code>member</code> works in <code>O(log n)</code> time and it’s quite
+easy to accidentally use slow <code>elem</code> instead of fast
+<code>member</code> function.</p>
 <blockquote>
-<p><strong>NOTE:</strong> It is worth mentioning that it is actually possible to patch the <code>Foldable</code> typeclass itself so it can have an efficient implementation of the <code>member</code> method for both <code>Set</code> and <code>HashSet</code>. The change was proposed earlier but haven’t been accepted.</p>
+<p><strong>NOTE:</strong> It is worth mentioning that it is actually
+possible to patch the <code>Foldable</code> typeclass itself so it can
+have an efficient implementation of the <code>member</code> method for
+both <code>Set</code> and <code>HashSet</code>. The change was proposed
+earlier but haven’t been accepted.</p>
 </blockquote>
-<p>Fortunately, it’s still possible to have useful <code>Foldable</code> instances for <code>Set</code> and <code>HashSet</code> but produce a compile-time error message when you are using <code>elem</code> or <code>notElem</code> from <code>Foldable</code>.</p>
-<p>The idea behind the implementation is to reexport our own version of the <code>elem</code> function which just delegates the implementation to <code>elem</code> from <code>Data.Foldable</code> but it has an additional constraint over the argument that pattern-matches on the type and produces either error message or empty constraint. As you can see, this technique can be extended even further. If you want to forbid instance completely, you just need to forbid every method of the typeclass for the particular data type.</p>
-<p>Below you can see a general template for solving described problems:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="kw">module</span> <span class="dt">BetterFoo</span> (fooBar) <span class="kw">where</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Foo</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true"></a><span class="ot">fooBar ::</span> (<span class="dt">DisallowFooBar</span> a, <span class="dt">Foo.Foo</span> a) <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Bar</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true"></a>fooBar <span class="ot">=</span> Foo.fooBar</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true"></a></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">DisallowFooBar</span> (<span class="ot">a ::</span> <span class="dt">Type</span>)<span class="ot"> ::</span> <span class="dt">Constraint</span> <span class="kw">where</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true"></a>    <span class="dt">DisallowFooBar</span> <span class="dt">Baz</span> <span class="ot">=</span> <span class="dt">TypeError</span> <span class="op">...</span> <span class="fu">error</span> message …</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true"></a>    <span class="dt">DisallowFooBar</span> a   <span class="ot">=</span> ()</span></code></pre></div>
+<p>Fortunately, it’s still possible to have useful <code>Foldable</code>
+instances for <code>Set</code> and <code>HashSet</code> but produce a
+compile-time error message when you are using <code>elem</code> or
+<code>notElem</code> from <code>Foldable</code>.</p>
+<p>The idea behind the implementation is to reexport our own version of
+the <code>elem</code> function which just delegates the implementation
+to <code>elem</code> from <code>Data.Foldable</code> but it has an
+additional constraint over the argument that pattern-matches on the type
+and produces either error message or empty constraint. As you can see,
+this technique can be extended even further. If you want to forbid
+instance completely, you just need to forbid every method of the
+typeclass for the particular data type.</p>
+<p>Below you can see a general template for solving described
+problems:</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> <span class="dt">BetterFoo</span> (fooBar) <span class="kw">where</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Foo</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="ot">fooBar ::</span> (<span class="dt">DisallowFooBar</span> a, <span class="dt">Foo.Foo</span> a) <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Bar</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>fooBar <span class="ot">=</span> Foo.fooBar</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">DisallowFooBar</span> (<span class="ot">a ::</span> <span class="dt">Type</span>)<span class="ot"> ::</span> <span class="dt">Constraint</span> <span class="kw">where</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">DisallowFooBar</span> <span class="dt">Baz</span> <span class="ot">=</span> <span class="dt">TypeError</span> <span class="op">...</span> <span class="fu">error</span> message …</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">DisallowFooBar</span> a   <span class="ot">=</span> ()</span></code></pre></div>
 <blockquote>
-<p><strong>NOTE:</strong> In the first example with the list we provided fat text for the whole instance because we don’t know which function was used. But now you can see how we can be aware of the fact which function is used and provide more specific error messages.</p>
+<p><strong>NOTE:</strong> In the first example with the list we provided
+fat text for the whole instance because we don’t know which function was
+used. But now you can see how we can be aware of the fact which function
+is used and provide more specific error messages.</p>
 </blockquote>
-<h2 id="deprecation-better-migration-guide">Deprecation: better migration guide</h2>
-<p>According to <a href="https://pvp.haskell.org/">PvP</a> it’s okay to remove a function from a library while you are increasing major version. However, from the users of the library point of view function removal may hurt when they try to upgrade to a newer version of your library. If the function you are using is removed from the library, the only error you get is that there is no such function. And now you need to find CHANGELOG for the library to see what to use instead and if the library author doesn’t provide migration guide, you need to read comments and reasoning under the corresponding issues (again, only if there was an issue at first place). This is a poor UX.</p>
-<p>GHC gives developers an ability to mark their functions with the <a href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#warning-and-deprecated-pragmas">DEPRECATED</a> pragma and provide a custom message. When a deprecated function is used you will see a warning with the specified text. Unfortunately, it’s very easy to miss a warning message. And, again, once the function is removed, you will see only the message that there is no such function. However, with custom type errors we can make deprecation cycles smoother. Instead of removing the function, you can add custom type error to the function saying that this function is deprecated. So every time the function is used, users will see compiler error telling what to do instead. It is still a compiler error like it would be if you removed the function, but now at least users know how to fix it with less hassle.</p>
-<p>It’s extremely easy to introduce such deprecation message. This can be done via the following code:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">CompilerError</span> (<span class="ot">msg ::</span> <span class="dt">ErrorMessage</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">TypeError</span> msg <span class="ot">=&gt;</span> <span class="dt">CompilerError</span> msg</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">ParseDeprecated</span> <span class="ot">=</span> <span class="op">...</span> message goes here <span class="op">...</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true"></a></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true"></a><span class="ot">parse ::</span> <span class="dt">CompilerError</span> <span class="dt">ParseDeprecated</span> <span class="ot">=&gt;</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true"></a>parse <span class="ot">=</span> <span class="fu">error</span> <span class="st">&quot;unreachable&quot;</span></span></code></pre></div>
+<h2 id="deprecation-better-migration-guide">Deprecation: better
+migration guide</h2>
+<p>According to <a href="https://pvp.haskell.org/">PvP</a> it’s okay to
+remove a function from a library while you are increasing major version.
+However, from the users of the library point of view function removal
+may hurt when they try to upgrade to a newer version of your library. If
+the function you are using is removed from the library, the only error
+you get is that there is no such function. And now you need to find
+CHANGELOG for the library to see what to use instead and if the library
+author doesn’t provide migration guide, you need to read comments and
+reasoning under the corresponding issues (again, only if there was an
+issue at first place). This is a poor UX.</p>
+<p>GHC gives developers an ability to mark their functions with the <a
+href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/glasgow_exts.html#warning-and-deprecated-pragmas">DEPRECATED</a>
+pragma and provide a custom message. When a deprecated function is used
+you will see a warning with the specified text. Unfortunately, it’s very
+easy to miss a warning message. And, again, once the function is
+removed, you will see only the message that there is no such function.
+However, with custom type errors we can make deprecation cycles
+smoother. Instead of removing the function, you can add custom type
+error to the function saying that this function is deprecated. So every
+time the function is used, users will see compiler error telling what to
+do instead. It is still a compiler error like it would be if you removed
+the function, but now at least users know how to fix it with less
+hassle.</p>
+<p>It’s extremely easy to introduce such deprecation message. This can
+be done via the following code:</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">CompilerError</span> (<span class="ot">msg ::</span> <span class="dt">ErrorMessage</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">TypeError</span> msg <span class="ot">=&gt;</span> <span class="dt">CompilerError</span> msg</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">ParseDeprecated</span> <span class="ot">=</span> <span class="op">...</span> message goes here <span class="op">...</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="ot">parse ::</span> <span class="dt">CompilerError</span> <span class="dt">ParseDeprecated</span> <span class="ot">=&gt;</span> <span class="dt">FilePath</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>parse <span class="ot">=</span> <span class="fu">error</span> <span class="st">&quot;unreachable&quot;</span></span></code></pre></div>
 <p>Here is what we do:</p>
 <ol type="1">
-<li>We create the <code>CompilerError</code> typeclass. Usually, you create typeclasses for types of kind <code>Type</code> or <code>Type -&gt; Type</code>. In this case, we create typeclass for things of the <code>ErrorMessage</code> kind.</li>
-<li>Then we create a single instance of <code>CompilerError</code> for every <code>ErrorMessage</code> with the <code>TypeError</code> constraint for that message. One instance to rule all error messages.</li>
-<li>You can see how to use this typeclass from the <code>parse</code> function type signature: just add it to the constraint with the specified error message. Now every time the <code>parse</code> function is used, you will get an error message like this one:</li>
+<li>We create the <code>CompilerError</code> typeclass. Usually, you
+create typeclasses for types of kind <code>Type</code> or
+<code>Type -&gt; Type</code>. In this case, we create typeclass for
+things of the <code>ErrorMessage</code> kind.</li>
+<li>Then we create a single instance of <code>CompilerError</code> for
+every <code>ErrorMessage</code> with the <code>TypeError</code>
+constraint for that message. One instance to rule all error
+messages.</li>
+<li>You can see how to use this typeclass from the <code>parse</code>
+function type signature: just add it to the constraint with the
+specified error message. Now every time the <code>parse</code> function
+is used, you will get an error message like this one:</li>
 </ol>
-<div class="sourceCode" id="cb27"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> parse <span class="st">&quot;path/to/config&quot;</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>    • <span class="dt">Function</span> &#39;parse&#39; was deprecated <span class="kw">in</span> my<span class="op">-</span>parser<span class="op">-</span><span class="fl">1.2</span><span class="op">.</span><span class="fl">6.0</span><span class="op">.</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a>      <span class="dt">It</span> will be deleted <span class="kw">in</span> my<span class="op">-</span>parser<span class="op">-</span><span class="fl">1.3</span><span class="op">.</span><span class="fl">0.0</span><span class="op">.</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true"></a>      <span class="dt">Use</span> &#39;parseConfig&#39; instead<span class="op">.</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true"></a>      <span class="dt">See</span> the following issue for motivation<span class="op">:</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true"></a></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true"></a>          <span class="op">*</span> https<span class="op">://</span>github<span class="op">.</span>com<span class="op">/</span>user<span class="op">/</span>my<span class="op">-</span>parser<span class="op">/</span>issue<span class="op">/</span><span class="dv">42</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true"></a></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true"></a>    • <span class="dt">In</span> the expression<span class="op">:</span> parse <span class="st">&quot;path/to/config&quot;</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true"></a>      <span class="dt">In</span> an equation for ‘it’<span class="op">:</span> it <span class="ot">=</span> parse <span class="st">&quot;path/to/config&quot;</span></span></code></pre></div>
-<p>Why write migration guide in some separate document if you can force the compiler to show this guide to every user of your library? I’m just joking. Please, write migration guides anyways, a separate document is still super useful!</p>
-<h2 id="analyse-generic-representation-of-a-type-names-fields-constructors">Analyse Generic representation of a type: names, fields, constructors</h2>
-<p>Final usage of custom type errors is more advanced than the previous ones. The approach uses <a href="https://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-Generics.html">Generic</a> capabilities to analyse the structure of the data types during compilation. Generics allow haskellers to derive automatically instances of arbitrary data types. However, it’s not always possible to derive instances. Sometimes you want to check whether a structure of a data type satisfies specific requirements. For example, if you don’t support automatic deriving for sum types, it is better to tell about this fact during compilation, not from docs or runtime. But with <code>Generic</code> you can do much more advanced checks! See <a href="https://github.com/Holmusk/elm-street/blob/69a574055c281e781da65f31b6feba075a4f9728/src/Elm/Generic.hs#L79-L89">elm-street</a> for examples of different compile-time verification.</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>ghci<span class="op">&gt;</span> parse <span class="st">&quot;path/to/config&quot;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">Function</span> &#39;parse&#39; was deprecated <span class="kw">in</span> my<span class="op">-</span>parser<span class="op">-</span><span class="fl">1.2</span><span class="op">.</span><span class="fl">6.0</span><span class="op">.</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">It</span> will be deleted <span class="kw">in</span> my<span class="op">-</span>parser<span class="op">-</span><span class="fl">1.3</span><span class="op">.</span><span class="fl">0.0</span><span class="op">.</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">Use</span> &#39;parseConfig&#39; instead<span class="op">.</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">See</span> the following issue for motivation<span class="op">:</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>          <span class="op">*</span> https<span class="op">://</span>github<span class="op">.</span>com<span class="op">/</span>user<span class="op">/</span>my<span class="op">-</span>parser<span class="op">/</span>issue<span class="op">/</span><span class="dv">42</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    • <span class="dt">In</span> the expression<span class="op">:</span> parse <span class="st">&quot;path/to/config&quot;</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">In</span> an equation for ‘it’<span class="op">:</span> it <span class="ot">=</span> parse <span class="st">&quot;path/to/config&quot;</span></span></code></pre></div>
+<p>Why write migration guide in some separate document if you can force
+the compiler to show this guide to every user of your library? I’m just
+joking. Please, write migration guides anyways, a separate document is
+still super useful!</p>
+<h2
+id="analyse-generic-representation-of-a-type-names-fields-constructors">Analyse
+Generic representation of a type: names, fields, constructors</h2>
+<p>Final usage of custom type errors is more advanced than the previous
+ones. The approach uses <a
+href="https://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-Generics.html">Generic</a>
+capabilities to analyse the structure of the data types during
+compilation. Generics allow haskellers to derive automatically instances
+of arbitrary data types. However, it’s not always possible to derive
+instances. Sometimes you want to check whether a structure of a data
+type satisfies specific requirements. For example, if you don’t support
+automatic deriving for sum types, it is better to tell about this fact
+during compilation, not from docs or runtime. But with
+<code>Generic</code> you can do much more advanced checks! See <a
+href="https://github.com/Holmusk/elm-street/blob/69a574055c281e781da65f31b6feba075a4f9728/src/Elm/Generic.hs#L79-L89">elm-street</a>
+for examples of different compile-time verification.</p>
 <p>A possible list of compile-time analytics includes:</p>
 <ol type="1">
 <li>A data type contains only a single constructor.</li>
@@ -337,9 +622,15 @@
 <li>A data type is an enumeration.</li>
 </ol>
 <p>And much more. The choices are limited only by your imagination!</p>
-<p>This approach is heavily used by the <a href="@hackage">generic-lens</a> library to check the structure of data type before allowing to use lenses.</p>
+<p>This approach is heavily used by the <a
+href="@hackage">generic-lens</a> library to check the structure of data
+type before allowing to use lenses.</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>You can see that custom type errors is a really powerful mechanism. It can increase the quality of type errors by a lot. But they require some effort from the developers. And sometimes they require some advanced Haskell knowledge and understanding of more challenging topics. But in the end, it pays off a lot.</p>
+<p>You can see that custom type errors is a really powerful mechanism.
+It can increase the quality of type errors by a lot. But they require
+some effort from the developers. And sometimes they require some
+advanced Haskell knowledge and understanding of more challenging topics.
+But in the end, it pays off a lot.</p>
 
 <hr>
 <blockquote>
