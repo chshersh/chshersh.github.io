@@ -198,13 +198,13 @@ aboutText =
         [ t_ "I'm a Senior Software Engineer at Bloomberg." ]
     , paragraph []
         [ t_ "At my job, I primarily use "
-        , bold "OCaml"
+        , bold "C++"
         , t_ " alongside "
         , bold "Python"
         , t_ ", "
         , bold "TypeScript"
         , t_ " and "
-        , bold "C++."
+        , bold "OCaml."
         ]
     , paragraph []
         [ t_ "I'm passionate about Functional Programming," ]
