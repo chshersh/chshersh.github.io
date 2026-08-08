@@ -51,8 +51,8 @@ title attrs =
             ++ attrs
         )
         [ t [ centerX ] "Dmitrii Kovanikov"
-        , t [ centerX ] "Senior SWE @ Bloomberg"
-        , t [ centerX, Font.color Color.suvaGrey ] "Functional Programming Adept"
+        , t [ centerX ] "Senior SWE"
+        , t [ centerX, Font.color Color.suvaGrey ] "C++ and FP Adept"
         ]
 
 
@@ -195,7 +195,7 @@ aboutText =
         , t_ ", and this is how you know I'm a nerd."
         ]
     , paragraph []
-        [ t_ "I'm a Senior Software Engineer at Bloomberg." ]
+        [ t_ "I'm a Senior Software Engineer." ]
     , paragraph []
         [ t_ "At my job, I primarily use "
         , bold "C++"
